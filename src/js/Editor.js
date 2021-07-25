@@ -2132,7 +2132,7 @@ Editor =(function(){
 			HTMLZones: HTMLZone,
 			Modules: Modules,
 			Strategies: Strategy,
-			sAjaxFile: '../JavaScript/Ajax.js',
+			sAjaxFile: 'Ajax.js',
 			sBasePath:'',
 			oAvailableSyntaxes: _Syntax,
 			oConfig:{
