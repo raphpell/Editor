@@ -20,7 +20,7 @@ Editor.addModule('KeyBoard',(function(){
 	// Editor
 		'F3':function(){ alert('DOCUMENT_RENAME ?')},
 		'CTRL+N':'DOCUMENT_NEW',
-		'CTRL+W':'DOCUMENT_CLOSE',
+	//	'CTRL+W':'DOCUMENT_CLOSE',
 		'CTRL+S':'DOCUMENT_SAVE',
 		'CTRL+SHIFT+:':'SOFT_TAB',
 		'CTRL+SHIFT+;':'SHOW_INVISIBLES',
