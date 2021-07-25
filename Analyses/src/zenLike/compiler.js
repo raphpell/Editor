@@ -189,7 +189,6 @@ var oSnippets =(function(){
 							var s = m(a)
 							return [ "-moz-"+s, "-webkit-"+s, "-o-"+s, "-ms-"+s, ""+s ].join('\n')
 							}
-						return 
 						}
 					if( sName.charAt(0)=='@' && ! oAbbrs[ sName ]){
 						return getValuesPrefixed( sName.slice(1))
