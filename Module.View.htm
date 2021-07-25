@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Les lignes vues</title>
-	
 	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
 	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
 	<style>
@@ -41,12 +40,12 @@
 
 <h1>Les lignes vues</h1>
 <p>
-	Cette classe est entre autre utilisée par le module <a href="Module.Fold.htm">Fold</a>.
+	Cette classe est entre autre utilisÃ©e par le module <a href="Module.Fold.htm">Fold</a>.
 </p>
 
 <div><h2>Objectif</h2>
 	<ul>
-		<li>Gérer les intervalles de lignes cachés.</li>
+		<li>GÃ©rer les intervalles de lignes cachÃ©s.</li>
 	</ul>
 </div>
 
@@ -54,7 +53,7 @@
 	<img src="diagram/Class.View.gif">
 </div>
 
-<div><h2>Aperçu</h2>
+<div><h2>AperÃ§u</h2>
 
 <div id="eContents"><!--var View =(function(){
 	var V=function( D ){
@@ -162,7 +161,7 @@
 			, D=this.oDocument, T=D.oSource
 			, oUpdates = D.oUpdates
 			, nLineHeight = D.oCharacter.nHeight
-			, nViewHeight = D.oEditor.nTextZoneHeight + nLineHeight // +1 résoud un bug d'affichage ?
+			, nViewHeight = D.oEditor.nTextZoneHeight + nLineHeight // +1 rÃ©soud un bug d'affichage ?
 			, nLength = Math.ceil( nViewHeight/nLineHeight )
 			if( isNaN( nViewHeight )) return false
 			if( oUpdates ){
@@ -234,7 +233,7 @@
 				this.aVisibleRanges = aVisibleRangesInView
 				this.aVisibleLinesFlipped = Array.flip( aVisibleLines )
 				}
-			// Comportement par défaut
+			// Comportement par dÃ©faut
 			else{
 				var nLines = T.nLines
 				, nLinesHeight = nLines * nLineHeight
@@ -302,7 +301,7 @@
 	<div id="eStats" class="stats"></div>
 	<div style="clear:both;"></div>
 	<dl class="info">
-		<dd><input type="checkbox" id="eUpdateInfo" checked><label for="eUpdateInfo">Mettre à jour les infos.</label></dd>
+		<dd><input type="checkbox" id="eUpdateInfo" checked><label for="eUpdateInfo">Mettre Ã  jour les infos.</label></dd>
 		<dd>V.aVisibleLines: <b id="eVisibleLines">...</b></dd>
 		<dt>V.aHiddenRanges: <pre id="eHiddenRanges">...</pre></dt>
 		<dt>V.aRealVisibleRanges: <pre id="eRealVisibleRanges">...</pre></dt>

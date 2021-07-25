@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>L'historique</title>
-	
 	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
 	<link rel="stylesheet" type="text/css" href="src/codeComments.css">
 	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
@@ -66,8 +65,8 @@
 <div><h1> L'historique</h1>
 	<div>
 		<p>
-			N'ayant pas trouvé de solution native pour gérer l'historique, il faut en créer une !<br>
-			Le contenu est mise à jour quand du texte est inséré, effacé ou remplacé.
+			N'ayant pas trouvÃ© de solution native pour gÃ©rer l'historique, il faut en crÃ©er une !<br>
+			Le contenu est mise Ã  jour quand du texte est insÃ©rÃ©, effacÃ© ou remplacÃ©.
 		</p>
 	</div>
 	
@@ -76,49 +75,49 @@
 		<table border="1" cellspacing="0" cellpadding="10">
 			<tr>
 				<th>Action primitive</th>
-				<td>Méthode</td>
-				<td>REDO (Rétablir)</td>
+				<td>MÃ©thode</td>
+				<td>REDO (RÃ©tablir)</td>
 				<td>UNDO (Annuler)</td>
 			</tr>
 			<tr>
 				<th>Ajout</th>
 				<td>oCaret.insert</td>
-				<td>index<br> texte ajouté</td>
-				<td>index<br> texte effacé = texte ajouté</td>
+				<td>index<br> texte ajoutÃ©</td>
+				<td>index<br> texte effacÃ© = texte ajoutÃ©</td>
 			</tr>
 			<tr>
 				<th>Suppression</th>
 				<td>oSelection.remove</td>
-				<td>index<br> texte effacé</td>
-				<td>index<br> texte ajouté = texte effacé</td>
+				<td>index<br> texte effacÃ©</td>
+				<td>index<br> texte ajoutÃ© = texte effacÃ©</td>
 			</tr>
 			<tr>
 				<th>Modification</th>
 				<td>oSelection.replace</td>
-				<td>index<br> texte effacé<br> texte ajouté</td>
-				<td>index<br> texte effacé = texte ajouté<br> texte ajouté = texte effacé</td>
+				<td>index<br> texte effacÃ©<br> texte ajoutÃ©</td>
+				<td>index<br> texte effacÃ© = texte ajoutÃ©<br> texte ajoutÃ© = texte effacÃ©</td>
 			</tr>
 		</table>
 	</div>
-	<div><h3> Historique évolué</h3>
+	<div><h3> Historique Ã©voluÃ©</h3>
 		<p>Principe de fonctionnement :</p>
 		<ul>
-			<li>Au lieu d'appliquer une action primitive, elle en applique plusieurs à la suite.</li>
-			<li>Les suites sont identifiées par un même identifiant.</li>
-			<li>A chaque extrémité des suites d'actions, on exécute une fonction optionnelle. Objectif: fixer la sélection et la position du curseur.</li>
+			<li>Au lieu d'appliquer une action primitive, elle en applique plusieurs Ã  la suite.</li>
+			<li>Les suites sont identifiÃ©es par un mÃªme identifiant.</li>
+			<li>A chaque extrÃ©mitÃ© des suites d'actions, on exÃ©cute une fonction optionnelle. Objectif: fixer la sÃ©lection et la position du curseur.</li>
 		</ul>
-		<p>Exemple : <b>Glissé/Déposé d'une sélection</b></p>
+		<p>Exemple : <b>GlissÃ©/DÃ©posÃ© d'une sÃ©lection</b></p>
 		<ul>
-			<li><i>Copie du texte sélectionné.</i></li>
-			<li>Suppression du texte sélectionné.</li>
-			<li>Insertion au curseur du texte copié.</li>
-			<li><i>Sélection du texte inséré.</i></li>
+			<li><i>Copie du texte sÃ©lectionnÃ©.</i></li>
+			<li>Suppression du texte sÃ©lectionnÃ©.</li>
+			<li>Insertion au curseur du texte copiÃ©.</li>
+			<li><i>SÃ©lection du texte insÃ©rÃ©.</i></li>
 		</ul>
 	</div>
 </div>
 
-<div><h2>Aperçu</h2>
-<input type="checkbox" id="eHistoryComplete" checked><label for="eHistoryComplete">Historique complète.</label>
+<div><h2>AperÃ§u</h2>
+<input type="checkbox" id="eHistoryComplete" checked><label for="eHistoryComplete">Historique complÃ¨te.</label>
 <div class="test"><dl id="eHistory"></dl></div>
 		
 <div id="eContents"><!--Editor.addModule('UndoStack',(function(){
@@ -214,19 +213,19 @@
 </div>
 
 	<div><h2>Diagrammes</h2>
-		<p>L'objet historique à 2 propriétés privées:</p>
+		<p>L'objet historique Ã  2 propriÃ©tÃ©s privÃ©es:</p>
 		<ul>
-			<li>Un tableau : liste des actions stockées dedans. Les index vont de 0 à i , i est égale à la longueur du tableau - 1.</li>
-			<li>Un nombre : position du pointeur dans l'historique. Sa valeur va de -1 à i. </li>
+			<li>Un tableau : liste des actions stockÃ©es dedans. Les index vont de 0 Ã  i , i est Ã©gale Ã  la longueur du tableau - 1.</li>
+			<li>Un nombre : position du pointeur dans l'historique. Sa valeur va de -1 Ã  i. </li>
 		</ul>
 		
 		<img src="diagram/Class.UndoStack.gif">
 		
-		<p>Intégration aux autres composants</p>
+		<p>IntÃ©gration aux autres composants</p>
 		<img src="diagram/Sequence.UndoStack.gif">
 	</div>
 	
-	<div><h2>Code commenté</h2>
+	<div><h2>Code commentÃ©</h2>
 		<div id="eTest" class="comments"></div>
 	</div>
 </div>
@@ -263,8 +262,8 @@ function translateAction ( bCompleteInfo, o, index ){
 		if( o.added ) a.push( 'added <pre>'+ o.added +'</pre>' )
 		if( o.detail )
 			a.push( 'selection <b>['+ o.detail[0] +','+ o.detail[1] +'[</b> curseur <b> '+ o.detail[2] +'</b>' )
-		if( o.Undo ) a.push( '<i>executé au Undo</i>' )
-		if( o.Redo ) a.push( '<i>executé au Redo</i> ')
+		if( o.Undo ) a.push( '<i>executÃ© au Undo</i>' )
+		if( o.Redo ) a.push( '<i>executÃ© au Redo</i> ')
 		}
 	else{
 		if( o.action ){
@@ -339,27 +338,27 @@ Events.add(
 	)
 
 _('eTest').innerHTML = getCodeComments( oEditor, {
-	2:"<code>fApplyMethod</code> est la méthode utilisée pour mettre à jour le contenu... voir la méthode <code>D.updateContents</code>",
-	3:"<code>a</code> Liste des actions sauvegardées<br> <code>n</code> Position du pointeur.",
-	4:[7,"<b>Déplace le pointeur de l'historique d'une place et retourne la valeur dépassée si elle existe.</b>"],
+	2:"<code>fApplyMethod</code> est la mÃ©thode utilisÃ©e pour mettre Ã  jour le contenu... voir la mÃ©thode <code>D.updateContents</code>",
+	3:"<code>a</code> Liste des actions sauvegardÃ©es<br> <code>n</code> Position du pointeur.",
+	4:[7,"<b>DÃ©place le pointeur de l'historique d'une place et retourne la valeur dÃ©passÃ©e si elle existe.</b>"],
 	8:[9,"<b>Effectue un Undo ou un Redo</b>"],
-	14:[14,"fixe normalement la sélection et la position du curseur... (fin de la suite d'actions)."],
+	14:[14,"fixe normalement la sÃ©lection et la position du curseur... (fin de la suite d'actions)."],
 	16:[16,"inversion ( added/deleted ) pour le Undo"],
-	17:"met à jour le contenu...",
+	17:"met Ã  jour le contenu...",
 	20:[20,"continue la suite d'actions."],
-	21:[23,"position du curseur et sélection par défaut."],
-	26:[32,"met à jour l'affichage des icônes du TopMenu si il existe"],
+	21:[23,"position du curseur et sÃ©lection par dÃ©faut."],
+	26:[32,"met Ã  jour l'affichage des icÃ´nes du TopMenu si il existe"],
 	34:"<b>Nettoyage de l'historique</b>",
-	37:"<b>Rétablissement d'une modification</b>",
+	37:"<b>RÃ©tablissement d'une modification</b>",
 	38:"<b>Annulation d'une modification</b>",
 	39:[39,"..."],
-	50:[55,"<b>Déplace le pointeur</b>"],
-	56:"<b>Ajoute une action à l'historique :<br> m={start, added [, deleted][, action]}<br> m={ Undo||Redo [, action]}</b>",
+	50:[55,"<b>DÃ©place le pointeur</b>"],
+	56:"<b>Ajoute une action Ã  l'historique :<br> m={start, added [, deleted][, action]}<br> m={ Undo||Redo [, action]}</b>",
 	57:"supprime la portion de l'historique suivant la position courante.",
 	59:"compression de l'historique",
-	60:[64,"les ajouts à la suite sont aggrégés entre eux"],
+	60:[64,"les ajouts Ã  la suite sont aggrÃ©gÃ©s entre eux"],
 	65:[75,"idem pour les supressions "],
-	77:[78,"ajoute une action et déplace la position du pointeur."]
+	77:[78,"ajoute une action et dÃ©place la position du pointeur."]
 	})
 </script>
 

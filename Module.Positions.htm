@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Les positions</title>
-	
 	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
 	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
 	<style>
@@ -23,42 +22,42 @@
 
 <h1>Les positions</h1>
 
-<p>Pour positionner un caractère (ou un espace), on utilise :</p>
+<p>Pour positionner un caractÃ¨re (ou un espace), on utilise :</p>
 <ul>
 	<li>
-		Dans le <i>texte source</i>: l'<b>index</b>. Il commence à <code>0</code>.<br>
-		Si le document contient <code>nLen</code> caractères, le dernier caractère est numéroté <code>nLen-1</code>.
+		Dans le <i>texte source</i>: l'<b>index</b>. Il commence Ã  <code>0</code>.<br>
+		Si le document contient <code>nLen</code> caractÃ¨res, le dernier caractÃ¨re est numÃ©rotÃ© <code>nLen-1</code>.
 	</li>
 	<li>
-		Dans un <i>éditeur</i>: la <b>colonne</b>, la <b>ligne logique</b> et la <b>ligne visible</b>. Elles commencent à <code>1</code>.
+		Dans un <i>Ã©diteur</i>: la <b>colonne</b>, la <b>ligne logique</b> et la <b>ligne visible</b>. Elles commencent Ã  <code>1</code>.
 		<ul>
 			<li> <b>ligne logique</b> : ligne dans la source.</li>
-			<li> <b>ligne visible</b> : ligne dans l'éditeur (rappel: les lignes peuvent être cachées).</li>
+			<li> <b>ligne visible</b> : ligne dans l'Ã©diteur (rappel: les lignes peuvent Ãªtre cachÃ©es).</li>
 		</ul>
 	</li>
 </ul>
 <p>
-	Le curseur texte est présent entre les caractères et peut-être positionné depuis  
-	<i>avant le premier caractère</i> (<code>0</code>)  
-	jusqu'à  <i>après le dernier caractère</i> (<code>nLen</code>).
+	Le curseur texte est prÃ©sent entre les caractÃ¨res et peut-Ãªtre positionnÃ© depuis  
+	<i>avant le premier caractÃ¨re</i> (<code>0</code>)  
+	jusqu'Ã   <i>aprÃ¨s le dernier caractÃ¨re</i> (<code>nLen</code>).
 </p>
 
 <div><h2>Objectif</h2>
-	<p>Déterminer une position précise dans le texte source et l'éditeur.</p>
+	<p>DÃ©terminer une position prÃ©cise dans le texte source et l'Ã©diteur.</p>
 	<ul>
-		<li>Quel est l'index d'une position dans l'éditeur ?</li>
+		<li>Quel est l'index d'une position dans l'Ã©diteur ?</li>
 		<li>Quelle est la position d'un index ? d'un clique de souris ?</li>
 	</ul>
 </div>
 
-<div><h2>Prérequis</h2>
+<div><h2>PrÃ©requis</h2>
 	<p>
 		On utilise une <b>police monospace</b> :  
-		la dimension de chacun de leurs caractères est identique.
+		la dimension de chacun de leurs caractÃ¨res est identique.
 	</p>
 	<ul>
-		<li>Toutes les lignes font la même hauteur.</li>
-		<li>Tous les caractères font la même largeur.</li>
+		<li>Toutes les lignes font la mÃªme hauteur.</li>
+		<li>Tous les caractÃ¨res font la mÃªme largeur.</li>
 	</ul>
 </div>
 
@@ -66,17 +65,17 @@
 	<img src="diagram/Class.Positions.gif">
 </div>
 
-<div><h2>Aperçu</h2>
+<div><h2>AperÃ§u</h2>
 	<p>
 		En appliquant quelques <a href="#2.6.4.5.">transformations</a>, 
-		nous obtenons le <b>tableau</b> transcrit ci-dessous (Une ligne = une chaîne du tableau). 
-		Il sert à calculer les positions dans l'éditeur. <br>
+		nous obtenons le <b>tableau</b> transcrit ci-dessous (Une ligne = une chaÃ®ne du tableau). 
+		Il sert Ã  calculer les positions dans l'Ã©diteur. <br>
 		Pour observer les modifications du 'tableau' ci-dessous :
 	</p>
 	<ol>
-		<li>Rendre actif l'éditeur ci-dessous</li>
+		<li>Rendre actif l'Ã©diteur ci-dessous</li>
 		<li>Ouvrer sa configuration <kbd>CTRL+M</kbd></li>
-		<li>Cocher ou décocher la case 'Tabulation souple' ou changer la taille des tabulations.</li>
+		<li>Cocher ou dÃ©cocher la case 'Tabulation souple' ou changer la taille des tabulations.</li>
 	</ol>
 	<div id="eEditeur1"></div>
 	<textarea id="eTOKENS" wrap="off"></textarea>
@@ -85,28 +84,28 @@
 
 <div style="clear: left; padding-top: 1em;"><h2>Colonne valide</h2>
 	<p>
-		Pour déterminer une <b>colonne valide</b>, on réalise quelques transformations sur le texte source :
+		Pour dÃ©terminer une <b>colonne valide</b>, on rÃ©alise quelques transformations sur le texte source :
 	</p>
 	<ul>
-		<li>On utilise un seul caractère pour définir les sauts de ligne.</li>
+		<li>On utilise un seul caractÃ¨re pour dÃ©finir les sauts de ligne.</li>
 		<li>On explose la source en un tableau de lignes.</li>
 		<li>On remplace :
 			<ul>
-				<li>les caractères non blancs avec <code>"x"</code>.</li>
+				<li>les caractÃ¨res non blancs avec <code>"x"</code>.</li>
 				<li>les espaces avec <code>"."</code> (ou <code>"x"</code> ca n'a pas d'importance).</li>
-				<li>les <b>tabulations</b> par un nombre de caractères égale à sa taille. On utilise :
+				<li>les <b>tabulations</b> par un nombre de caractÃ¨res Ã©gale Ã  sa taille. On utilise :
 					<ul>
-						<li><code>"B"</code> pour marquer le début d'une tabulation.</li>
-						<li><code>"="</code> pour compléter la taille de la tabulation.</li>
+						<li><code>"B"</code> pour marquer le dÃ©but d'une tabulation.</li>
+						<li><code>"="</code> pour complÃ©ter la taille de la tabulation.</li>
 					</ul>
 				</li>
 			</ul>
 		</li>
 	</ul>
-	<p>En résumé :</p>
+	<p>En rÃ©sumÃ© :</p>
 	<ul>
-		<li>On récupère la ligne dans le tableau.</li>
-		<li>Si le caractère à la colonne fait partie des caractères <code>"x.B"</code> : la colonne est valide.</li>
+		<li>On rÃ©cupÃ¨re la ligne dans le tableau.</li>
+		<li>Si le caractÃ¨re Ã  la colonne fait partie des caractÃ¨res <code>"x.B"</code> : la colonne est valide.</li>
 		<li>Sinon on recherche la colonne valide la plus proche de la colonne d'origine.</li>
 	</ul>
 </div>
@@ -237,7 +236,7 @@
 				index: parseInt( nIndex )
 				}
 			},
-		getColumnMax :function( nLine ){ // Sans nLine retourne le résultat pour la source
+		getColumnMax :function( nLine ){ // Sans nLine retourne le rÃ©sultat pour la source
 			if( nLine ) return this.a[nLine-1] ? this.a[nLine-1].length : 0
 			var nMax = 0, nColumnMaxLine = 1
 			for(var i=0, ni=this.a.length, n ; i<ni ; i++ ){
@@ -264,8 +263,8 @@
 <div><h2>A faire</h2>
 <ul>
 	<li>
-		Calculer la colonne la plus à gauche selon un clique souris.<br>
-		<b>Objectif: Finaliser la sélection des mots par double clique.</b>
+		Calculer la colonne la plus Ã  gauche selon un clique souris.<br>
+		<b>Objectif: Finaliser la sÃ©lection des mots par double clique.</b>
 	</li>
 </ul>
 </div>
@@ -295,7 +294,7 @@ var D = oEditor.newDoc( 'Source', eContents.firstChild.data )
 
 oEditor.execCommand( 'FOLD_LEVEL_3' )
 
-// Affiche le texte servant à analyser les espaces blancs "
+// Affiche le texte servant Ã  analyser les espaces blancs "
 ;(getWhitesSpaces=function(){
 	eTOKENS.value = oEditor.oActiveDocument.oPositions.a.join('\n')
 	})();

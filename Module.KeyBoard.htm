@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Le clavier</title>
-	
 	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
 	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
 	<link rel="stylesheet" type="text/css" href="src/view.commands.css">
@@ -47,19 +46,19 @@
 	<ul>
 		<li>Capturer le texte saisie au clavier.</li>
 		<li>Ajouter des touches raccourcies</li>
-		<li>Copier/couper du texte pour le coller à l'extérieur de l'éditeur.</li>
+		<li>Copier/couper du texte pour le coller Ã  l'extÃ©rieur de l'Ã©diteur.</li>
 	</ul>
 </div>
 <div class=""><h2>A noter</h2>
 	<ul>
 		<li>
-			La liste des touches raccourcies est étendue pendant l'exécution.<br>
+			La liste des touches raccourcies est Ã©tendue pendant l'exÃ©cution.<br>
 			<code>Editor.extend( 'KeyBoard', { 'CTRL+1':'MARK_STYLE_1', 'CTRL+2':'MARK_STYLE_2' })</code>
 		</li>
 		<li>
-			Comment consulter la liste des touches raccourcies ? (associées à des commandes...)
+			Comment consulter la liste des touches raccourcies ? (associÃ©es Ã  des commandes...)
 			<ol>
-				<li>rendre actif l'éditeur</li>
+				<li>rendre actif l'Ã©diteur</li>
 				<li>presser les touches <kbd>CTRL+W</kbd></li>
 				<li>cliquer sur "Commandes et raccourcies"</li>
 			</ol>
@@ -119,15 +118,15 @@
 
 <div><h2>Comment ca marche</h2>
 	<dl>
-	<dt><b>La capture des touches pressées</b></dt>
+	<dt><b>La capture des touches pressÃ©es</b></dt>
 	<dd>
-		Elle se fait avec un élément textarea en arrière plan, actif lorsque le curseur clignote dans l'éditeur.
+		Elle se fait avec un Ã©lÃ©ment textarea en arriÃ¨re plan, actif lorsque le curseur clignote dans l'Ã©diteur.
 	</dd>
-	<dt><b>Le coupé et le copié de la sélection</b></dt>
+	<dt><b>Le coupÃ© et le copiÃ© de la sÃ©lection</b></dt>
 	<dd>
-		Elle se fait avec un autre élément textarea.<br>
-		On a donc un second textarea en arrière plan, actif lorsqu'une sélection existe. <br>
-		Son contenu, totalement sélectionné, est la sélection dans l'éditeur.
+		Elle se fait avec un autre Ã©lÃ©ment textarea.<br>
+		On a donc un second textarea en arriÃ¨re plan, actif lorsqu'une sÃ©lection existe. <br>
+		Son contenu, totalement sÃ©lectionnÃ©, est la sÃ©lection dans l'Ã©diteur.
 	</dd>
 	</dl>
 </div>
@@ -188,12 +187,12 @@ for(var sAttr in oShortCuts ){
 <!-- 
 	<div><h2> Conclusion</h2>
 		<p>
-			Quelque soit son implémentation l'ensemble du système fonctionne avec des petits textes. 
-			Mais dés que la longueur du texte grandie il faut impérativement éviter :
+			Quelque soit son implÃ©mentation l'ensemble du systÃ¨me fonctionne avec des petits textes. 
+			Mais dÃ©s que la longueur du texte grandie il faut impÃ©rativement Ã©viter :
 		</p>
 		<ul>
-			<li>Accéder aux dimensions des éléments non fixées</li>
-			<li>Affecter l'attribut innerHTML d'un élément avec un grand texte.</li>
+			<li>AccÃ©der aux dimensions des Ã©lÃ©ments non fixÃ©es</li>
+			<li>Affecter l'attribut innerHTML d'un Ã©lÃ©ment avec un grand texte.</li>
 		</ul>
 	</div>
  -->

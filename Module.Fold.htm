@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Le replie de bloc</title>
-	
 	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
 	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
 	<style>
@@ -21,11 +20,11 @@
 <a href="./index.htm">index</a>
 
 <div><h1>Le replie de bloc</h1>
-<p>Ce module requiert le résultat de l'<a href="Strategy.Highlighting.Syntax.htm">analyse lexicale</a>.</p>
+<p>Ce module requiert le rÃ©sultat de l'<a href="Strategy.Highlighting.Syntax.htm">analyse lexicale</a>.</p>
 
 <div class=""><h2>Objectifs</h2>
 	<ul>
-		<li>Réduire visuellement le nombre de ligne du texte source.</li>
+		<li>RÃ©duire visuellement le nombre de ligne du texte source.</li>
 	</ul>
 </div>
 
@@ -33,7 +32,7 @@
 	<img src="diagram/Class.Fold.gif">
 </div>
 
-<div class=""><h2>Aperçu</h2>
+<div class=""><h2>AperÃ§u</h2>
 <!-- SOURCE -->
 <textarea id="eSource"></textarea>
 <div id="eContents"><!--Editor.addModule('Fold',(function(){
@@ -102,7 +101,7 @@
 					//	default:throw new Error ( e.title )
 						}
 					}
-				// Needed tant que 'e' n'a plus de parent (il est effacé!)
+				// Needed tant que 'e' n'a plus de parent (il est effacÃ©!)
 				setTimeout( function(){ D.oEditor.focus()}, 50 )
 				})
 			,D.oCaret, 'change', CallBack( this, 'highlight' )
@@ -172,7 +171,7 @@
 			_f( this.nCurrentFoldID, 'delete' )
 			this.nCurrentFoldID = _f( nFoldID, 'add' )
 			},
-		getBrackets :function(){ // TODO : eviter les calcul inutile lors de l'édition
+		getBrackets :function(){ // TODO : eviter les calcul inutile lors de l'Ã©dition
 			if( ! this.bVisible ) return ;
 			var D=this.oDocument, Sy=D.oSyntax.oStrategy, V=D.oView
 			var aBefore = this.aIntervals
@@ -180,7 +179,7 @@
 				var o=Sy.oRootNode
 				, f=function( s ){ return to_array( o.getElementsByTagName( s ))}
 				, aIntervals = []
-				// Marque à faux tous les intervalles cachés. sera égale aux intervalles sans point de controle
+				// Marque Ã  faux tous les intervalles cachÃ©s. sera Ã©gale aux intervalles sans point de controle
 				for(var i=0, a; a=V.aHiddenRanges[i]; i++ ) a[2] = false
 				// Recherche les paires
 				for(var i=0, ni=this.aPaired.length; i<ni; i++ ){
@@ -196,7 +195,7 @@
 							var n2 = oNode.oValue.lineStart
 							if( n1==n2 ) continue;
 							aIntervals.push( Range( n1, n2, 1 ))
-							// Marquage des intervalles pouvant-être réafichés
+							// Marquage des intervalles pouvant-Ãªtre rÃ©afichÃ©s
 							var bHidden = V.isHiddenRange( n1+1, n2 )
 							if( bHidden ) V.aHiddenRanges[ bHidden-1 ][2]=true 
 							}
@@ -205,7 +204,7 @@
 					for(var j=0, oNode; oNode=aLPAIR[j]; j++ )
 						aIntervals.push( Range( oNode.oValue.lineStart, sRPair+' ?' ))
 					}
-				// Affiche les intervalles ne pouvant plus être réaffiché
+				// Affiche les intervalles ne pouvant plus Ãªtre rÃ©affichÃ©
 				for(var i=0, a; a=V.aHiddenRanges[i]; i++ ) if( ! a[2]) V.showRange( a[0], a[1])
 				// Organisation des paires 
 				aIntervals.sortBy('1','DESC')
@@ -217,12 +216,12 @@
 					for(var j=i+1; j<ni; j++ ){
 						var a2 = aIntervals[j]
 						if( ! a2 ) continue;
-						if( a1[0]==a2[0]){ // Si deux intervalles ont le même départ on efface le deuxième
+						if( a1[0]==a2[0]){ // Si deux intervalles ont le mÃªme dÃ©part on efface le deuxiÃ¨me
 							aIntervals[j] = null
 							continue;
 							}
 						if( a2[0]>=a1[1]) break;
-						// Mise à jour du "Level"
+						// Mise Ã  jour du "Level"
 						if( a1[0]<=a2[0] && a2[1]<=a1[1]) a2[2]=a1[2]+1
 						}
 					}
@@ -232,7 +231,7 @@
 						a.push( aIntervals[i])
 				this.aIntervals = a
 				}
-			// met à jour l'affichage si et seulement si il diffère
+			// met Ã  jour l'affichage si et seulement si il diffÃ¨re
 			if( aBefore.toString() != this.aIntervals.toString()) this.refresh()
 			},
 		setBrackets :function(){
@@ -267,7 +266,7 @@
 				if( ! n1ViewLine ) continue;
 				var bHidden = V.isHiddenRange( n1+1, n2 )
 				, sTop = (n1ViewLine-1)*Ch.nHeight +nVAlign+'px'
-				// Point de contrôle de l'intervalle
+				// Point de contrÃ´le de l'intervalle
 				this.oControlPoints[i]=[
 					eParent.appendChild( Tag( 'DT',{ nFoldID:i, innerHTML:bHidden?'+':'-', style:{
 						top: sTop,

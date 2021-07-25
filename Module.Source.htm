@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Le texte source</title>
-	
 	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
 	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
 	<style>
@@ -31,9 +30,9 @@
 
 <div><h2>Objectif</h2>
 	<ul>
-		<li>Gérer le texte source d'un document.</li>
-		<li>Être indépendant des différents type de saut de ligne: \r\n, \n, \r.</li>
-		<li>Connaître la position de mots.</li>
+		<li>GÃ©rer le texte source d'un document.</li>
+		<li>ÃŠtre indÃ©pendant des diffÃ©rents type de saut de ligne: \r\n, \n, \r.</li>
+		<li>ConnaÃ®tre la position de mots.</li>
 	</ul>
 </div>
 
@@ -41,7 +40,7 @@
 	<img src="diagram/Class.Source.gif">
 </div>
 
-<div><h2>Aperçu</h2>
+<div><h2>AperÃ§u</h2>
 <div id="eContents"><!--Source =(function(){
 	var T =function( sSource ){
 		var sValue, aLines, oLines
@@ -133,7 +132,7 @@
 	T.prototype ={
 		nLines: 1,
 		sOS: null, // DOS, MAC, UNIX
-		sNewLine: "\n", // "\n", // TODO : Must be a character :  \r or \n, caractère définissant les nouvelles lignes
+		sNewLine: "\n", // "\n", // TODO : Must be a character :  \r or \n, caractÃ¨re dÃ©finissant les nouvelles lignes
 		determineOS :function( s ){
 			if( /\r\n/.test( s )) return 'DOS'
 			if( /\r/.test( s )) return 'MAC'
@@ -182,13 +181,13 @@
 
 	<div id="eEditeur1"></div>
 	<div class="info">
-		Résultat de la fonction <code>updateValue</code><br>
+		RÃ©sultat de la fonction <code>updateValue</code><br>
 		<code>oDocument.oUpdates =</code>
 		<pre id="eINFO"></pre>
 		Voir les diagrammes:
 		<ul  style="margin:0; padding: 0 0 0 2em;">
 			<li><a href="diagram/graphCaretInsertion.html">Insertion au curseur</a></li>
-			<li><a href="diagram/graphSelectionReplacement.html">Remplacement de la sélection</a></li>
+			<li><a href="diagram/graphSelectionReplacement.html">Remplacement de la sÃ©lection</a></li>
 		</ul>
 	</div>
 	<div id="eStats" class="stats"></div>
