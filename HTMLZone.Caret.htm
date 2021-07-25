@@ -23,16 +23,16 @@
 
 <div><h2>Objectif</h2>
 	<ul>
-		<li>Offrir ‡ l'utilisateur un point d'insertion dans le texte.</li>
-		<li>Positionner le curseur avant ou aprËs un caractËre (mÍme pour une tabulation).</li>
+		<li>Offrir √† l'utilisateur un point d'insertion dans le texte.</li>
+		<li>Positionner le curseur avant ou apr√®s un caract√®re (m√™me pour une tabulation).</li>
 		<li>Le faire clignoter pour le situer plus rapidemment.</li>
-		<li>Le rendre toujours visible quand on le dÈplace.</li>
+		<li>Le rendre toujours visible quand on le d√©place.</li>
 	</ul>
 	<p>Note : </p>
 	<ul>
-		<li>Le module <a href="Module.Positions.htm">Positions</a> dÈtermine des positions prÈcises.</li>
-		<li>Le module <a href="Module.View.htm">View</a> dÈtermine les lignes visibles.</li>
-		<li>La zone html <a href="HTMLZone.TextZoneControl.htm">TextZoneControl</a> dÈtermine l'espace visible.</li>
+		<li>Le module <a href="Module.Positions.htm">Positions</a> d√©termine des positions pr√©cises.</li>
+		<li>Le module <a href="Module.View.htm">View</a> d√©termine les lignes visibles.</li>
+		<li>La zone html <a href="HTMLZone.TextZoneControl.htm">TextZoneControl</a> d√©termine l'espace visible.</li>
 	</ul>
 </div>
 
@@ -64,13 +64,13 @@
 		</ol>
 	</div>
 
-	<div><h2>AperÁu: le curseur html</h2>
+	<div><h2>Aper√ßu: le curseur html</h2>
 	<dl class="info">
 		<dt><b>position</b>( </dt>
 		<dt>index: <b id="eIndex">...</b> , </dt>
 		<dt>colonne: <b id="eCol">...</b> , </dt>
 		<dt>ligne logique: <b id="eLine">...</b> , </dt>
-		<dt>ligne rÈel: <b id="eViewLine">...</b></dt>
+		<dt>ligne r√©el: <b id="eViewLine">...</b></dt>
 		<dt> )</dt>
 	</dl>
 	</div>
@@ -78,8 +78,8 @@
 	<div id="eStats" class="stats"></div>
 	<div style="clear:left;"></div>
 	
-	<div><h2>Code commentÈ</h2>
-		<p>Le placement du curseur est rÈalisÈ depuis <code>Editor.prototype.placeHandle(evt)</code>.</p>
+	<div><h2>Code comment√©</h2>
+		<p>Le placement du curseur est r√©alis√© depuis <code>Editor.prototype.placeHandle(evt)</code>.</p>
 		<div id="eTest" class="comments"></div>
 		<div id="eContents"><!--Caret =(function(){
 	var C =function( D ){
@@ -96,7 +96,7 @@
 			}
 				
 		// setPosition: ATTENTION oPosition DOIT CONTENIR index QUE SI C'EST UNE VALEUR JUSTE
-		this.setPosition =function( oPosition ){ // viewLine, line et col commence ‡ 1
+		this.setPosition =function( oPosition ){ // viewLine, line et col commence √† 1
 			//
 			if( oPosition.viewLine && ! oPosition.line )
 				oPosition = D.oPositions.getFromView( oPosition )
@@ -152,7 +152,7 @@
 					break;
 				}
 			},
-		setIndex :function ( nIndex, bPreventScrolling, bUpdate ){ // nLine et nCol  commence ‡ 1
+		setIndex :function ( nIndex, bPreventScrolling, bUpdate ){ // nLine et nCol  commence √† 1
 			var D=this.oDocument, V=D.oView
 			, o = D.oPositions
 			, sLine = D.oSource.lineAt( nIndex, 'setIndex' )
@@ -229,10 +229,10 @@ _('eTest').innerHTML = getCodeComments( oEditor, {
 	1:"Caret = curseur texte",
 	3:[3,"..."],
 	16:[17,"Positionne le curseur",'lightskyblue'],
-	37:[40,"Met ‡ jour les infos du curseur dans la barre de status (si elle existe)",'lightskyblue'],
-	41:[41,"RÈcupËre l'index au curseur",'lightskyblue'],
-	42:[43,"InsËre du texte au curseur",'lightskyblue'],
-	54:[71,"Active ou dÈsactive le curseur (visuel)<ul style='text-align:left;'><li>true: il a le focus.<li>false: il perd le focus<li>null: il est masquÈ</ul>",'lightskyblue'],
+	37:[40,"Met √† jour les infos du curseur dans la barre de status (si elle existe)",'lightskyblue'],
+	41:[41,"R√©cup√®re l'index au curseur",'lightskyblue'],
+	42:[43,"Ins√®re du texte au curseur",'lightskyblue'],
+	54:[71,"Active ou d√©sactive le curseur (visuel)<ul style='text-align:left;'><li>true: il a le focus.<li>false: il perd le focus<li>null: il est masqu√©</ul>",'lightskyblue'],
 	72:[73,"Change l'index du curseur",'lightskyblue'],
 	90:[105,"Rafraichit l'emplacement du curseur depuis son attribut <code>position</code>.",'lightskyblue']
 	})

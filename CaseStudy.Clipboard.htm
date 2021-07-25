@@ -10,49 +10,49 @@
 
 <div><h1> Le copier/coller</h1>
 	<p>
-		Les navigateurs ne nous laisse pas la possibilité d'accéder et de 
-		modifier les valeurs du presse papier pour des raisons de sécurité. <br>
-		Si l'on veut utiliser le copier/coller natif, il va falloir faire preuve d'une grande créativité.
+		Les navigateurs ne nous laisse pas la possibilitÃ© d'accÃ©der et de 
+		modifier les valeurs du presse papier pour des raisons de sÃ©curitÃ©. <br>
+		Si l'on veut utiliser le copier/coller natif, il va falloir faire preuve d'une grande crÃ©ativitÃ©.
 	</p>
 	<div><h2> Le presse papier simple</h2>
 		<p>
-			Le 'couper' ou le 'copier' copie le contenu de la sélection dans une variable.<br>
+			Le 'couper' ou le 'copier' copie le contenu de la sÃ©lection dans une variable.<br>
 			Le 'coller' utilise le contenu de cette variable.
 		</p>
 		<p><cite>
-			Ce presse papier est utilisable que dans l'éditeur... <br>
+			Ce presse papier est utilisable que dans l'Ã©diteur... <br>
 			Il ne nous permet pas d'importer du texte d'ailleurs.
 		</cite></p>
 	</div>
 	<div><h2> Le presse papier natif</h2>
-		<p>Il nous faut au moins un élément TEXTAREA ou INPUT(type=TEXT) pour pouvoir capturer ses actions.</p>
+		<p>Il nous faut au moins un Ã©lÃ©ment TEXTAREA ou INPUT(type=TEXT) pour pouvoir capturer ses actions.</p>
 		<p>J'ai choisi d'utiliser 2 TEXTAREA :</p>
 		<dl><ol>
-			<li>Un pour capturer le contenu de la sélection de l'éditeur.
+			<li>Un pour capturer le contenu de la sÃ©lection de l'Ã©diteur.
 				<dl>
-					<dd>Cet élément est mise à jour dés que la sélection est modifiée.</dd>
-					<dd>Son contenu est sélectionné (voir La sélection native).</dd>
-					<dd>Il a le focus tant qu'une sélection existe.</dd>
-					<dd>Il sert à capturer un Couper ou un Coller.</dd>
+					<dd>Cet Ã©lÃ©ment est mise Ã  jour dÃ©s que la sÃ©lection est modifiÃ©e.</dd>
+					<dd>Son contenu est sÃ©lectionnÃ© (voir La sÃ©lection native).</dd>
+					<dd>Il a le focus tant qu'une sÃ©lection existe.</dd>
+					<dd>Il sert Ã  capturer un Couper ou un Coller.</dd>
 				</dl></li>
-			<li>Un pour insérer du contenu dans l'éditeur.
+			<li>Un pour insÃ©rer du contenu dans l'Ã©diteur.
 				<dl>
-					<dd>Il a le focus tant quand l'éditeur a le focus et qu'aucune sélection existe.</dd>
+					<dd>Il a le focus tant quand l'Ã©diteur a le focus et qu'aucune sÃ©lection existe.</dd>
 					<dd>Il permet de capturer un Coller.</dd>
-					<dd>Il permet aussi capturer les touches pressées du clavier.</dd>
-					<dd>Son contenu est automatiquement traité : il est toujours vide.</dd>
+					<dd>Il permet aussi capturer les touches pressÃ©es du clavier.</dd>
+					<dd>Son contenu est automatiquement traitÃ© : il est toujours vide.</dd>
 				</dl></li>
 		</ol></dl>
-		<p>La seule contrainte est de différer les actions de l'éditeur.</p>
+		<p>La seule contrainte est de diffÃ©rer les actions de l'Ã©diteur.</p>
 		<dl>
-			<dt><kbd>CTRL+C</kbd>: Copie de la sélection.
+			<dt><kbd>CTRL+C</kbd>: Copie de la sÃ©lection.
 				<ul>
-					<li>Le contenu du TEXTAREA 1 est copié !</li>
-					<li>Il est aussi copié dans le presse papier simple.</li>
+					<li>Le contenu du TEXTAREA 1 est copiÃ© !</li>
+					<li>Il est aussi copiÃ© dans le presse papier simple.</li>
 				</ul></dt>
 			<dd>
 				<dl>
-					<dt>Actions différées :
+					<dt>Actions diffÃ©rÃ©es :
 						<ol>
 							<li>Le TEXTAREA 2 prend le focus !</li>
 						</ol>
@@ -61,30 +61,30 @@
 			</dd>
 			<dt><kbd>CTRL+X</kbd>: Couper.
 				<ul>
-					<li>Le contenu du TEXTAREA 1 est copié !</li>
-					<li>Il est aussi copié dans le presse papier simple.</li>
+					<li>Le contenu du TEXTAREA 1 est copiÃ© !</li>
+					<li>Il est aussi copiÃ© dans le presse papier simple.</li>
 				</ul></dt>
 			<dd>
 				<dl>
-					<dt>Actions différées (si une sélection existe) :
+					<dt>Actions diffÃ©rÃ©es (si une sÃ©lection existe) :
 						<ol>
-							<li>Placer le curseur au début de la sélection.</li>
-							<li>Remplacer la sélection par une chaîne vide.</li>
+							<li>Placer le curseur au dÃ©but de la sÃ©lection.</li>
+							<li>Remplacer la sÃ©lection par une chaÃ®ne vide.</li>
 							<li>Le TEXTAREA 2 prend le focus !</li>
 						</ol>
 					</dt>
 				</dl>
 			</dd>
-			<dt><kbd>CTRL+V</kbd>: Coller. Le contenu d'un des deux TEXTAREA est modifié !</dt>
+			<dt><kbd>CTRL+V</kbd>: Coller. Le contenu d'un des deux TEXTAREA est modifiÃ© !</dt>
 			<dd>
 				<dl>
-					<dt>Actions différées
+					<dt>Actions diffÃ©rÃ©es
 						<ol>
-							<li>Récupération du contenu du TEXTAREA possédant le focus.</li>
-							<li>Si il est vide, récupération du contenu du presse papier simple.</li>
-							<li>La valeur de ce TEXTAREA est remplacé par une chaîne vide.</li>
-							<li>La sélection courante est supprimée.</li>
-							<li>Le contenu récupéré est inséré au curseur.</li>
+							<li>RÃ©cupÃ©ration du contenu du TEXTAREA possÃ©dant le focus.</li>
+							<li>Si il est vide, rÃ©cupÃ©ration du contenu du presse papier simple.</li>
+							<li>La valeur de ce TEXTAREA est remplacÃ© par une chaÃ®ne vide.</li>
+							<li>La sÃ©lection courante est supprimÃ©e.</li>
+							<li>Le contenu rÃ©cupÃ©rÃ© est insÃ©rÃ© au curseur.</li>
 						</ol>
 					</dt>
 				</dl>
@@ -95,7 +95,7 @@
 		<p>Il est possible :</p>
 		<ul>
 			<li>D'utiliser le presse papier natif.</li>
-			<li>De simuler les actions du presse papier natif dans l'éditeur.</li>
+			<li>De simuler les actions du presse papier natif dans l'Ã©diteur.</li>
 		</ul>
 	</div>
 </div>

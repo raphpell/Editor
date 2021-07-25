@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>La sélection native</title>
+	<title>La sÃ©lection native</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
 	<style>
@@ -18,29 +18,29 @@
 
 <a href="./index.htm">index</a>
 
-<div><h1> La sélection native</h1>
+<div><h1> La sÃ©lection native</h1>
 	<ul style="float:left; margin-right:3em;;">
-		<li>Elle a un début et une fin.</li>
-		<li>Elle peut-être étendue progressivement :
+		<li>Elle a un dÃ©but et une fin.</li>
+		<li>Elle peut-Ãªtre Ã©tendue progressivement :
 			<ul>
-				<li>à un mot = double clique</li>
-				<li>à une ligne = triple clique</li>
-				<li>"caractère/caractère" = <kbd>SHIFT</kbd> + flèches</li>
-				<li>"mot/mot" = <kbd>SHIFT</kbd> + <kbd>CTRL</kbd> + flèches</li>
+				<li>Ã  un mot = double clique</li>
+				<li>Ã  une ligne = triple clique</li>
+				<li>"caractÃ¨re/caractÃ¨re" = <kbd>SHIFT</kbd> + flÃ¨ches</li>
+				<li>"mot/mot" = <kbd>SHIFT</kbd> + <kbd>CTRL</kbd> + flÃ¨ches</li>
 			</ul></li>
-		<li>Elle peut-être modifiée :
+		<li>Elle peut-Ãªtre modifiÃ©e :
 			<ul>
-				<li>sélection + <kbd>SHIFT</kbd> + clique</li>
+				<li>sÃ©lection + <kbd>SHIFT</kbd> + clique</li>
 			</ul></li>
-		<li><strike>Elle peut-être multiple (touche <kbd>CTRL</kbd>).</strike> mis de coté</li>
-		<li>Elle peut-être effacée, extraite ou remplacée</li>
-		<li>Elle peut-être glissée et déposée ailleurs.</li>
-		<li>Le bout est toujours visible lorsqu'on l'étend.</li>
+		<li><strike>Elle peut-Ãªtre multiple (touche <kbd>CTRL</kbd>).</strike> mis de cotÃ©</li>
+		<li>Elle peut-Ãªtre effacÃ©e, extraite ou remplacÃ©e</li>
+		<li>Elle peut-Ãªtre glissÃ©e et dÃ©posÃ©e ailleurs.</li>
+		<li>Le bout est toujours visible lorsqu'on l'Ã©tend.</li>
 	</ul>
 
-	<div style="float:left;"><h2> La sélection dans un textarea</h2>
+	<div style="float:left;"><h2> La sÃ©lection dans un textarea</h2>
 <textarea id="eSource" wrap="off" style="height: 144px; width: 456px;">
-// Les symboles spéciaux : >, <, &amp
+// Les symboles spÃ©ciaux : >, <, &amp
 // Exemple: <hr>, &amp;lt
 
 /* 1 - JavaScript syntax */
@@ -63,43 +63,43 @@
 
 	<div style="clear:both;"></div>
 
-	<div><h2> La sélection native d'un document HTML</h2>
+	<div><h2> La sÃ©lection native d'un document HTML</h2>
 		<p>
-			N'étant pas motivé pour en créer une, je conserve la sélection par défaut dans la zone HTML. 
-			Mon objectif est de pouvoir déjà supporter la sélection simple.
+			N'Ã©tant pas motivÃ© pour en crÃ©er une, je conserve la sÃ©lection par dÃ©faut dans la zone HTML. 
+			Mon objectif est de pouvoir dÃ©jÃ  supporter la sÃ©lection simple.
 		</p>
 		<p>
-			La sélection native possède un début et une fin ayant chacun comme attribut :
+			La sÃ©lection native possÃ¨de un dÃ©but et une fin ayant chacun comme attribut :
 		</p>
 		<ul>
-			<li>Un élément html ou texte</li>
-			<li>Un index dans l'élément.</li>
+			<li>Un Ã©lÃ©ment html ou texte</li>
+			<li>Un index dans l'Ã©lÃ©ment.</li>
 		</ul>
 		<p>
-			Il faut créer un objet pour gérer la sélection selon l'index des caractères dans la source.
+			Il faut crÃ©er un objet pour gÃ©rer la sÃ©lection selon l'index des caractÃ¨res dans la source.
 		</p>
 		
-		<div><h3> Passage Sélection / Index</h3>
+		<div><h3> Passage SÃ©lection / Index</h3>
 			<p>
-				Une fois une sélection réalisé, pour son début et sa fin il faut calculer un index dans la source :
+				Une fois une sÃ©lection rÃ©alisÃ©, pour son dÃ©but et sa fin il faut calculer un index dans la source :
 			</p>
 			<ul>
-				<li>somme = index dans l'élément</li>
-				<li>parcours [ fréres précédants ]
+				<li>somme = index dans l'Ã©lÃ©ment</li>
+				<li>parcours [ frÃ©res prÃ©cÃ©dants ]
 				<ul>
 					<li>si ils ont une longeur, somme += leur .</li>
-					<li>sinon si ils ont un contenu html, somme += longueur de son "contenu texte" (éléments html exclus!)</li>
+					<li>sinon si ils ont un contenu html, somme += longueur de son "contenu texte" (Ã©lÃ©ments html exclus!)</li>
 				</ul></li>
-				<li>si le parent de l'élément est la zone d'édition on retourne la somme</li>
-				<li>sinon on continue la même opération avec le parent et la somme, puis on retourne le résultat.</li>
+				<li>si le parent de l'Ã©lÃ©ment est la zone d'Ã©dition on retourne la somme</li>
+				<li>sinon on continue la mÃªme opÃ©ration avec le parent et la somme, puis on retourne le rÃ©sultat.</li>
 			</ul>
 		</div>
-		<div><h3> Passage Index / Sélection</h3>
-			<p>C'est possible aussi... mais là on utilise des objets javascript natifs.</p>
+		<div><h3> Passage Index / SÃ©lection</h3>
+			<p>C'est possible aussi... mais lÃ  on utilise des objets javascript natifs.</p>
 		</div>
 	</div>
 
-	<div><h2> Résultat</h2>
+	<div><h2> RÃ©sultat</h2>
 		<div id="eEditeur1"></div>
 		<div style="margin:1em 0 0;">
 			<div style="float:right;">
@@ -161,11 +161,11 @@
 		<div style="clear:both;"></div>
 	</div>
 
-	<div><h2> Les soucis avec un éditeur</h2>
+	<div><h2> Les soucis avec un Ã©diteur</h2>
 		<ul>
-			<li>le clique sur la sélection avec Safari et Chrome.... ?</li>
-			<li>Les sauts de lignes ne sont pas visibles dans la sélection.</li>
-			<li>le glissé/déposé de texte sélectionné sur Opera... ?</li>
+			<li>le clique sur la sÃ©lection avec Safari et Chrome.... ?</li>
+			<li>Les sauts de lignes ne sont pas visibles dans la sÃ©lection.</li>
+			<li>le glissÃ©/dÃ©posÃ© de texte sÃ©lectionnÃ© sur Opera... ?</li>
 			<li>On ne peut pas couper le texte et ainsi le mettre dans le presse papier !</li>
 		</ul>
 	</div>
@@ -227,15 +227,15 @@ function getC (){ return oEditor.oActiveDocument.oCaret }
 
 	<div><h2> Conclusion</h2>
 		<p>
-			Par la suite je me suis rendu compte qu'utiliser la sélection native n'était pas possible. 
-			Je n'ai pas réussi à simuler le copier sans perdre le focus sur la sélection !.
+			Par la suite je me suis rendu compte qu'utiliser la sÃ©lection native n'Ã©tait pas possible. 
+			Je n'ai pas rÃ©ussi Ã  simuler le copier sans perdre le focus sur la sÃ©lection !.
 		</p>
-		<p>Finalement je vais tenter de créer une simulation de <b>sélection simple</b> :</p>
+		<p>Finalement je vais tenter de crÃ©er une simulation de <b>sÃ©lection simple</b> :</p>
 		<ul>
-			<li>Je vais avoir un élément html par ligne (et pour une sélection multiple plusieurs...)</li>
-			<li>Une fois la sélection réalisée un textarea avec tout le contenu sélectionné aura le focus 
-				(Pour le couper <kbd>CTRL+X</kbd> et le copié <kbd>CTRL+C</kbd>).</li>
-			<li>Lorsque le curseur aura la priorité je vais avoir un deuxième textarea pour capturer le texte tapé...</li>
+			<li>Je vais avoir un Ã©lÃ©ment html par ligne (et pour une sÃ©lection multiple plusieurs...)</li>
+			<li>Une fois la sÃ©lection rÃ©alisÃ©e un textarea avec tout le contenu sÃ©lectionnÃ© aura le focus 
+				(Pour le couper <kbd>CTRL+X</kbd> et le copiÃ© <kbd>CTRL+C</kbd>).</li>
+			<li>Lorsque le curseur aura la prioritÃ© je vais avoir un deuxiÃ¨me textarea pour capturer le texte tapÃ©...</li>
 		</ul>
 	</div>
 
