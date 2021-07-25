@@ -24,7 +24,7 @@ Editor.addStrategy( 'Highlighting', 'Syntax', (function(){
 		var a = this.childNodes
 		, nStart = 0, nMiddle, nEnd = a.length-1
 		
-		// Recherche dichotomique d'un élément à la l igne
+		// Recherche dichotomique d'un Ã©lÃ©ment Ã  la l igne
 		if( a.length )
 			do{
 				nMiddle = Math.round( nStart + ( nEnd - nStart ) / 2 )
@@ -237,7 +237,7 @@ var LexerClass =function(){
 				get :function(){ return s },
 				set :function( sToken ){
 					return o.excluded[sToken]
-						? false // doit impérativement retourner cette valeur
+						? false // doit impÃ©rativement retourner cette valeur
 						: s = LexerRules.Translation[sToken]||sToken
 					},
 				validFor :function( sToken ){
@@ -270,9 +270,9 @@ var LexerClass =function(){
 			getSize :function(){ return n },
 			pop :function(){
 				if( that.bIncremental ){
-					// Cas : Un parent est stoppé plus top
+					// Cas : Un parent est stoppÃ© plus top
 					if( that.eEndToken && that.eParent==that.eEndToken.parentNode ){
-						// Efface tous les enfants du parent présent après sa nouvelle fin
+						// Efface tous les enfants du parent prÃ©sent aprÃ¨s sa nouvelle fin
 						for(var e=that.eEndToken; e;){
 							var eRemoved = e
 							e = e.nextSibling
@@ -282,7 +282,7 @@ var LexerClass =function(){
 						that.eEndToken = that.getTokenAfter( that.eParent )
 						}
 					}
-				// A faire après suppression des éléments inutiles
+				// A faire aprÃ¨s suppression des Ã©lÃ©ments inutiles
 				if( n ){
 					var e = a[--n]
 					e.oValue.lineEnd = e.lastChild && e.lastChild.oValue.lineEnd || 1
@@ -440,18 +440,18 @@ var LexerClass =function(){
 			},
 		haveLexeme :function( oLexeme ){
 			if( ! this.eEndToken ) return false
-			// Efface les éléments dépassés par le lexème trouvé
+			// Efface les Ã©lÃ©ments dÃ©passÃ©s par le lexÃ¨me trouvÃ©
 			while( this.eEndToken && this.eEndToken.oValue.index + this.nShift < oLexeme.index )
 			// pas <= sinon autant faire une analyse totale
 			// mais... a voir
 				this.getNextEndToken()
 			var o = this.eEndToken && this.eEndToken.oValue
-			// Si le nouveau token est 'identique' à eEndToken
+			// Si le nouveau token est 'identique' Ã  eEndToken
 			if( o && oLexeme.token==o.token && oLexeme.value==o.value && oLexeme.index==o.index+this.nShift ){
-				// 1. Contrôle si les tokens sont bien identique = ont le même parent
+				// 1. ContrÃ´le si les tokens sont bien identique = ont le mÃªme parent
 				if( this.eParent !== this.eEndToken.parentNode )
 					this.getNextEndToken()
-				// 2. FIN ANALYSE: Met à jour les éléments suivant ( index et ligne ) 
+				// 2. FIN ANALYSE: Met Ã  jour les Ã©lÃ©ments suivant ( index et ligne ) 
 				else{
 					this.nLineEnd = o.lineEnd
 					this.nLineShift = oLexeme.lineStart - o.lineStart
@@ -465,7 +465,7 @@ var LexerClass =function(){
 			, nTokenStart = e.oValue.index
 			while( e.oValue.bParent ) e=e.lastChild
 			var nTokenEnd = e.oValue.index + e.oValue.value.length
-			return nStart <= nTokenStart && nTokenStart <= nEnd	// Le début du token est dans l'intervalle
+			return nStart <= nTokenStart && nTokenStart <= nEnd	// Le dÃ©but du token est dans l'intervalle
 				|| nTokenStart <= nStart && nEnd <= nTokenEnd	// L'intervalle est dans le token
 				|| nStart <= nTokenEnd && nTokenEnd <= nEnd		// La fin du token est dans l'intervalle
 			},
@@ -505,22 +505,22 @@ var LexerClass =function(){
 				eNext = e.nextSibling
 				return this.removeToken( e )
 				})
-			// Efface le premier élément à la position nPos
+			// Efface le premier Ã©lÃ©ment Ã  la position nPos
 			if( e ) remove( e )
-			// Efface à gauche jusqu'au premier espace trouvé
+			// Efface Ã  gauche jusqu'au premier espace trouvÃ©
 			while( ePrevious ){
 				if( this.isWhiteSpace( ePrevious.oValue.token )) break;
 				remove( ePrevious )
 				}
-			// Efface à droite les éléments inclus dans l'intervalle effacé
-			// et efface à droite jusqu'au premier espace trouvé
+			// Efface Ã  droite les Ã©lÃ©ments inclus dans l'intervalle effacÃ©
+			// et efface Ã  droite jusqu'au premier espace trouvÃ©
 			while( eNext ){
 				if( this.isWhiteSpace( eNext.oValue.token ) && ! this.isPartOfRange( eNext, nPos, nDeleted )) break;
 				remove( eNext )
 				}
-			/* Normalement ePrevious et eNext ont les mêmes parents !!!
+			/* Normalement ePrevious et eNext ont les mÃªmes parents !!!
 			if( ePrevious && eNext && ePrevious.parentNode != eNext.parentNode )
-				throw Error( 'Pas le même parent ! final' )
+				throw Error( 'Pas le mÃªme parent ! final' )
 			*/
 			return {
 				before: ! e ? this.eRoot.lastChild : ePrevious,
@@ -576,7 +576,7 @@ var LexerClass =function(){
 
 			var nLineStart = this.nLine
 			
-			// Création de la pile des ancêtres
+			// CrÃ©ation de la pile des ancÃªtres
 			this.stack = Stack(this)
 			this.stack.push( eParent )
 			if( eParent!=eRoot )
@@ -604,7 +604,7 @@ var LexerClass =function(){
 			if( ! this.nShift || ! this.eEndToken ) return ;
 
 			if( this.nLineShift ){
-				// màj un elt + ceux suivants et les enfants des éléments parents
+				// mÃ j un elt + ceux suivants et les enfants des Ã©lÃ©ments parents
 				var update =CallBack( this, function( eFirst ){
 					for(var e=eFirst, o ; e ; e=e.nextSibling ){
 						if( o=e.oValue ){
@@ -626,7 +626,7 @@ var LexerClass =function(){
 					}
 				}
 			else{
-				// màj un elt + ceux suivants et les enfants des éléments parents
+				// mÃ j un elt + ceux suivants et les enfants des Ã©lÃ©ments parents
 				var update =CallBack( this, function( eFirst ){
 					for(var e=eFirst, o ; e ; e=e.nextSibling ){
 						if( o=e.oValue ){
@@ -700,7 +700,7 @@ var OneRegExpLexer =(function( Lexer ){
 			: false
 		}
 	
-	// Analyse par défaut
+	// Analyse par dÃ©faut
 	;(function(){
 		var o = Lexer.Rules
 		o.addTokens([
@@ -713,7 +713,7 @@ var OneRegExpLexer =(function( Lexer ){
 			['NOT_WHITE_SPACES',/[^\t \n\r\f]+/],
 			['TEXT',/[^\t \n\r\f]+/]
 			])
-		// Syntaxe par défaut
+		// Syntaxe par dÃ©faut
 		o.addRule( 'TXT', 'TAB|L_NEW_LINE|SPACES|TEXT' )
 		o.addCSSClass( 'space=SPACES&tab=TAB&linefeed=L_NEW_LINE&whitespaces=WHITE_SPACES&undefined=NOT_WHITE_SPACES' )
 		o.setTokensTranslation('L_NEW_LINE=NEW_LINE')
@@ -895,20 +895,20 @@ OneRegExpLexer.insert( function(o){
 		['E_PROP_VALUE',/;/],
 		['CSS_PHP_BUG',/[\-+]|(?:deg|rad|grad|px|cm|mm|in|pt|pc|em|ex|ms|s|hz|khz|%)/],
 		['COMBINATOR',/[+>*~]/],
-		['ATKEYWORD',/@-?(?:[_a-zA-Z]|é|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))(?:[_a-zA-Z0-9\-]|é|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))*/],
-		['NAME',/(?:[_a-zA-Z0-9\-]|é|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))+/],
-		['HASH',/#(?:[_a-zA-Z0-9\-]|é|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))+/],
-		['IDENT',/-?(?:[_a-zA-Z]|é|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))(?:[_a-zA-Z0-9\-]|é|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))*/],
-		['CLASS',/\.-?(?:[_a-zA-Z]|é|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))(?:[_a-zA-Z0-9\-]|é|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))*/],
+		['ATKEYWORD',/@-?(?:[_a-zA-Z]|Ã©|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))(?:[_a-zA-Z0-9\-]|Ã©|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))*/],
+		['NAME',/(?:[_a-zA-Z0-9\-]|Ã©|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))+/],
+		['HASH',/#(?:[_a-zA-Z0-9\-]|Ã©|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))+/],
+		['IDENT',/-?(?:[_a-zA-Z]|Ã©|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))(?:[_a-zA-Z0-9\-]|Ã©|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))*/],
+		['CLASS',/\.-?(?:[_a-zA-Z]|Ã©|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))(?:[_a-zA-Z0-9\-]|Ã©|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))*/],
 		['S_PSEUDO',/::?/],
 		['S_IMPORTANT',/!/],
 		['E_IMPORTANT',/important/],
 		['CSS_NUMBER',/-?(?:[0-9]+|[0-9]*\.[0-9]+)/],
 		['DIMENSIONS',/-?(?:[0-9]+|[0-9]*\.[0-9]+)(?:deg|rad|grad|px|cm|mm|in|pt|pc|em|ex|ms|s|hz|khz|%)(?:\/(?:-?(?:[0-9]+|[0-9]*\.[0-9]+)(?:deg|rad|grad|px|cm|mm|in|pt|pc|em|ex|ms|s|hz|khz|%)))*/],
-		['PATH',/(?:[!#$%&\*-\~]|é|\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F])*/],
+		['PATH',/(?:[!#$%&\*-\~]|Ã©|\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F])*/],
 		['S_URL',/url\(/],
 		['E_URL',/\)/],
-		['S_FUNCTION',/(?:-?(?:[_a-zA-Z]|é|\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|é|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))*)\(/],
+		['S_FUNCTION',/(?:-?(?:[_a-zA-Z]|Ã©|\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|Ã©|(?:\\[0-9a-fA-F]{1,6}|\\[^\r\n\f0-9a-fA-F]))*)\(/],
 		['E_FUNCTION',/\)/],
 		['FUNCTION_ARG',/[^\f\r\n \t,)}{]/]
 		])

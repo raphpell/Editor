@@ -92,7 +92,7 @@ Editor.addModule( 'Commands',(function(){
 				this.eTextarea.focus()
 				}
 			}
-		else{// Déplacement caractère par caractère
+		else{// DÃ©placement caractÃ¨re par caractÃ¨re
 			var n = C.position.index
 			if( n<=0 ) return ;
 			if( C.setIndex( n-1 )){
@@ -111,7 +111,7 @@ Editor.addModule( 'Commands',(function(){
 				this.eTextarea.focus()
 				}
 			}
-		else{// Déplacement caractère par caractère
+		else{// DÃ©placement caractÃ¨re par caractÃ¨re
 			var n = C.position.index
 			if( n >= T.getValue().length ) return ;
 			if( C.setIndex( n+1 )){
@@ -188,7 +188,7 @@ Editor.addModule( 'Commands',(function(){
 		if( ! C.state ) this.execCommand('LINE_UP')
 		else if( S && S.exist()) this.execCommand('CHAR_LEFT')
 		else{
-			// déplacement mot par mot
+			// dÃ©placement mot par mot
 			var n = C.position.index
 			, oWord = T.getWordPositionAt( n, 'spaceRight' )
 			C.setIndex( n > oWord.start ? oWord.start : oWord.previous )

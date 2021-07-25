@@ -27,8 +27,10 @@ Editor.addModule( 'Selection', (function(){
 			}
 		Events.add(
 			document,
-				'click', CallBack( E, E.placeHandle ),				'mouseup', CallBack( E, E.placeHandle ),
-				'dblclick', CallBack( E, E.placeHandle ),				'selectstart', CallBack( E, E.placeHandle ),
+				'click', CallBack( E, E.placeHandle ),
+				'mouseup', CallBack( E, E.placeHandle ),
+				'dblclick', CallBack( E, E.placeHandle ),
+				'selectstart', CallBack( E, E.placeHandle ),
 			E.eEditor,
 				"dblclick", function( evt ){
 					nIndex = C.position.index
@@ -42,7 +44,7 @@ Editor.addModule( 'Selection', (function(){
 	S.prototype ={
 		exist :function(){ return S.getRange() },
 		collapse :function(){  },
-		getIndex :function( e, nIndex ){ // IdÈalement la position de dÈbut ou de fin d'une sÈlection
+		getIndex :function( e, nIndex ){ // Id√©alement la position de d√©but ou de fin d'une s√©lection
 			if( ! e ) return null
 			if( e===this.oDocument.eContent ) return nIndex
 			var eParent = e.parentNode, n = nIndex
@@ -52,7 +54,7 @@ Editor.addModule( 'Selection', (function(){
 				}
 			return ( eParent===this.oDocument.eTZ ) ? n : this.getIndex( eParent, n )
 			},
-		getPosition :function( e, nIndex, nTraveled ){ // IdÈalement la zone d'Èdition et un index de la source
+		getPosition :function( e, nIndex, nTraveled ){ // Id√©alement la zone d'√©dition et un index de la source
 			var eParent = e
 			, nTraveled = nTraveled || 0
 			for( var e = eParent.firstChild, n ; e ; e = e.nextSibling ){
@@ -155,11 +157,11 @@ Editor.addModule( 'Selection', (function(){
 		D.oSelection = new S(D)
 		Events.preventSelection( false, D.eTZ )
 		}
-	// Ajout automatique d'une instance ‡ la crÈation d'un document
+	// Ajout automatique d'une instance √† la cr√©ation d'un document
 	Events.add( Editor.prototype, 'documentinit', newinstance )
-	// Ajoute une instance ‡ tous les documents dÈj‡ existant
+	// Ajoute une instance √† tous les documents d√©j√† existant
 	Editor.mapDocuments( newinstance )
-	// Active la possibilitÈ d'Èditer les documents
+	// Active la possibilit√© d'√©diter les documents
 	Editor.Modules.Selection = true
 	var s='onContentEditableChange'
 	Editor.mapEditors( function(E){ if( E[s]) E[s]()})

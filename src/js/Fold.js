@@ -126,7 +126,7 @@ Editor.addModule('Fold',(function(){
 					//	default:throw new Error ( e.title )
 						}
 					}
-				// Needed tant que 'e' n'a plus de parent (il est effacé!)
+				// Needed tant que 'e' n'a plus de parent (il est effacÃ©!)
 				setTimeout( function(){ D.oEditor.focus()}, 50 )
 				})
 			,D
@@ -182,12 +182,12 @@ Editor.addModule('Fold',(function(){
 			_highlight( a[nFoldID], 'add' )
 			this.nCurrentFoldID = nFoldID
 			},
-		// TODO: à optimiser impérativement
+		// TODO: Ã  optimiser impÃ©rativement
 		getBrackets :function(){
 			if( ! this.bVisible ) return;
 			var D=this.oDocument, V=D.oView, Sy=D.oSyntax, o=D.oUpdates
 			if( o ){
-				// Affiche une ligne caché : utile lors de l'édition quand le curseur est dans un bloque replié
+				// Affiche une ligne cachÃ© : utile lors de l'Ã©dition quand le curseur est dans un bloque repliÃ©
 				var nLine=D.oCaret.position.line
 				if( ! V.isLineVisible( nLine )) V.showLine( nLine )
 				}
@@ -203,7 +203,7 @@ Editor.addModule('Fold',(function(){
 						n2 = oNode.oValue.lineStart
 						if( n1==n2 || ( aBuffer[n1] && aBuffer[n1][0]>n2)) continue;
 						aBuffer[n1] = Range( n2, 1 )
-						// Marquage des intervalles pouvant-être réaffichés
+						// Marquage des intervalles pouvant-Ãªtre rÃ©affichÃ©s
 						if( bHidden = V.isHiddenRange( n1+1, n2 ))
 							V.aHiddenRanges[ bHidden-1 ][2] = true 
 						// recup du buffer
@@ -219,7 +219,7 @@ Editor.addModule('Fold',(function(){
 				}
 			if( Sy && Sy.getElementsByTagName ){
 				var f=function( s ){ return to_array( Sy.getElementsByTagName( s ))}
-				// Marque à faux tous les intervalles. sera égale aux intervalles sans point de controle
+				// Marque Ã  faux tous les intervalles. sera Ã©gale aux intervalles sans point de controle
 				for(var i=0, a; a=V.aHiddenRanges[i]; i++ ) a[2] = false
 				// Recherche les paires
 				for(var i=0; aPair=this.aPaired[i]; i++ ){
@@ -241,7 +241,7 @@ Editor.addModule('Fold',(function(){
 							_populate( sLPair, sRPair, oGroup[ aNodesGroup[j] ])
 						}
 					}
-				// Affiche les intervalles ne pouvant plus être réaffiché
+				// Affiche les intervalles ne pouvant plus Ãªtre rÃ©affichÃ©
 				for(var i=0, a; a=V.aHiddenRanges[i]; i++ ) if( ! a[2]) V.showRange( a[0], a[1])
 				// Calcul du "Level"
 				var a1, a2
@@ -250,19 +250,19 @@ Editor.addModule('Fold',(function(){
 						for(var j=i+1; j<ni; j++ )
 							if( (a2=aBuffer[j]) && a2[1]){
 								if( j>=a1[0]) break;
-								// Mise à jour du "Level"
+								// Mise Ã  jour du "Level"
 								if( i<=j && a2[0]<=a1[0]) a2[1]=a1[1]+1
 								}
 					}
 				}
 			this.aBuffer = aBuffer
-			// Met à jour l'affichage si et seulement si il diffère
+			// Met Ã  jour l'affichage si et seulement si il diffÃ¨re
 			if( aBefore.toString() != this.aBuffer.toString()) this.refresh()
 			},
-		refresh :function(){ // TODO : éviter les calcul inutile lors de l'édition
+		refresh :function(){ // TODO : Ã©viter les calcul inutile lors de l'Ã©dition
 			var D=this.oDocument, C=D.oCaret, Ch=D.oCharacter, eParent=this.e, V=D.oView, F=this
 			var eParent = this.e.removeChild( this.e.firstChild )
-			// 1- Efface les éléments
+			// 1- Efface les Ã©lÃ©ments
 		//	while( eParent.childNodes.length ) eParent.removeChild( eParent.firstChild )
 			eParent.innerHTML= ''
 			var nVAlign = (Ch.nHeight-Ch.nWidth)/2-1
@@ -286,7 +286,7 @@ Editor.addModule('Fold',(function(){
 				var bHidden = V.isHiddenRange( n1+1, n2 )
 				, sTop = (n1ViewLine-1)*Ch.nHeight +nVAlign+'px'
 				
-				// POINT DE CONTRÔLE DE L'INTERVALLE
+				// POINT DE CONTRÃ”LE DE L'INTERVALLE
 				if( ! m[2] || ! m[2].nFoldID ) m[2]=Tag('DT')
 				m[2].innerHTML = bHidden?'+':'-'
 				m[2].nFoldID = i

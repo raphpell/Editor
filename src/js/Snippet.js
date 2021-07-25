@@ -126,14 +126,14 @@ Editor.addModule('Snippet',(function(){
 					var sTokenName = Token.nodeName.toUpperCase()
 					}
 				action = M[ nState1 ] ? M[ nState1 ][ ENGINE.SYMBOLS[ sTokenName ]] : null
-				if( ! action ) throw new Error ( 'Erreur de syntaxe\n token: "'+ sTokenName +'"\n index: '+ i +'\n état: '+ nState1 )
+				if( ! action ) throw new Error ( 'Erreur de syntaxe\n token: "'+ sTokenName +'"\n index: '+ i +'\n Ã©tat: '+ nState1 )
 				var f = ACTIONS[ action[0]]
 				if( f ){
 					var result = f()
 					if( result ) return result
 					} else throw new Error ( "Erreur parsing ... action "+ action )
 			}while( i<aTokens.length && aStack.length )
-			throw new Error ( 'Phrase incomplète...' )
+			throw new Error ( 'Phrase incomplÃ¨te...' )
 			}
 		ParserLR.sIgnoredToken = '|WHITE_SPACES|NEW_LINE|TAB|SPACES|SPACE|SLC|MLC|'
 		ParserLR.Node =function( X ){
@@ -186,7 +186,7 @@ Editor.addModule('Snippet',(function(){
 			return sContext
 			},
 		extract :function( C,S,T ){
-			// TODO: extraire automatiquement la portion de texte avant un index pouvant être compilé
+			// TODO: extraire automatiquement la portion de texte avant un index pouvant Ãªtre compilÃ©
 			var nIndex = C.position.index
 			var soLine = T.lineAt( nIndex )
 			var sIndentation = this.getIndentation( soLine )
@@ -218,7 +218,7 @@ Editor.addModule('Snippet',(function(){
 					sText: sSnippet
 					}
 				}
-			// retourne la portion de texte générée
+			// retourne la portion de texte gÃ©nÃ©rÃ©e
 			},
 		replace :function( E,D,C,S,T ){
 			var sAction = Editor.getUniqueId('EXPAND_SNIPPET')
@@ -227,7 +227,7 @@ Editor.addModule('Snippet',(function(){
 			if( o.sSnippet ){
 				var sContext = this.getContext(D)
 				var oResult = this.compile( o.sSnippet, sContext )
-			//	console.warn( 'Résultat: ' + JSON.stringify( oResult ))
+			//	console.warn( 'RÃ©sultat: ' + JSON.stringify( oResult ))
 				if( oResult.sText == o.sSnippet ) return;
 				
 				// Ajoute l'indentation et recalcule la position de l'index du curseur texte

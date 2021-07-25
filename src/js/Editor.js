@@ -16,14 +16,14 @@ Editor =(function(){
 					this.setPosition =function( oPos ){ // ATTENTION oPos DOIT CONTENIR index QUE SI C'EST UNE VALEUR JUSTE
 						var mask = Bitmask( oPos.viewLine, oPos.line, oPos.col, oPos.index!=undefined )
 						switch( mask.s ){
-							case '1010': // la colonne est recalculée !
+							case '1010': // la colonne est recalculÃ©e !
 								oPos = D.oPositions.getFromView( oPos )
 								break;
 							case '0110':
 								oPos.viewLine = D.oView.getLine( oPos.line )
 								oPos.index = D.oPositions.getIndex( oPos.line, oPos.col )
 								break;
-							case '0111': // ligne caché !
+							case '0111': // ligne cachÃ© !
 							case '1111':
 								break;
 							default: alert( 'oCaret.setPosition: ERROR '+ mask.s )
@@ -72,7 +72,7 @@ Editor =(function(){
 							}
 						this.state = m
 						},
-					setIndex :function( nIndex, bPreventScrolling ){ // nLine et nCol  commence à 1
+					setIndex :function( nIndex, bPreventScrolling ){ // nLine et nCol  commence Ã  1
 						var D=this.oDocument
 						, bHidden = this.setPosition( D.oPositions.getFromIndex( nIndex ))
 						if( ! bPreventScrolling ) D.scrollToPosition()
@@ -188,7 +188,7 @@ Editor =(function(){
 							'dblclick', CallBack( this, function(){
 								if( bExpanded ){
 									bExpanded = false
-									E.resizeTo( E.oFixedDim.width-2 +'px', E.oFixedDim.height-6 +'px' ) // TODO: supprimer "les valeurs négatives"
+									E.resizeTo( E.oFixedDim.width-2 +'px', E.oFixedDim.height-6 +'px' ) // TODO: supprimer "les valeurs nÃ©gatives"
 								}else{
 									bExpanded = true
 									E.fitDocument()
@@ -774,7 +774,7 @@ Editor =(function(){
 											)
 										MenuItem[ "e" + sName ] = eSELECT
 										}
-									else if( oConfig.type=='b' && oConfig.command ){ // case à cocher
+									else if( oConfig.type=='b' && oConfig.command ){ // case Ã  cocher
 										var eLI = MenuItem.createButton( oEditor, oConfig.command )
 										eLI[ oEditor[sAttr]?'down':'up' ]()
 										Events.add(
@@ -803,7 +803,7 @@ Editor =(function(){
 						},
 					MenuItem.createButton =function( oEditor, sName, sCommand ){
 						var eLI = Tag( "LI" )
-						, m = L10N[ sName ] // Réservé pour la traduction
+						, m = L10N[ sName ] // RÃ©servÃ© pour la traduction
 						, eA = Tag("A",{ title:m||'' })
 						, eDIV = Tag("DIV",{ style:{ backgroundPosition: "-" + MenuItem.button[ sName] + "px 0" }})
 						, eSPAN = Tag("SPAN",{ innerHTML: m })
@@ -938,7 +938,7 @@ Editor =(function(){
 			// TODO: D.layOut need newline width
 			return {
 				TOKEN: 'N',
-				HTML: '<i class="newline"></i>$1' //'\n' ou '\r' sera ajouté après.   \xAC
+				HTML: '<i class="newline"></i>$1' //'\n' ou '\r' sera ajoutÃ© aprÃ¨s.   \xAC
 				}
 			})(),
 		Source:(function(){
@@ -1031,7 +1031,7 @@ Editor =(function(){
 				}
 			T.LineBreaks ={ DOS:"\r\n",MAC:"\r",UNIX:"\n" }
 			T.oRe ={
-				// \u00C0-\u00FF : lettres accentuées
+				// \u00C0-\u00FF : lettres accentuÃ©es
 				'selection': /(?:\s+|[0-9A-Za-z\u00C0-\u00FF]+|[^\s0-9A-Za-z\u00C0-\u00FF]+)/g,
 				'spaceLeft': /(?:\s*(?:\w|\d)+|\s*[^\s\w\d]+|\s+)/g,
 				'spaceRight': /(?:\s+|(?:\w|\d)+\s*|[^\s\w\d]+\s*)/g
@@ -1039,7 +1039,7 @@ Editor =(function(){
 			T.prototype ={
 				nLines: 1,
 				sOS: null, // DOS, MAC, UNIX
-				sNewLine: "\n", // "\n", // TODO : Must be a character :  \r or \n, caractère définissant les nouvelles lignes
+				sNewLine: "\n", // "\n", // TODO : Must be a character :  \r or \n, caractÃ¨re dÃ©finissant les nouvelles lignes
 				determineOS :function( s ){
 					if( /\r\n/.test( s )) return 'DOS'
 					if( /\r/.test( s )) return 'MAC'
@@ -1220,7 +1220,7 @@ Editor =(function(){
 					, D=this.oDocument, T=D.oSource
 					, oUpdates = D.oUpdates
 					, nLineHeight = D.oCharacter.nHeight
-					, nViewHeight = D.oEditor.nTextZoneHeight + nLineHeight + 1 // +1 résoud un bug d'affichage !
+					, nViewHeight = D.oEditor.nTextZoneHeight + nLineHeight + 1 // +1 rÃ©soud un bug d'affichage !
 					, nLength = Math.ceil( nViewHeight/nLineHeight )
 					if( isNaN( nViewHeight )) return false
 					if( oUpdates ){
@@ -1245,7 +1245,7 @@ Editor =(function(){
 						if( this.onupdate ) this.onupdate()
 						}
 					// CALCUL DE LA DIMENSION DE LA VUE...
-					// Comportement bloc réduit
+					// Comportement bloc rÃ©duit
 					if( this.haveHiddenRange()){
 						this.calculateVisibleRanges()
 						var nLines = this.nLines
@@ -1293,7 +1293,7 @@ Editor =(function(){
 						this.aVisibleRanges = aVisibleRangesInView
 						this.aVisibleLinesFlipped = Array.flip( aVisibleLines )
 						}
-					// Comportement par défaut
+					// Comportement par dÃ©faut
 					else{
 						var nLines = T.nLines
 						, nLinesHeight = nLines * nLineHeight
@@ -1498,7 +1498,7 @@ Editor =(function(){
 						}
 					return { viewLine:nViewLine, line:nLine, col:nCol, index:this.getIndex( nLine, nCol )}
 					},
-				getColumnMax :function( nLine ){ // Sans nLine retourne le résultat pour la source
+				getColumnMax :function( nLine ){ // Sans nLine retourne le rÃ©sultat pour la source
 					if( nLine ) return this.a[nLine-1] ? this.a[nLine-1].length : 0
 					var nMax = 0, nColumnMaxLine = 1
 					for(var i=0, ni=this.a.length, n ; i<ni ; i++ ){
@@ -1527,7 +1527,7 @@ Editor =(function(){
 				CacheAll :(function(){
 					var redraw =function(){
 						var D=this, V=D.oView, sContents=''
-						// 1- Récupère le contenu affiché
+						// 1- RÃ©cupÃ¨re le contenu affichÃ©
 						for( var aj=V.aVisibleRanges, j=0, nj=aj.length; j<nj; j++ ){
 							var a = aj[j]
 							sContents += '<dt>'+D.aLinesBuffer.slice( a[0]-1, a[1] ).join('<dt>')
@@ -1566,7 +1566,7 @@ Editor =(function(){
 				StringCaching :(function(){
 					var redraw =function(){
 						var D=this, V=D.oView, sContents=''
-						// 1- Récupère le contenu affiché
+						// 1- RÃ©cupÃ¨re le contenu affichÃ©
 						for( var aj=V.aVisibleRanges, j=0, nj=aj.length; j<nj; j++ ){
 							var a = aj[j]
 							for( var i=a[0]-1; i<a[1]; i++ ){
@@ -1611,9 +1611,9 @@ Editor =(function(){
 						var D=this, V=D.oView, e= D.eTZ
 						if( e.parentNode ) e=D.eTZC.removeChild( D.eTZ )
 						if( ! D.oSyntax ) return ;
-						// 1- Efface les éléments
+						// 1- Efface les Ã©lÃ©ments
 						while( e.childNodes.length ) e.removeChild( e.firstChild )
-						// 2- Ajoute les éléments à afficher
+						// 2- Ajoute les Ã©lÃ©ments Ã  afficher
 						for(var aj=V.aVisibleRanges, j=0, nj=aj.length; j<nj; j++ ){
 							var a = aj[j]
 							for(var i=a[0]-1; i<a[1]; i++ ){
@@ -1828,7 +1828,7 @@ Editor =(function(){
 				? oSettings.acquire( oEditor.oDefaultSettings, true )
 				: oEditor.oDefaultSettings
 				)
-			if( D.bContentEditable ) Editor.loadModules( 'UndoStack,Commands,Selection' ) // Pas super réactif le mode asynchrone...
+			if( D.bContentEditable ) Editor.loadModules( 'UndoStack,Commands,Selection' ) // Pas super rÃ©actif le mode asynchrone...
 			var E  = D.oEditor = oEditor
 			var V  = D.oView = new Modules.View(D)
 			var T  = D.oSource = new Modules.Source(D, sSource )
@@ -1862,7 +1862,7 @@ Editor =(function(){
 					}
 				)
 			
-			// fait à l'initialisation... normalement
+			// fait Ã  l'initialisation... normalement
 			if( D.sFontSize!='13px' || D.nLineHeight!=1.3 )
 				D.setAttribute( 'lineHeight', D.nLineHeight )
 			if( ! D.bGutter ) D.oGutter.hide()
@@ -2005,7 +2005,7 @@ Editor =(function(){
 				_initContents.call( D, D.oSource.getValue())
 				D.oRender.execAction( 'initialize' )
 				},
-			// Utilisé par Caret, Selection, UndoStack et this.setContents
+			// UtilisÃ© par Caret, Selection, UndoStack et this.setContents
 			updateContents :function( o, bPreventHistory ){ // o == { start,  added [, deleted] }
 				if( ! o || o.start==undefined || ! ( o.added || o.deleted )) return ;
 				var D=this, H=D.oUndoStack
@@ -2221,7 +2221,7 @@ Editor =(function(){
 				Strategy[ sType ].addStrategy( sName, o )
 				},
 			getUniqueId :function( sLabel ){
-				// Utilisé dans l'historique pour eviter la "concaténation" des actions lors de l'exécution
+				// UtilisÃ© dans l'historique pour eviter la "concatÃ©nation" des actions lors de l'exÃ©cution
 				return sLabel + '@' + (new Date()).valueOf()
 				},
 			insertTextFromTextarea :function( e, sAction ){
@@ -2252,16 +2252,16 @@ Editor =(function(){
 			})
 		Editor.prototype ={
 			nDocID:1,
-			sClipBoardValue: '', // Utilisé que si les touches raccourcie ne sont pas utilisées
+			sClipBoardValue: '', // UtilisÃ© que si les touches raccourcie ne sont pas utilisÃ©es
 			ondocumentinit: null,
 			onFontSizeChange :function(){},
 			onLineHeightChange :function(){},
 			oncontentchange :function( oUpdates ){},
-		//¤	onselectionchange :function( S ){},
+		//Â¤	onselectionchange :function( S ){},
 			onviewchange :function(){},
 			onhistorychange :function(){},
 			oncaretchange :function(){},
-		//¤	oncommand :function( sCommand ){},
+		//Â¤	oncommand :function( sCommand ){},
 			execCommand :function( sAction, bCallBack ){
 				var o=Editor.Modules.Commands, that = this
 				if( o ){
@@ -2372,7 +2372,7 @@ Editor =(function(){
 				this.oActiveDocument = D
 				if( D ){
 					D.refreshView()
-					if( D.oUndoStack ) D.oUndoStack.onchange() // Mise à jour icônes TopMenu...
+					if( D.oUndoStack ) D.oUndoStack.onchange() // Mise Ã  jour icÃ´nes TopMenu...
 					this.oncaretchange( D.oCaret.position )
 					if( Editor.ondocument ) Editor.ondocument( this )
 					}
@@ -2438,7 +2438,7 @@ Editor =(function(){
 							return false
 							}
 						if( o && S.includesIndex( o.index )){
-							// initialise le D&D de la la sélection
+							// initialise le D&D de la la sÃ©lection
 							if( ! D.oGutter.sLineSelected ){
 								S.bDragging = true
 								Tag.className( D.eTZ, 'drag', 'add' )
@@ -2450,7 +2450,7 @@ Editor =(function(){
 							this.focus()
 							}
 						C.setPosition( o )
-						return false // IMPORTANT : pour empécher la sélection par défaut
+						return false // IMPORTANT : pour empÃ©cher la sÃ©lection par dÃ©faut
 						}
 					else{
 						C.setPosition( o )

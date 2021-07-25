@@ -1,35 +1,35 @@
 var oCommandsDesc ={
 	BACK_TAB:
-		"- Si une sélection existe : Supprime une tabulation au début des lignes de la sélection.\n"+
-		"- Si le curseur est en début de ligne, ou juste après tous les espaces en début de ligne : Désindente la ligne d'une tabulation.\n"+
-		"- Dans le texte : Déplace le curseur en arrière suivant la largeur d'une tabulation."+
-		"\n\n\t**BUG - placement du curseur à des index inexistant...**",
+		"- Si une sÃ©lection existe : Supprime une tabulation au dÃ©but des lignes de la sÃ©lection.\n"+
+		"- Si le curseur est en dÃ©but de ligne, ou juste aprÃ¨s tous les espaces en dÃ©but de ligne : DÃ©sindente la ligne d'une tabulation.\n"+
+		"- Dans le texte : DÃ©place le curseur en arriÃ¨re suivant la largeur d'une tabulation."+
+		"\n\n\t**BUG - placement du curseur Ã  des index inexistant...**",
 	CHAR_LEFT:
-		"- Si une sélection existe : Déplace le curseur au début de celle-ci.\n"+
-		"- Sinon déplace le curseur d'un caractère à gauche.",
+		"- Si une sÃ©lection existe : DÃ©place le curseur au dÃ©but de celle-ci.\n"+
+		"- Sinon dÃ©place le curseur d'un caractÃ¨re Ã  gauche.",
 	CHAR_LEFT_EXTEND:
-		"Sélection : Ajoute ou retire le caractère gauche.",
+		"SÃ©lection : Ajoute ou retire le caractÃ¨re gauche.",
 	CHAR_RIGHT:
-		"- Si une sélection existe : Déplace le curseur à la fin de celle-ci.\n"+
-		"- Sinon déplace le curseur d'un caractère à droite.",
+		"- Si une sÃ©lection existe : DÃ©place le curseur Ã  la fin de celle-ci.\n"+
+		"- Sinon dÃ©place le curseur d'un caractÃ¨re Ã  droite.",
 	CHAR_RIGHT_EXTEND:
-		"Sélection : Ajoute ou retire le caractère droit.",
+		"SÃ©lection : Ajoute ou retire le caractÃ¨re droit.",
 	CLEAR:
-		"- Si une sélection existe: Efface la sélection.\n"+
-		"- Sinon : Efface le caractère droit",
+		"- Si une sÃ©lection existe: Efface la sÃ©lection.\n"+
+		"- Sinon : Efface le caractÃ¨re droit",
 	COPY:
-		"Copie la sélection dans le presse papier.",
+		"Copie la sÃ©lection dans le presse papier.",
 	CUT:
-		"Coupe la sélection et la déplace dans le presse papier.",
+		"Coupe la sÃ©lection et la dÃ©place dans le presse papier.",
 	DELETE_BACK:
-		"- Si une sélection existe: Efface la sélection.\n"+
-		"- Sinon : Efface le caractère gauche",
+		"- Si une sÃ©lection existe: Efface la sÃ©lection.\n"+
+		"- Sinon : Efface le caractÃ¨re gauche",
 	DEL_LINE_LEFT:
-		"Efface la portion de la ligne à gauche du curseur.\n"+
-			"\t Si une sélection existe à droite du curseur, elle est conservée.",
+		"Efface la portion de la ligne Ã  gauche du curseur.\n"+
+			"\t Si une sÃ©lection existe Ã  droite du curseur, elle est conservÃ©e.",
 	DEL_LINE_RIGHT:
-		"Efface la portion de la ligne à droite du curseur.\n"+
-			"\t Si une sélection existe à gauche du curseur, elle est conservée.",
+		"Efface la portion de la ligne Ã  droite du curseur.\n"+
+			"\t Si une sÃ©lection existe Ã  gauche du curseur, elle est conservÃ©e.",
 	DEL_WORD_LEFT:
 		"- Si le curseur est dans un mot : Efface la portion gauche.\n"+
 		"- Si le curseur est entre deux mots : Efface le mot gauche.",
@@ -39,90 +39,90 @@ var oCommandsDesc ={
 	DOCUMENT_NEW:
 		"Nouveau document.",
 	DOCUMENT_END:
-		"Place le curseur à la fin du document.\n"+
-			"\t (Annule la sélection)",
+		"Place le curseur Ã  la fin du document.\n"+
+			"\t (Annule la sÃ©lection)",
 	DOCUMENT_END_EXTEND:
-		"Etend la sélection à la fin du document depuis le curseur.\n"+
-			"\t (Les caractères sélectionnés après le curseur sont déselectionnés)",
+		"Etend la sÃ©lection Ã  la fin du document depuis le curseur.\n"+
+			"\t (Les caractÃ¨res sÃ©lectionnÃ©s aprÃ¨s le curseur sont dÃ©selectionnÃ©s)",
 	DOCUMENT_START:
-		"Place le curseur au début du document.\n"+
-			"\t (Annule la sélection)",
+		"Place le curseur au dÃ©but du document.\n"+
+			"\t (Annule la sÃ©lection)",
 	DOCUMENT_START_EXTEND:
-		"Etend la sélection au début du document depuis le curseur.\n"+
-			"\t (Les caractères sélectionnés avant le curseur sont déselectionnés)",
+		"Etend la sÃ©lection au dÃ©but du document depuis le curseur.\n"+
+			"\t (Les caractÃ¨res sÃ©lectionnÃ©s avant le curseur sont dÃ©selectionnÃ©s)",
 	LINES_CLIMB_DOWN:
-		"Déplace une ou plusieurs lignes vers le bas.",
+		"DÃ©place une ou plusieurs lignes vers le bas.",
 	LINES_CLIMB_UP:
-		"Déplace une ou plusieurs lignes vers le haut.",
+		"DÃ©place une ou plusieurs lignes vers le haut.",
 	LINE_DELETE:
-		"Supprime la ligne du curseur ou celle(s) de la sélection.",
+		"Supprime la ligne du curseur ou celle(s) de la sÃ©lection.",
 	LINE_DOWN:
-		"Déplace le curseur d'une ligne vers le bas.\n"+
-			"\t (Annule la sélection)",
+		"DÃ©place le curseur d'une ligne vers le bas.\n"+
+			"\t (Annule la sÃ©lection)",
 	LINE_DOWN_EXTEND:
-		"Etend la sélection jusqu'à la position sous le curseur.\n"+
-		"\t (Les caractères sélectionnés après le curseur sont déselectionnés)",
+		"Etend la sÃ©lection jusqu'Ã  la position sous le curseur.\n"+
+		"\t (Les caractÃ¨res sÃ©lectionnÃ©s aprÃ¨s le curseur sont dÃ©selectionnÃ©s)",
 	LINE_END:
-		"Déplace le curseur en fin de ligne.",
+		"DÃ©place le curseur en fin de ligne.",
 	LINE_END_EXTEND:
-		"Etend la sélection jusqu'à la fin de la ligne.\n"+
-		"\t (Les caractères sélectionnés après le curseur sont déselectionnés)",
+		"Etend la sÃ©lection jusqu'Ã  la fin de la ligne.\n"+
+		"\t (Les caractÃ¨res sÃ©lectionnÃ©s aprÃ¨s le curseur sont dÃ©selectionnÃ©s)",
 	LINE_SCROLL_DOWN:
-		"Défile la vue vers le bas d'une ligne.",
+		"DÃ©file la vue vers le bas d'une ligne.",
 	LINE_SCROLL_UP:
-		"Défile la vue vers le haut d'une ligne.",
+		"DÃ©file la vue vers le haut d'une ligne.",
 	LINE_START:
-		"Déplace le curseur en début de ligne.",
+		"DÃ©place le curseur en dÃ©but de ligne.",
 	LINE_START_EXTEND:
-		"Etend la sélection jusqu'au début de la ligne (avec ou sans espace).\n"+
-		"\t (Les caractères sélectionnés avant le curseur sont déselectionnés)",
+		"Etend la sÃ©lection jusqu'au dÃ©but de la ligne (avec ou sans espace).\n"+
+		"\t (Les caractÃ¨res sÃ©lectionnÃ©s avant le curseur sont dÃ©selectionnÃ©s)",
 	LINE_TRANSPOSE:
-		"Echange la position de la ligne du curseur avec celle de la ligne précédente.",
+		"Echange la position de la ligne du curseur avec celle de la ligne prÃ©cÃ©dente.",
 	LINE_UP: 
-		"Déplace le curseur d'une ligne vers le haut.\n"+
-			"\t (Annule la sélection)",
+		"DÃ©place le curseur d'une ligne vers le haut.\n"+
+			"\t (Annule la sÃ©lection)",
 	LINE_UP_EXTEND:
-		"Etend la sélection jusqu'à la position au dessus du curseur.\n"+
-		"\t (Les caractères sélectionnés avant le curseur sont déselectionnés)",
+		"Etend la sÃ©lection jusqu'Ã  la position au dessus du curseur.\n"+
+		"\t (Les caractÃ¨res sÃ©lectionnÃ©s avant le curseur sont dÃ©selectionnÃ©s)",
 	LOWERCASE:
-		"Transforme la sélection en minuscule.",
+		"Transforme la sÃ©lection en minuscule.",
 	NEW_LINE:
-		"Insère un saut de ligne.",
+		"InsÃ¨re un saut de ligne.",
 	PAGE_DOWN:
-		"Défile la vue vers le bas d'une page.",
+		"DÃ©file la vue vers le bas d'une page.",
 	PAGE_DOWN_EXTEND: "",
 	PAGE_UP:
-		"Défile la vue vers le haut d'une page.",
+		"DÃ©file la vue vers le haut d'une page.",
 	PAGE_UP_EXTEND: "",
 	PASTE:
 		"Colle le contenu du presse papier au curseur.",
 	REDO: 
-		"Rétabli l'action annulée précédemment.",
+		"RÃ©tabli l'action annulÃ©e prÃ©cÃ©demment.",
 	SELECTION_DUPLICATE:
-		"Duplique la sélection ou la ligne du curseur.",
+		"Duplique la sÃ©lection ou la ligne du curseur.",
 	SELECT_ALL:
-		"Sélectionne tout.\n"+
-			"\t (Place le curseur devant le premier caractère)",
+		"SÃ©lectionne tout.\n"+
+			"\t (Place le curseur devant le premier caractÃ¨re)",
 	SET_ZOOM:
-		"Restaure la taille des caractères du document par défaut.",
+		"Restaure la taille des caractÃ¨res du document par dÃ©faut.",
 	TAB:
-		"Insère une tabulation, ou si une sélection préexiste indente des lignes.",
+		"InsÃ¨re une tabulation, ou si une sÃ©lection prÃ©existe indente des lignes.",
 	UNDO: 
-		"Annule l'action réalisée précédemment.",
+		"Annule l'action rÃ©alisÃ©e prÃ©cÃ©demment.",
 	UPPERCASE:
-		"Transforme la sélection en MAJUSCULE.",
+		"Transforme la sÃ©lection en MAJUSCULE.",
 	WORD_LEFT:
-		"Déplace le curseur à la limite gauche du mot.",
+		"DÃ©place le curseur Ã  la limite gauche du mot.",
 	WORD_LEFT_EXTEND:
-		"Etend la sélection jusqu'à la première limite gauche de mot.\n"+
-		"\t (Les caractères sélectionnés avant le curseur sont déselectionnés)",
+		"Etend la sÃ©lection jusqu'Ã  la premiÃ¨re limite gauche de mot.\n"+
+		"\t (Les caractÃ¨res sÃ©lectionnÃ©s avant le curseur sont dÃ©selectionnÃ©s)",
 	WORD_RIGHT:
-		"Déplace le curseur à la limite droite du mot.",
+		"DÃ©place le curseur Ã  la limite droite du mot.",
 	WORD_RIGHT_END_EXTEND:
-		"Etend la sélection jusqu'à la première limite droite de mot.\n"+
-		"\t (Les caractères sélectionnés après le curseur sont déselectionnés)",
+		"Etend la sÃ©lection jusqu'Ã  la premiÃ¨re limite droite de mot.\n"+
+		"\t (Les caractÃ¨res sÃ©lectionnÃ©s aprÃ¨s le curseur sont dÃ©selectionnÃ©s)",
 	ZOOM_IN:
-		"Agrandit la taille des caractères du document.",
+		"Agrandit la taille des caractÃ¨res du document.",
 	ZOOM_OUT:
-		"Réduit la taille des caractères du document."
+		"RÃ©duit la taille des caractÃ¨res du document."
 	}

@@ -30,7 +30,7 @@ Editor.addModule('KeyBoard',(function(){
 		'CTRL+F':'DIALOG_SEARCH',
 		'ALT+W':'DIALOGS',
 		'CTRL+M':'DIALOG_DOCUMENT',
-	// Déplacement du curseur
+	// DÃ©placement du curseur
 		'HOME':'LINE_START',
 		'END':'LINE_END',
 		'CTRL+HOME':'DOCUMENT_START',
@@ -41,7 +41,7 @@ Editor.addModule('KeyBoard',(function(){
 		'DOWN':'LINE_DOWN',
 		'CTRL+LEFT':'WORD_LEFT',
 		'CTRL+RIGHT':'WORD_RIGHT',
-	// Défiler
+	// DÃ©filer
 		'PAGE_DOWN':'PAGE_DOWN',
 		'PAGE_UP':'PAGE_UP',
 		'CTRL+DOWN':'LINE_SCROLL_DOWN',
@@ -56,7 +56,7 @@ Editor.addModule('KeyBoard',(function(){
 		'CTRL+PLUS':'ZOOM_IN'
 		}
 	var K =function( E ){
-		Events.add( // Capture des touches pressées
+		Events.add( // Capture des touches pressÃ©es
 			E.eTextarea, // CURSEUR TEXTE
 				'keypress', function( evt ){
 					E.sClipBoardValue=''
@@ -77,7 +77,7 @@ Editor.addModule('KeyBoard',(function(){
 			var _fShortCut =function( sShortCut ){
 				return CallBack( this, function(){ return this.fireShortCut( sShortCut )})
 				}
-			// Enumère les touches raccourcies
+			// EnumÃ¨re les touches raccourcies
 			var aKeys=[], sChar
 			for(var sShortCut in oShortCuts ){
 				sChar = sShortCut.charAt(0)

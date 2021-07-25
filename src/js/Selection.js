@@ -3,7 +3,7 @@ Editor.addModule('Selection',(function(){
 		this.oDocument = D
 		var E=D.oEditor, S=this, C=D.oCaret, P=D.oPositions
 		
-		// Restaure le défilement automatique 
+		// Restaure le dÃ©filement automatique 
 		var oStart = false
 		var nScrollInterval
 		// Ajoute le triple clique
@@ -22,8 +22,8 @@ Editor.addModule('Selection',(function(){
 				if( E.onselectionchange ) E.onselectionchange( this )
 				}),
 			document,
-				// Initialisation du glissé voir Editor.prototype.placeHandle
-				// Initialise la sélection
+				// Initialisation du glissÃ© voir Editor.prototype.placeHandle
+				// Initialise la sÃ©lection
 				'mousedown', CallBack( S, function( evt ){
 					if( D.elementInContents( Events.element( evt ))){
 						oStart = P.getFromEvent( evt )
@@ -34,7 +34,7 @@ Editor.addModule('Selection',(function(){
 							} else if( ! Keyboard.shift ) S.start = S.end = null
 						}
 					}),
-				// Restaure le DÉFILEMENT AUTOMATIQUE lors d'une sélection
+				// Restaure le DÃ‰FILEMENT AUTOMATIQUE lors d'une sÃ©lection
 				'mousemove', CallBack( S, function( evt ){
 					if( oStart || D.oGutter.sLineSelected || S.bDragging ){
 						var e = D.eTZC 
@@ -57,7 +57,7 @@ Editor.addModule('Selection',(function(){
 						else if( oMouse.top < oTag.top )fScroll( 'scrollTop', -n ) 
 						}
 					}),	
-				// Etend la sélection
+				// Etend la sÃ©lection
 				'mousemove', CallBack( S, function( evt ){
 					if( oStart ){
 						var o = P.getFromEvent( evt )
@@ -69,11 +69,11 @@ Editor.addModule('Selection',(function(){
 						Tag.className( D.eTZ, 'selectionHover', o && S.includesIndex( o.index ) ? 'add' : 'delete' )
 						}
 					}),
-				// Glisse la sélection
+				// Glisse la sÃ©lection
 				'mousemove', CallBack( S, function( evt ){
 					if( S.bDragging ) C.setPosition( P.getFromEvent( evt ))
 					}),
-				// Finalise la sélection
+				// Finalise la sÃ©lection
 				'mouseup', CallBack( S, function( evt ){
 					clearInterval( nScrollInterval )
 					if( S.start==S.end || ! oStart )
@@ -81,7 +81,7 @@ Editor.addModule('Selection',(function(){
 					oStart = false
 					S.bMouseSelection = false
 					}),
-				// Finalise le glissé
+				// Finalise le glissÃ©
 				'mouseup', CallBack( S, function( evt ){
 					if( S.bDragging ){
 						var o = P.getFromEvent( evt )
@@ -97,13 +97,13 @@ Editor.addModule('Selection',(function(){
 								}
 							fHistory( 'Undo', n, n + s.length )
 							S.replace( '', true, sAction )
-							// insertion avant la sélection
+							// insertion avant la sÃ©lection
 							if( b1 ){
 								C.setIndex( nIndex )
 								C.insert( s, true, sAction )
 								fHistory( 'Redo', nIndex, nIndex + s.length )()
 								}
-							// insertion après la sélection
+							// insertion aprÃ¨s la sÃ©lection
 							else if( b2 ){
 								C.setIndex( nIndex-s.length )
 								C.insert( s, true, sAction )
@@ -121,7 +121,7 @@ Editor.addModule('Selection',(function(){
 						}
 					}),
 			D.eTZC,
-				// Ajoute le TRIPLE CLIQUE + Sélectionne un 'mot'
+				// Ajoute le TRIPLE CLIQUE + SÃ©lectionne un 'mot'
 				'dblclick', CallBack( S, function( evt ){
 					timer = null
 					var e = Events.element( evt )
@@ -134,7 +134,7 @@ Editor.addModule('Selection',(function(){
 						timer = setTimeout(function(){ timer = null; }, timeout )
 						}
 					}),
-				// TRIPLE CLIQUE = Sélectionne la ligne
+				// TRIPLE CLIQUE = SÃ©lectionne la ligne
 				'click', CallBack( S, function( evt ){
 					if( timer && D.elementInContents( Events.element( evt ))){
 						S.set( oWord.start, oWord.end )
@@ -391,11 +391,11 @@ Editor.addModule('Selection',(function(){
 		if( D.oSelection ) D.oSelection.collapse()
 		D.oSelection = new S(D)
 		}
-	// Ajout automatique d'une instance à la création d'un document
+	// Ajout automatique d'une instance Ã  la crÃ©ation d'un document
 	Events.add( Editor.prototype, 'documentinit', newinstance )
-	// Ajoute une instance à tous les documents déjà existant
+	// Ajoute une instance Ã  tous les documents dÃ©jÃ  existant
 	Editor.mapDocuments( newinstance )
-	// Active la possibilité d'éditer les documents
+	// Active la possibilitÃ© d'Ã©diter les documents
 	Editor.Modules.Selection = true
 	var s='onContentEditableChange'
 	Editor.mapEditors( function(E){ if( E[s]) E[s]()})
@@ -423,7 +423,7 @@ Editor.addModule('Selection',(function(){
 					S.replace( str_replace( /^(?:\t)/gim, '', S.cloneContents()), false, sAction )
 					S.collapse()
 					}
-				// TODO = le curseur se positionne sur des positions ne correspondant pas à un index !
+				// TODO = le curseur se positionne sur des positions ne correspondant pas Ã  un index !
 				n = n % nTabSize == 0 ? n - nTabSize : n - n % nTabSize
 				if( n < 0 ) n = 0
 				C.setPosition({ line:CP.line, col:n+1 })
@@ -721,7 +721,7 @@ Editor.addModule('Selection',(function(){
 		SELECTION_DUPLICATE :function(D,C,S,T){
 			var i = C.position.index
 			var sAction = fI('DUPLICATE')
-			if( S.exist()){ // duplique la sélection
+			if( S.exist()){ // duplique la sÃ©lection
 				var s = S.cloneContents()
 				S.replace( s+s, false, sAction ).set( S.start, S.start+s.length )
 			}else{ // duplique la ligne courante
@@ -743,7 +743,7 @@ Editor.addModule('Selection',(function(){
 				D.scrollToPosition()
 				}
 			},
-		TAB :function(D,C,S){// Insère une tabulation, ou indente une ou plusieurs lignes
+		TAB :function(D,C,S){// InsÃ¨re une tabulation, ou indente une ou plusieurs lignes
 			if( S.exist()){
 				S.expand()
 				S.replace( str_replace( /^/gim, "\t", S.cloneContents()), false, fI('INDENT'))
@@ -758,7 +758,7 @@ Editor.addModule('Selection',(function(){
 			if( S.exist()) S.replace( S.cloneContents().toUpperCase(), false, fI('UPPERCASE'))
 			},
 		WORD_LEFT_END_EXTEND: null,
-		WORD_LEFT_EXTEND :function(D,C,S,T){// Etend la sélection à la limite de mot à gauche
+		WORD_LEFT_EXTEND :function(D,C,S,T){// Etend la sÃ©lection Ã  la limite de mot Ã  gauche
 			var n = C.position.index
 			, oWord = T.getWordPositionAt( n, 'spaceRight' )
 			, nStart = n > oWord.start ? oWord.start : oWord.previous
@@ -770,7 +770,7 @@ Editor.addModule('Selection',(function(){
 				}
 			C.setIndex( nStart )
 			},
-		WORD_RIGHT_END_EXTEND :function(D,C,S,T){// Etend la sélection à la limite de mot à droite
+		WORD_RIGHT_END_EXTEND :function(D,C,S,T){// Etend la sÃ©lection Ã  la limite de mot Ã  droite
 			var n = C.position.index
 			, oWord = T.getWordPositionAt( n, 'spaceLeft' )
 			, nEnd = n < oWord.end ? oWord.end : oWord.next
@@ -785,7 +785,7 @@ Editor.addModule('Selection',(function(){
 		WORD_RIGHT_EXTEND: null
 		})
 	Editor.extend( 'KeyBoard', {
-	// EXTENSION DE LA SÉLECTION
+	// EXTENSION DE LA SÃ‰LECTION
 		'CTRL+A':'SELECT_ALL',
 		'CTRL+SHIFT+LEFT':'WORD_LEFT_EXTEND',
 		'CTRL+SHIFT+RIGHT':'WORD_RIGHT_END_EXTEND',
@@ -807,7 +807,7 @@ Editor.addModule('Selection',(function(){
 		'CTRL+SHIFT+BACKSPACE':'DEL_LINE_LEFT',
 		'CTRL+SHIFT+DELETE':'DEL_LINE_RIGHT',
 		'CTRL+L':'LINE_DELETE',
-	// DÉPLACEMENT DE LIGNES
+	// DÃ‰PLACEMENT DE LIGNES
 		'CTRL+T':'LINE_TRANSPOSE',
 		'CTRL+SHIFT+UP':'LINES_CLIMB_UP',
 		'CTRL+SHIFT+DOWN':'LINES_CLIMB_DOWN',

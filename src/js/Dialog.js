@@ -50,7 +50,7 @@ Editor.addModule('Dialog',(function(){
 		if( ! Dialogs[ 'bad_protocol' ]){
 			Events.add(
 				Dialogs[ 'bad_protocol' ] = E.eDialogs.appendChild( Tag( 'DIV', {
-					innerHTML:'<b class="error">Désolé, le protocole http est requis pour ouvrir les fenêtres modales.</b>',
+					innerHTML:'<b class="error">DÃ©solÃ©, le protocole http est requis pour ouvrir les fenÃªtres modales.</b>',
 					className:"dialogBox"
 					}))
 				, 'mouseover', function(){ _close( 'bad_protocol' )}

@@ -111,9 +111,9 @@ Editor.addModule('UndoStack',(function(){
 		var H = D.oUndoStack = new UndoStack ( D, CallBack( D, 'updateContents' ))
 		Events.add( H, 'change', CallBack( D.oEditor, 'onhistorychange' ))
 		}
-	// Ajout automatique d'une instance ‡ la crÈation d'un document
+	// Ajout automatique d'une instance √† la cr√©ation d'un document
 	Events.add( Editor.prototype, 'documentinit', newinstance )
-	// Ajoute une instance ‡ tous les documents dÈj‡ existant
+	// Ajoute une instance √† tous les documents d√©j√† existant
 	Editor.mapDocuments( newinstance )
 
 	return UndoStack

@@ -128,7 +128,7 @@ var aKeys = []
 var Commands = Editor.Modules.Commands
 for( var sAttr in Commands ){
 	if( sAttr.toUpperCase()==sAttr && Commands[sAttr]){
-		aKeys.push( '<KBD id="_'+ sAttr +'" title="'+ oCommandsDesc[sAttr] +'">' + sAttr + '</KBD>' )
+		aKeys.push( '<KBD id="_'+ sAttr +'" title="'+ (oCommandsDesc[sAttr]||'') +'">' + sAttr + '</KBD>' )
 		}
 	}
 </script>
