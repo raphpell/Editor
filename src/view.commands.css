@@ -1,0 +1,33 @@
+#eKeyboard {
+	border: 1px solid #BBB;
+	float: left;
+	height: 300px;
+	width: 20%;
+	margin: 0 1% 1em;
+	overflow: auto;
+	padding: 0 0 3px 0;
+	}
+#eKeyboard KBD {
+	background-color: #CCC;
+	border: 1px solid #BBB;
+	cursor: pointer !important;
+	font: bold 11px Verdana;
+	text-transform: uppercase;
+	margin: 1px 1px 0;
+	padding: 0 0 0 10px;
+	display: block;
+	transition: 250ms ease;
+	white-space: nowrap;
+	width:100%;
+	min-width:250px;
+	}
+#eKeyboard KBD I {
+	background: #CCC;
+	font: normal 8px Verdana;
+	margin: 0 4px;
+	vertical-align: top;
+	text-transform: none;
+	}
+#eKeyboard KBD I.red {
+	color: red;
+	}

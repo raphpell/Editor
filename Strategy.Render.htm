@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>L'affichage de la source</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+	.editor {
+		float: left;
+		height: 400px;
+		width: 100%;
+		}
+	#eResult1 {
+		border: 1px solid #000;
+		}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<h1>L'affichage de la source</h1>
+
+<div><h2>Objectif</h2>
+	<p>Offrir et tester différents moteurs d'affichage. Celui par défaut :</p>
+	<ul>
+		<li>Affiche uniquement les lignes visibles à l'écran.</li>
+		<li>Met en cache les lignes affichées (Elles sont récupèrer avec l'objet <code>oSyntax</code>).</li>
+		<li>Lors de l'édition, il met à jour le cache sans récupérer les lignes modifiées.</li>
+	</ul>
+</div>
+
+<div><h2>Diagramme</h2>
+	<img src="diagram/Class.Render.gif">
+</div>
+
+<div><h2>Aperçu</h2>
+	<label for="eStrategy">oEditor.oActiveDocument.oRender.setStrategy( </label>
+	<select id="eStrategy">
+		<option value="Default" selected>Default</option>
+		<option value="CacheAll">CacheAll</option>
+		<option value="StringCaching">StringCaching</option>
+	</select>
+	<label for="eStrategy"> ) </label>
+	<textarea id="eSource" wrap="off" style="width:45%; height:400px; display:none;"></textarea>
+	<div id="eEditeur1"></div>
+	<div id="eStats" class="stats"></div>
+</div>
+
+<div id="eContents"><!--var Render = (function(){
+	var Strategies ={
+		CacheAll :(function(){
+			var redraw =function(){
+				var D=this, V=D.oView, sContents=''
+				// 1- Récupère le contenu affiché
+				for( var aj=V.aVisibleRanges, j=0, nj=aj.length; j<nj; j++ ){
+					var a = aj[j]
+					sContents += '<dt>'+D.aLinesBuffer.slice( a[0]-1, a[1] ).join('<dt>')
+					}
+				// 2- Modifie la zone texte
+				var e = D.eTZ
+				, oStyle = e.style
+				oStyle.height = V.height
+				oStyle.paddingTop = V.top
+				oStyle.paddingBottom = V.bottom
+				oStyle.left = D.Padding.get('left')+'px'
+				D.eTZ = Tag.replaceHtml( e, sContents )
+				}
+			return {
+				initialize :function(){
+					this.aLinesBuffer = this.oSyntax.getContents()
+					redraw.call( this )
+					},
+				editing :function(){
+					var D=this, o=D.oUpdates, oD=o.oDeleted, oA=o.oAdded
+					Array.prototype.splice.apply( D.aLinesBuffer,
+						Array.merge(
+							  oD.text
+								? [ oD.nLineStart-1, oD.nLineEnd-oD.nLineStart+1 ]
+								: [ oA.nLineStart-1, 1 ]
+							, oA.text
+								? D.oSyntax.getLines( oA.nLineStart, oA.nLineEnd )
+								: [D.oSyntax.getLine( oD.nLineStart )]
+							)
+						)
+					redraw.call( this )
+					},
+				redraw : redraw
+				}
+			})(),
+		StringCaching :(function(){
+			var redraw =function(){
+				var D=this, V=D.oView, sContents=''
+				// 1- Récupère le contenu affiché
+				for( var aj=V.aVisibleRanges, j=0, nj=aj.length; j<nj; j++ ){
+					var a = aj[j]
+					for( var i=a[0]-1; i<a[1]; i++ ){
+						var m = D.aLinesBuffer[i]
+						if( ! m ) m = D.aLinesBuffer[i] = ( D.oSyntax.getLine( i+1 )||' ' )
+						sContents += '<dt>'+ m
+						}
+					}
+				// 2- Modifie la zone texte
+				var e = D.eTZ
+				, oStyle = e.style
+				oStyle.height = V.height
+				oStyle.paddingTop = V.top
+				oStyle.paddingBottom = V.bottom
+				oStyle.left = D.Padding.get('left')+'px'
+				D.eTZ = Tag.replaceHtml( e, sContents )
+				}
+			return {
+				initialize :function(){
+					this.aLinesBuffer = []
+					redraw.call( this )
+					},
+				editing :function(){
+					var D=this, o=D.oUpdates, oD=o.oDeleted, oA=o.oAdded
+					Array.prototype.splice.apply( D.aLinesBuffer,
+						Array.merge(
+							  oD.text
+								? [ oD.nLineStart-1, oD.nLineEnd-oD.nLineStart+1 ]
+								: [ oA.nLineStart-1, 1 ]
+							, oA.text
+								? D.oSyntax.getLines( oA.nLineStart, oA.nLineEnd )
+								: [D.oSyntax.getLine( oD.nLineStart )]
+							)
+						)
+					redraw.call( this )
+					},
+				redraw : redraw
+				}
+			})(),
+		Default :(function(){ // Element Caching
+			var redraw =function(){
+				var D=this, V=D.oView, e= D.eTZ
+				if( e.parentNode ) e=D.eTZC.removeChild( D.eTZ )
+				if( ! D.oSyntax ) return ;
+				// 1- Efface les éléments
+			//	e.innerHTML = ''
+				while( e.childNodes.length ) e.removeChild( e.firstChild )
+			//	for(var i=0, ni=e.childNodes.length; i<ni; i++ ) e.childNodes[i].style.display = 'none'
+				// 2- Ajoute les éléments à afficher
+				for( var aj=V.aVisibleRanges, j=0, nj=aj.length; j<nj; j++ ){
+					var a = aj[j]
+					for( var i=a[0]-1; i<a[1]; i++ ){
+						var m = D.aLinesBuffer[i]
+						if( ! m ) m = D.oSyntax.getLine( i+1 )
+						var nTop = (V.getLine(i+1)-1)*D.oCharacter.nHeight +'px'
+						if( ! m.parentNode ){
+							if( m.constructor==String ){
+								D.aLinesBuffer[i] = e.appendChild( Tag( 'DT', { innerHTML:m, style:{ position:'absolute', top:nTop }}))
+								continue ;
+								}
+							D.aLinesBuffer[i] = e.appendChild( D.aLinesBuffer[i] )
+							}
+						D.aLinesBuffer[i].style.top = nTop
+					//	D.aLinesBuffer[i].style.display = ''
+						}
+					}
+				// 3- Modifie la zone texte
+				var oStyle = e.style
+				oStyle.height = V.nLinesHeight+'px'
+				oStyle.left = D.Padding.get('left')+'px'
+				D.eTZC.appendChild( e )
+				}
+			return {
+				initialize :function(){
+					this.aLinesBuffer = []
+					redraw.call( this )
+					},
+				editing :function(){
+					var D=this
+					, o=D.oUpdates
+					, nLinesDeleted = o.nLineEnd-o.nLineStart+1
+					, aSpliced = [ o.nLineStart-1, nLinesDeleted ]
+					for( var i=aSpliced[0]; i<aSpliced[1]; i++ ){
+						var e = D.aLinesBuffer[ i ]
+						if( e && e.parentNode ) D.eTZ.removeChild( e )
+						}
+					var a = D.oSyntax.getLines( o.nLineStart, o.nLineEnd + o.nLineShift )
+					Array.prototype.splice.apply( D.aLinesBuffer, aSpliced.concat( a ))
+					redraw.call( this )
+					},
+				redraw : redraw
+				}
+			})()
+		}
+	var RS =function( D, sStrategyName ){
+		this.execAction =function( s ){ // initialize, editing, redraw
+			s = s || 'redraw'
+			var o = this.oStrategy
+			if( o ) return o[s] ? o[s].call( D ) : o.redraw.call( D )
+			throw new Error ( '"'+ this.sStrategyName +'" render strategy: action "'+ s +'" undefined.' )
+			}
+		this.removeCache =function( nLineStart, nLineEnd ){
+			for( var i=nLineStart-1, ni=nLineEnd; i<ni; i++ )
+				D.aLinesBuffer[i]=''
+			}
+		this.setStrategy =function( s ){
+			if( ! Strategies[ s ]) throw new Error ( '"'+ s +'" render strategy undefined.' )
+			this.oStrategy = Strategies[ this.sStrategyName=s ]
+			this.execAction( 'initialize' )
+			}
+		this.setStrategy( sStrategyName||'Default' )
+		}
+	RS.get =function( s ){ return Strategies[ s ]}
+	RS.addStrategy =function( s, o ){
+		if( o.initialize && o.editing && o.redraw )
+			return Strategies[ s ] = o
+		throw new Error ( '"'+ s +'" render strategy is not valid.' )
+		}
+	return RS
+	})()
+--></div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Fold.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script>
+_( 'eEditeur1,eSource,eContents,eTOKENS,eStats,eStrategy' )
+eSource.value = eContents.firstChild.data
+
+Events.add(
+	eStrategy, 'change', function(){ oEditor.oActiveDocument.oRender.setStrategy( eStrategy.value )}
+	)
+
+BenchmarkFunctions(
+	eStats, Editor.Strategies.Render.prototype,
+	'execAction,removeCache,setStrategy'
+	)
+			
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS' })
+var D = oEditor.newDoc( 'Source', eSource.value )
+var F = D.oFold
+oEditor.execCommand( 'FOLD_LEVEL_3' )
+F.unfold( 85, true )
+oEditor.execCommand( 'FOLD_LEVEL_4' )
+F.unfold( 118, true )
+F.fold( 159, true )
+oEditor.execCommand( 'FOLD_LEVEL_5' )
+</script>
+
+<script src="config.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC("Strategy.Render.htm")</script>
+</body>
+</html>

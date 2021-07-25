@@ -1,0 +1,674 @@
+/* FULLSCREEN Cf. js class Tag  */
+.fullscreen {
+	margin: 0 !important;
+	height: auto !important;
+	width: auto !important;
+	bottom: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	top: 0 !important;
+	position: fixed !important;
+	z-index: 1000 !important;
+	}
+BODY.fullscreen  {
+	overflow: hidden !important;
+	position: relative;
+	}
+TEXTAREA.fullscreen {
+	border-width: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	height: 100% !important;
+	width: 100% !important;
+	}
+
+.editor {
+	background: #FFF;
+	border: 1px solid #CCC; /* Attention: Influence le positionnement du curseur suite à un clique -> doit-être égale à 0 */
+	box-sizing: border-box;
+	/* margin: 1px -1px; */
+	color: #000;
+	letter-spacing: 0;
+	/*overflow:hidden;  */
+	padding: 2px 0 !important;
+	position: relative;
+	height: 250px;
+	width: 604px;
+	}
+.editor:hover {
+	border-color: lightskyblue;
+	}
+
+/* HTML */	
+.editor DL {
+	position: absolute;
+	/*left:0; DELETED for line numbers */
+	left: 0;
+	top: 0;
+	margin: 0;
+	padding: 0;
+	z-index: 1;
+	}
+.editor TEXTAREA {
+	background: #EEE;
+	position: fixed;
+	left: -1000em;
+	height: 50%;
+	width: 20em;
+	}
+.editor IFRAME {
+	display: none;
+	}
+.editor I { font-style: normal !important; }
+.editor B { font-weight: normal !important; }
+
+/* Module Character */
+.editor .charSizeTest {
+	background: red;
+	color: yellow;
+	position: absolute;
+ 	left: -100em;
+	top: -100em;
+	}
+	
+/* Module Modal Dialog */
+.editor .dialogs {
+	font: normal 0.7em Arial, Verdana;
+	}
+.editor .dialogs .current {
+	box-shadow: 0 0 14px #666;
+	opacity: 1;
+	z-index: 13;
+	transition: opacity 1s ease;
+	}
+.editor .dialogs .current .dialog_title {
+	background: #333;
+	}
+.editor INPUT {
+	font: normal 0.95em Arial, Verdana;
+	}
+.editor FIELDSET,
+.editor LEGEND {
+	background: #eee;
+	border-color: #999;
+	color: #000;
+	}
+.editor .dialogBox {
+	background: #eee;
+	border: 1px solid #666;
+	border-radius: 6px;
+	box-shadow: 0 0 7px #666;
+	float: right;
+	left: -1000px;
+	padding: 0.5em 1em;
+	position: absolute;
+	top: -30em;
+	transition: top 1s ease;
+	z-index: 12;
+	opacity: 0.9;
+	white-space: nowrap;
+	}
+.editor .dialogBox .dialog_title {
+	text-shadow: 0 0 5px #FFF, -5px 0 5px #FFF, 0 0 15px #FFF;
+    background: #666;
+	border-radius: 6px 6px 0 0;
+    color: #000;
+	cursor: pointer;
+    height: 1.5em;
+    line-height: 1.5em;
+    margin: -0.5em 0 0.5em -1em;
+    padding: .2em 1em;
+    width: 100%;
+	text-align: center;
+	transition: .5s ease;
+	}
+.editor .dialogBox .error {
+	color: red;
+	}
+	
+/* Module TopMenu */
+.editor .menu {
+	background: #FFF;
+	float: left;
+	font-family: 'Arial',monospace !important;
+	font-size: 13px;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top:0;
+	width: 100%;
+	z-index: 11;
+	}
+	.editor .menu UL {
+		background: transparent url(../../images/bg.png) repeat-x 0 0;
+		border: 1px solid #666;
+		left:-1px;
+		height: 23px;
+		list-style-type: none;
+		margin: 2px 2px 1px;
+		overflow: hidden;
+		padding: 1px 0;
+		white-space: nowrap;
+		}
+	.editor .menu LI {
+		display: inline-block;
+		float: left;
+		}
+		.editor .menu SELECT {
+			height: 20px;
+			font-size: 13px;
+			margin: 1px 0 3px 1px;
+			overflow: hidden;
+			vertical-align: bottom;
+			}
+		.editor .menu A ,
+		.editor .menu A:visited {
+			border: 1px solid transparent;
+			cursor: default;
+			color: #000;
+			margin: 0 0 1px 1px;
+			padding: 2px;
+			display: inline-block;
+			height: 17px;
+			width: 17px;
+			position: relative;
+			text-decoration : none;
+			}
+		.editor .menu A.down {
+			border: 1px solid #666 !important;
+			background-color: #ddd;
+			cursor: default;
+			}
+		.editor .menu A:hover {
+			border: 1px solid lightskyblue;
+			background-color: #CDE;
+			cursor: hand; cursor: pointer;
+			}
+		.editor .menu A.disabled:hover {
+			border: 1px solid transparent;
+			background-color: transparent;
+			cursor: default;
+			}
+			.editor .menu A DIV {
+				background: transparent url(../../images/outils.png) no-repeat 0 0;
+				display: inline-block;
+				height: 17px;
+				width: 17px;
+				}
+			.editor .menu A:hover DIV {
+				
+				}
+			.editor .menu SPAN {
+				background: #fff;
+				border: 1px solid #666;
+				cursor: hand;
+				padding: 0 5px;
+				position:absolute;
+				top: 25px;
+				left: -1000em;
+				z-index: 20;
+				display: none;
+				}
+			.editor .menu A:hover SPAN {
+				/*left: 10px;*/
+				}
+			.editor .menu IMG {
+				border: 0px solid #000;
+				float: left;
+				height: 24px;
+				width: 24px;
+				}
+		.editor .menu.separator {
+			background: transparent;
+			font-size: 0px;
+			}
+		.editor .menu .separator DIV {
+			background: #DDD;
+			height: 19px;
+			margin: 2px 5px;
+			width: 1px;
+			}
+.editor .menu ~ .tab_menu { margin-top: -1px !important; }
+.editor .tab_menu {
+	font-family: 'Arial',monospace !important;
+	box-shadow: 0 0 5px #999;
+	font-size: 13px;
+	top: 0;
+	overflow: hidden;
+	padding: 2px 0 0;
+	position: absolute;
+	width: 100%;
+	z-index: 2;
+	}
+.editor .tab_menu .nav {
+	bottom: 2px;
+	border: 1px solid #eee;
+	box-shadow: 0 0 4px #999;
+	position: absolute;
+	text-align: center;
+	top: 2px;
+	z-index: 3;
+	width: 7px;
+	}
+.editor .tab_menu .nav:hover {
+	background-color: #CDE;
+	}
+.editor .tab_menu .previous {
+	background: #FFF url(../../images/Widgets/previous.png) no-repeat center center;
+	right: 11px;
+	}
+.editor .tab_menu:hover .next,
+.editor .tab_menu:hover .previous {
+	border: 1px solid lightskyblue;
+	}
+.editor .tab_menu:hover .current {
+	box-shadow: 0 0 3px #333, 0 0 2px #FC0 !important;
+	}
+.editor .tab_menu .next {
+	background: #FFF url(../../images/Widgets/next.png) no-repeat center center;
+	right: 1px;
+	}
+.editor .tab_menu DL {
+	background:url(../../images/patterns2.jpg) top left;
+	border-bottom: 2px solid #FFF;
+	box-shadow: 0 0 5px #666 inset;
+	left: 0;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+	position: relative;
+	white-space: nowrap;
+	width: 1000%;
+	transition: left 250ms linear;
+	}
+.editor .tab_menu DT {
+	background: #666;
+	cursor: default;
+	color: #EEE;
+	border: 1px solid #FFF;
+	box-shadow: 0 0 5px #333;
+	display: inline-block;
+	margin: 0 1px 0 0;
+	padding: 2px 5px;
+	z-index: 1;
+	position:relative;
+	}
+.editor .tab_menu .current {
+	background: #FFF;
+	box-shadow: 0 0 5px #333, 0 0 5px #FC0, 0 0 3px #FC0;
+	border-color: #FFF #FC0;
+	border-width: 2px 1px;
+	color: #000;
+	z-index: 3;
+	}
+.editor .tab_contents {
+	background: #FFF;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	}
+	
+/* Zone Texte  */
+.editor .textZoneControl {
+	background: #FFF;
+	font-family: 'Monaco','Menlo','Ubuntu Mono','Consolas','source-code-pro',monospace !important;
+	font-size: 13px;
+	/*height: inherit;*/
+	margin: 0 2px !important;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	overflow: auto;
+	position: absolute;
+	z-index: 1;
+	}
+.editor DIV.textZoneControl { /* ATTENTION: paddingLeft modifié dynamiquement ! */ }
+.editor .textZoneControl .showMe {
+	background: yellow;
+	box-shadow: inset 0 0 10px red;
+	opacity:0.5;
+	z-index: 100000;
+	position: absolute;
+	left:0;
+	top:0;
+	height: 100%;
+	width: 100%;
+	}
+
+/* Contenu "edition" */
+.editor .textZone {
+	background: transparent url(../../images/tzc.png) no-repeat right top;
+	cursor:text;
+	font-family: inherit !important;
+	position: absolute;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	overflow: visible;
+	min-height:100% !important; /* IMPORTANT */
+	/*height: auto !important;  Attention: Limitation */
+	z-index:50;
+	}
+.editor .textZone DT {} /* Une ligne */
+/* .editor .textZone DT:hover { background: yellow; } */
+.editor .textZoneControl .textZone { /* ATTENTION: modifié dynamiquement ! */ }
+
+/* Module Gutter */
+.editor .gutter {
+	background:url(../../images/patterns2.jpg) top right;
+	border-right: 1px solid #333; 
+ 	box-shadow: 0 0 10px #666;
+	opacity:0.7;
+	overflow: hidden;
+	position: absolute;
+	min-height: 100% !important;
+	z-index: 101;
+	}
+.editor .gutter UL {
+	background:#000;
+	color: #FFF;
+	cursor: pointer; cursor: default;
+	direction: rtl;
+	float:left;
+	list-style-type: none;
+	margin: 0;
+	min-height: 100% !important;
+	opacity:0.8;
+	padding: 0;
+	text-align: right;
+	/* text-indent: 13px; */
+	transition: all 0.25s ease-in-out;
+	-ms-transition: all 0.25s ease-in-out;
+	-webkit-transition: all 0.25s ease-in-out;
+	-o-transition: all 0.25s ease-in-out;
+	}
+.editor .gutter LI {
+	list-style-type: none;
+	margin:0;
+	padding:0;
+	transition: all 0.25s ease-in-out;
+	}
+.editor .gutter LI.mark {
+	color: #000 !important;
+	background-color: #FFF !important;
+ 	border: 0 solid #FC0;
+	border-width: 0 0 0 0.25em !important;
+	box-shadow: inset 0.25em 0 0.25em #999;
+	}
+.editor .gutter LI.current {
+	background:#000;
+	color:#E4E4E4;
+	}
+
+/* Module Status  */
+.editor .status {
+	background:url(../../images/patterns2.jpg) top left;
+	color: #E4E4E4;
+	cursor: pointer; cursor: default;
+	bottom: 0;
+	float: left;
+	font: normal 15px/17px Verdana;
+	margin: 2px;
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	right: 0;
+	z-index:1;
+	}
+.editor .status DL {
+	background:#333;
+	opacity:0.8;
+	font-size: 11px;
+	height: 17px;
+	left: 0;
+	right: 0;
+	list-style-type:none;
+	margin: 0;
+	padding: 0 14px 0 0;
+	}
+.editor .status DT {
+	float: left;
+	margin: 0;
+	padding: 0 10px;
+	}
+.editor .status DD {
+	border-left: 1px solid #FFF;
+	float: right;
+	margin: 0;
+	padding: 0 10px;
+	}
+
+/* Module Grip */
+.editor .grip {
+	background: transparent url(../../images/grip.png) no-repeat center center;
+	bottom: 0;
+	cursor: nw-resize;
+	height: 16px;
+	position: absolute;
+	right: 0;
+	width: 16px;
+	z-index: 1;
+	}
+
+/* Module TextMarker */
+.editor .highlight {
+	z-index:4;
+	}
+.editor .highlight DT {
+	opacity: 0.4;
+	position: absolute;
+	}
+.editor .highlight .smart { background: #00FF00; }
+.editor .highlight .style1 { background: #00FFFF; z-index:5; }
+.editor .highlight .style2 { background: #FF8000; z-index:4; }
+.editor .highlight .style3 { background: #FFFF00; z-index:3; }
+.editor .highlight .style4 { background: #8000FF; z-index:2; }
+.editor .highlight .style5 { background: #008000; z-index:1; }
+.editor .highlight .style6 { background: #FF0000; z-index:6; }
+
+/* Module CurrentLine */
+.editor .currentLine {
+	background: #CDE;
+	opacity: 0.5;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	/* min-width:100% !important; IMPORTANT */
+	z-index: 2;
+	}
+
+/* Module Brackets */
+.editor .bracket {
+	background: yellow;
+	color: purple;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 49;
+	}
+.editor .bracketSelection {
+	background: red;
+	color: red;
+	opacity: 0.5;
+	z-index: 48;
+	}
+	
+/* Module Fold */
+.editor .fold {
+	background: #ddd;
+	position: absolute;
+	min-height:100% !important;
+	z-index: 48; 
+	}
+.editor .fold DL {
+	background: #eee;
+	}
+.editor .fold .error {
+	background: red;
+	border-color: yellow;
+	opacity:1;
+	}
+.editor .fold DIV {
+	background: #999;
+	height: 1px;
+	position: absolute;
+	}
+.editor .fold DT,
+.editor .fold DD {
+	position: absolute;
+	margin:0;
+	padding:0;
+	width: 9px;
+	}
+.editor .fold DT {
+	box-shadow:inset 0 0 2px #DDD;
+	cursor: pointer;
+	left: 2px;
+	background: #FFF;
+	color: #666;
+	border: 1px solid #666;
+	overflow: hidden;
+	text-align: center;
+	z-index: 100;
+	}
+.editor .fold DD {
+	left: 7px;
+	opacity:0.3;
+	border-left: 1px solid #666;
+	border-bottom: 1px solid #666;
+	width: 50%;
+	}
+.editor .fold DT.in,
+.editor .fold DD.in {
+	border-color: red;
+	opacity:1;
+	color: red;
+	z-index: 99 !important;
+	}
+.editor .fold DT.in {
+	z-index: 100 !important;
+	}
+.editor .fold DIV.in {
+	background: #699;
+	}
+
+/* Module Curseur */
+.editor .caret {
+	background: #000000;
+	cursor:text;
+	overflow: hidden;
+	position: absolute;
+	width: 1px;
+	left: 0; /* 160px = colonne 17 pour une largeur de colonne de 8px ! */
+	top: -10em; /* 80px = 3eme ligne  pour une hauteur de ligne de 40px ! */
+	z-index:52;
+	}
+
+/* Module Selection */
+.editor .selectionHover {
+	cursor: default !important;
+	}
+.editor .drag {
+	cursor:progress !important;  cursor:help !important;
+	}
+.editor .selection {
+	z-index:3;
+	}
+
+.editor .selection DT {
+	background: lightskyblue;
+	opacity: 0.75;
+	position: absolute;
+	}
+.editor .selection DT.selected { /* Pas appliqué à la ligne courante... */
+	min-width: 10px;
+	}
+
+/* Hauteur de ligne : par défaut */
+.editor .textZone,
+.editor .gutter LI,
+.editor .charSizeTest,
+.editor .currentLine,
+.editor .caret,
+.editor .bracket,
+.editor DT { /* ATTENTION: modifié dynamiquement ! */
+	font-family: inherit !important;
+	height: 16px;
+	line-height: 16px;
+	}
+
+/* Tabulations et saut de lignes */
+.editor .textZone .newline,
+.editor .textZone .tabulation,
+.editor .textZone .linefeed,
+.editor .textZone .tab {
+	font-family: inherit !important;
+	display: inline-block;
+	vertical-align: top;
+	overflow: hidden;
+	opacity:0.7;
+	}
+.editor .invisible .newline,
+.editor .invisible .tabulation,
+.editor .invisible .linefeed,
+.editor .invisible .tab {
+	background-color: transparent !important;
+	background-image: none !important;
+	}
+.editor .textZone .tabulation,
+.editor .textZone .tab {
+	background: url(../../images/tab.png) no-repeat center right;
+	background-size:auto 100%;
+	}
+.editor .textZone .newline,
+.editor .textZone .linefeed {
+	background: url(../../images/newline.png) no-repeat center right;
+	width: 1em !important;
+	background-size:100% 100%;
+	}
+
+/* Visualisation des lignes  */
+.editor .lines DT {
+	clear: left;
+	float: left;
+	margin:0;
+	padding:0;
+	width:100%;
+	}
+.editor DL.lines { /* ATTENTION: modifié dynamiquement ! */
+	width:200%;
+	}
+.editor .lines DT:nth-child(even) { background: #F5F5F5; }
+.editor .lines DT:nth-child(odd) { background: transparent; }
+
+/* Visualisation des colonnes */
+.editor DL.cols {/* ATTENTION: modifié dynamiquement ! */
+	/* height:100%; */
+	}
+.editor .cols {
+	margin: 0;
+	opacity: 0.25;
+	overflow: hidden;
+	padding: 0;
+	white-space: nowrap;
+	}
+.editor .cols DD {
+	clear:none !important;
+	display: inline-block;
+	overflow:hidden;
+	margin: 0;
+	padding: 0;
+	}
+.editor DL.cols DD {  /* ATTENTION: modifié dynamiquement ! */
+	background: transparent url(../../images/indent.png) repeat-y center right;
+	height: 400px; 
+	width: 0 !important;
+	}
+/*
+.editor .cols DD:nth-child(even) { background-color: #666; }
+.editor .cols DD:nth-child(odd) { background-color: YELLOW; }
+*/

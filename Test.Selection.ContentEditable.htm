@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+</head>
+<body spellcheck="false">
+
+
+<h2>Elément PRE (contenteditable="true")</h2>
+<p></p>
+<pre id="eTest" contenteditable="true" style="width:600px; height:400px; overflow:scroll; !important;">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		<b>sDoubleQuoteString</b> : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+	RegExp.extend({
+		escape :function( s ){
+			// Bracket test 2
+			var re1 = /(\.|\?|\*|\+|\\|\(|\)|\[|\]|\}|\{|\$|\^|\|)/g
+			, re2 = /("|')/gm
+			return s.replace( re1 , "\\$1" )
+			}
+		})
+</pre>
+
+<script src="shared.js"></script>
+
+<div id="eSelection" style="position:fixed; right:0; top:1em; background:red;">
+	aaaa
+</div>
+
+<script type="Text/JavaScript">
+alert( 'attach' )
+_( 'eTest,eSelection' )
+var o
+Events.add( eTest, 'mouseup', function(){
+	var sText = ''
+	if( window.getSelection ){  // all browsers, except IE before version 9
+		o = window.getSelection()                                      
+		sText = o.toString()
+		} 
+	else if( document.selection.createRange ){ // Internet Explorer
+		o = document.selection.createRange()
+		sText = o.text
+		}
+
+	eSelection.innerHTML = sText
+	})
+</script>
+</body>
+</html>

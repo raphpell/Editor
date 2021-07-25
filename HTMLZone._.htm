@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Les bloques HTML</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+		#eSource {
+			display: none;
+			}
+		#eEditeur {
+			float: left;
+			height: 400px;
+			width: 50%;
+			}
+		.buttons {
+			float:left;
+			margin: 0 2em;
+			list-style-type: none;
+			padding: 0;
+			}
+		.buttons KBD {
+			border: 1px solid lightskyblue;
+			display: inline-block;
+			text-align: center;
+			width: 100px;
+			}
+		.buttons I {
+			display: block;
+			margin: 1em 0 0.5em;
+			text-align: center;
+			}
+		.buttons INPUT {
+			display: inline-block;
+			margin: 0 0.5em;
+			width: 150px;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1>Les bloques HTML</h1>
+
+<div style="clear:left;"></div>
+
+<div class=""><h2>Structure visuelle</h2>
+	<img src="images/HTMLZones.png" style="width: 470px;">
+	<p><code>var E=oEditor, D=oEditor.oActiveDocument</code></p>
+</div>
+
+<div style="clear:both;padding:1em 0;"><h2>Aperçu</h2>
+<!-- SOURCE -->
+<textarea id="eSource" wrap="off">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+	RegExp.extend({
+		escape :function( s ){
+			// Bracket test 2
+			var re1 = /(\.|\?|\*|\+|\\|\(|\)|\[|\]|\}|\{|\$|\^|\|)/g
+			, re2 = /("|')/gm
+			return s.replace( re1 , "\\$1" )
+			}
+		})
+
+/* 2 - PHP */
+	<?php
+	function phpSafe ( $strText ){
+		// a single line comment ( a double quote ")
+		$tmpString = $strText ;
+		$tmpString = str_replace( chr(92) , "" , $tmpString ); 
+		return rawurldecode( $tmpString );
+		}
+		
+	/*
+	a  multi line comment ( a single quote  )
+	*/
+	$hiddencontent = phpSafe( $_POST[ 'content' ]);
+	?>
+</textarea>
+
+	<div id="eTest"></div>
+	<div id="eEditeur"></div>
+	<ul class="buttons" style="">
+		<li><kbd>ALT+SHIFT+M</kbd>
+			<input type="button" onclick="Button.toggleTopMenu()" value="TopMenu">
+			<a href="HTMLZone.TopMenu.htm">détail</a>
+			</li>
+		<li><kbd>ALT+SHIFT+T</kbd>
+			<input type="button" onclick="Button.toggleTabMenu()" value="TabMenu">
+			<a href="HTMLZone.TabMenu.htm">détail</a>
+			</li>
+		<li><kbd>ALT+SHIFT+S</kbd>
+			<input type="button" onclick="Button.toggleStatus()" value="Status">
+			<a href="HTMLZone.Status.htm">détail</a>
+			</li>
+		<li><kbd>ALT+SHIFT+G</kbd>
+			<input type="button" onclick="Button.toggleGutter()" value="Gutter">
+			<a href="HTMLZone.Gutter.htm">détail</a>
+			</li>
+		<li><kbd>ALT+SHIFT+L</kbd>
+			<input type="button" onclick="Button.toggleCurrentLine()" value="CurrentLine">
+			<a href="HTMLZone.CurrentLine.htm">détail</a>
+			</li>
+		<li><kbd></kbd>
+			<input type="button" onclick="Button.toggleGrip()" value="Grip">
+			<a href="HTMLZone.Grip.htm">détail</a>
+			</li>
+		<li><i>Module(s)</i></li>
+		<li><kbd>ALT+SHIFT+F</kbd>
+			<input type="button" onclick="Button.toggleFold()" value="Fold">
+			<a href="Module.Fold.htm">détail</a>
+			</li>
+		<li><i>Autre(s)</i></li>
+		<li><kbd></kbd>
+			<input type="button" onclick="Button.toggleTZC()" value="TextZoneControl">
+			<a href="HTMLZone.TextZoneControl.htm">détail</a>
+			</li>
+	</ul>
+</div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur,eSource,eDocName' )
+var oEditor = new Editor ( eEditeur, {
+	sSyntax:'JS'
+	,sTopMenu: 'DOCUMENT_NEW,|,FULLSCREEN,|,UNDO,REDO'
+	,bCurrentLine: 0
+	,bFold: 0
+	,bGrip: 0
+	,bGutter: 0
+	,bTabMenu: 0
+	,bTopMenu: 0
+	,bStatus: 0
+	})
+var D = oEditor.newDoc( '', eSource.value )
+/*
+oEditor.execCommand('DOCUMENT_NEW')
+oEditor.oTabMenu.setActive('doc1')
+*/
+Button={
+	toggleGrip :function(){ oEditor.oGrip.toggle(); oEditor.focus();},
+	toggleStatus :function(){ oEditor.oStatus.toggle(); oEditor.focus();},
+	toggleGutter :function(){ oEditor.oActiveDocument.oGutter.toggle(); oEditor.focus();},
+	toggleCurrentLine :function(){ oEditor.oActiveDocument.oCurrentLine.toggle(); oEditor.focus();},
+	toggleTZC :function(){ oEditor.oActiveDocument.oTextZoneControl.toggle(); oEditor.focus();},
+	toggleTabMenu :function(){ oEditor.oTabMenu.toggle(); oEditor.focus();},
+	toggleTopMenu :function(){ oEditor.oTopMenu.toggle(); oEditor.focus();},
+	toggleFold :function(){ oEditor.oActiveDocument.oFold.toggle(); oEditor.focus();}
+	}
+</script>
+
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC('HTMLZone._.htm')</script>
+</body>
+</html>

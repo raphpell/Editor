@@ -1,0 +1,43 @@
+.comments {}
+.comments .lineNumber {
+	background: #eee;
+	display: inline-block;
+	font-family: Verdana;
+	margin-right: 0.5em;
+	text-align: right;
+	width:3em;
+	padding: 0 0.5em 0 0;
+	}
+.comments .tab {
+	display: inline-block;
+	}
+.comments .line {
+	clear: left;
+	float: left;
+	width: 100%;
+	}
+.comments .line DIV {
+	float: left;
+	height: 1px;
+	padding: 0 0.5em;
+	position: relative;
+	margin: 0 0 0 0;
+	width: 250px;
+	}
+.comments .note {
+	background: yellow;
+	box-shadow: 0 0 0.25em #666;
+	border: 1px solid #999;
+	height: inherit !important;
+	padding: 0.25em 0.5em;
+	margin-bottom: 0.25em !important;
+	text-align: right;
+	}
+.comments .code {
+	font:normal 11px Monaco, Courier !important;
+	margin:0 0 0 280px;
+	padding:0;
+	}
+.comments .code B {
+	font-weight:normal;
+	}

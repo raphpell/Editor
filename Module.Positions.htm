@@ -1,0 +1,317 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Les positions</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+	#eResult1 {
+		border: 1px solid #000;
+		}
+	.editor,
+	#eTOKENS {
+		float: left;
+		height: 400px;
+		width: 48%;
+		}
+	</style>
+</head>	
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<h1>Les positions</h1>
+
+<p>Pour positionner un caractère (ou un espace), on utilise :</p>
+<ul>
+	<li>
+		Dans le <i>texte source</i>: l'<b>index</b>. Il commence à <code>0</code>.<br>
+		Si le document contient <code>nLen</code> caractères, le dernier caractère est numéroté <code>nLen-1</code>.
+	</li>
+	<li>
+		Dans un <i>éditeur</i>: la <b>colonne</b>, la <b>ligne logique</b> et la <b>ligne visible</b>. Elles commencent à <code>1</code>.
+		<ul>
+			<li> <b>ligne logique</b> : ligne dans la source.</li>
+			<li> <b>ligne visible</b> : ligne dans l'éditeur (rappel: les lignes peuvent être cachées).</li>
+		</ul>
+	</li>
+</ul>
+<p>
+	Le curseur texte est présent entre les caractères et peut-être positionné depuis  
+	<i>avant le premier caractère</i> (<code>0</code>)  
+	jusqu'à  <i>après le dernier caractère</i> (<code>nLen</code>).
+</p>
+
+<div><h2>Objectif</h2>
+	<p>Déterminer une position précise dans le texte source et l'éditeur.</p>
+	<ul>
+		<li>Quel est l'index d'une position dans l'éditeur ?</li>
+		<li>Quelle est la position d'un index ? d'un clique de souris ?</li>
+	</ul>
+</div>
+
+<div><h2>Prérequis</h2>
+	<p>
+		On utilise une <b>police monospace</b> :  
+		la dimension de chacun de leurs caractères est identique.
+	</p>
+	<ul>
+		<li>Toutes les lignes font la même hauteur.</li>
+		<li>Tous les caractères font la même largeur.</li>
+	</ul>
+</div>
+
+<div><h2>Diagramme</h2>
+	<img src="diagram/Class.Positions.gif">
+</div>
+
+<div><h2>Aperçu</h2>
+	<p>
+		En appliquant quelques <a href="#2.6.4.5.">transformations</a>, 
+		nous obtenons le <b>tableau</b> transcrit ci-dessous (Une ligne = une chaîne du tableau). 
+		Il sert à calculer les positions dans l'éditeur. <br>
+		Pour observer les modifications du 'tableau' ci-dessous :
+	</p>
+	<ol>
+		<li>Rendre actif l'éditeur ci-dessous</li>
+		<li>Ouvrer sa configuration <kbd>CTRL+M</kbd></li>
+		<li>Cocher ou décocher la case 'Tabulation souple' ou changer la taille des tabulations.</li>
+	</ol>
+	<div id="eEditeur1"></div>
+	<textarea id="eTOKENS" wrap="off"></textarea>
+	<div id="eStats" class="stats"></div>
+</div>
+
+<div style="clear: left; padding-top: 1em;"><h2>Colonne valide</h2>
+	<p>
+		Pour déterminer une <b>colonne valide</b>, on réalise quelques transformations sur le texte source :
+	</p>
+	<ul>
+		<li>On utilise un seul caractère pour définir les sauts de ligne.</li>
+		<li>On explose la source en un tableau de lignes.</li>
+		<li>On remplace :
+			<ul>
+				<li>les caractères non blancs avec <code>"x"</code>.</li>
+				<li>les espaces avec <code>"."</code> (ou <code>"x"</code> ca n'a pas d'importance).</li>
+				<li>les <b>tabulations</b> par un nombre de caractères égale à sa taille. On utilise :
+					<ul>
+						<li><code>"B"</code> pour marquer le début d'une tabulation.</li>
+						<li><code>"="</code> pour compléter la taille de la tabulation.</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<p>En résumé :</p>
+	<ul>
+		<li>On récupère la ligne dans le tableau.</li>
+		<li>Si le caractère à la colonne fait partie des caractères <code>"x.B"</code> : la colonne est valide.</li>
+		<li>Sinon on recherche la colonne valide la plus proche de la colonne d'origine.</li>
+	</ul>
+</div>
+
+<div id="eContents"><!--var Positions =(function(){
+	var _refreshArray =function(){
+		var D=this.oDocument
+		var bSearchMaxWidth = false
+		if( D.oUpdates ){
+			var o = D.oUpdates.oDeleted, s
+			if( o.text ){
+				if( o.nLineStart<=this.nColumnMaxLine && this.nColumnMaxLine<=o.nLineEnd ) bSearchMaxWidth=true
+				this.a.splice( o.nLineStart, o.nLineEnd-o.nLineStart )
+				s = this.replaceCharactersOfLine( str_replace( this.oSource.sNewLine, '', o.sNewContents ))
+				this.a[ o.nLineStart-1 ] = s
+				this.refreshColumnMax( s.length, o.nLineStart )
+				}
+			var o = D.oUpdates.oAdded
+			if( o.text ){
+				for( var i=o.nLineStart, ni=o.nLineEnd; i<ni; i++ ){
+					this.a.splice( o.nLineStart-1 , 0, '' )
+					}
+				for( var i=o.nLineStart, ni=o.nLineEnd, j=0; i<=ni; i++, j++ ){
+					s = this.replaceCharactersOfLine( o.aNewContents[j] )
+					this.a[ i-1 ] = s
+					this.refreshColumnMax( s.length, i )
+					}
+				}
+			}
+		else{
+			this.a = this.oSource.getValue().split( /(?:\r\n|[\r\n\f])/ )
+			for( var i=0, ni=this.a.length; i<ni; i++ )
+				this.a[i] = this.replaceCharactersOfLine( this.a[i])
+			this.getColumnMax()
+			}
+		if( bSearchMaxWidth ){
+			this.nColumnMax = null
+			this.getColumnMax()
+			}
+		}
+
+	P =function(D){
+		this.a = []
+		this.oDocument = D
+		this.oSource = D.oSource
+		this.oTabulation = D.oTabulation
+		var E = D.oEditor
+		var f=CallBack( E, function(){ _refreshArray.call( this.oActiveDocument.oPositions )})
+		Events.add(
+			D, 'update', CallBack( this, function(){ _refreshArray.call( this )}),
+			E,
+				'documentinit', f,
+				'TabSizeChange', f,
+				'SoftTabChange', f
+			)
+		}
+	P.prototype ={
+		a: null,
+		nColumnMax: null, // PRIVATE
+		nColumnMaxLine: null, // PRIVATE
+		replaceCharactersOfLine :function( s ){
+			var o = this.oTabulation
+			var nShift = 0
+			sResult = str_replace(
+				[ /[^\s]/g, /(?:\r\n|[\r\n\f])/g, /\t/g, /\s/g ],
+				[ 'x', Modules.NewLine.TOKEN, function( sMatched, nIndex ){
+					if( ! o.bSoftTab ) return o.TOKEN
+					// Tabulations souples
+					var n = o.size-(nIndex+nShift)%o.size
+					nShift += n-1
+					return o.TOKEN.slice( 0, n )
+					}, '.' ],
+				s
+				)
+			return sResult
+			},
+		calculateColumn :function( nIndex, oLine ){ // DEPRECATED
+			var oLine = oLine || this.oSource.lineAt( nIndex, 'calculateColumn' )
+			return this.replaceCharactersOfLine( oLine.substring( 0, nIndex-oLine.index )).length+1
+			},
+		getFromView :function( oPosition ){ // return {line,viewLine,col,index}
+			var D=this.oDocument, V=D.oView
+			, nLine = oPosition.viewLine
+			, nCol = oPosition.col
+
+			var nViewLine = nLine = Math.max( 1, Math.min( nLine, V.nLines ))
+			nCol = Math.max( 1, nCol )
+			
+			if( V.haveHiddenRange()) nLine = V.aVisibleLines[ nLine-1 ]
+
+			var sLine = this.a[ nLine-1 ]
+			if( sLine!=undefined ){
+				var nIndex = nCol-1
+				var sChar = sLine.charAt( nIndex )
+				switch( sChar ){
+					case '.': case 'x': case 'B': break;
+					case '=':
+						var nToBegin = 1
+						var nToEnd = 1
+						var n = parseInt( this.oTabulation.size )
+						for( var i=nIndex; sLine.charAt( --i )=="="; nToBegin++ );
+						for( var i=nIndex; sLine.charAt( ++i )=="="; nToEnd++ );
+						nCol = nToBegin < nToEnd ? nCol-nToBegin : nCol+nToEnd
+						break;
+					default: nCol = sLine.length+1
+					}
+			}else if( this.a.length ){
+				nLine = this.a.length
+				nCol = this.a[ nLine-1 ].length+1
+			}else{
+				nLine = 1
+				nCol = 1
+				}
+			return { viewLine:nViewLine, line:nLine, col:nCol, index:this.getIndex( nLine, nCol )}
+			},
+		getIndex :function( nLine, nCol ){ // return nIndex
+			var a = this.a.slice( 0, nLine )
+			a[ a.length-1 ] = a[ a.length-1 ].slice( 0, nCol-1 )
+			return a.join('N').replace( /B=*/g, 'T' ).length
+			},
+		getFromIndex :function( nIndex ){ // return {line,viewLine,col,index}
+			var a = this.oSource.getValue().slice( 0, nIndex ).split( this.oSource.sNewLine )
+			, nLine = a.length
+			return {
+				line: nLine,
+				viewLine: this.oDocument.oView.getLine( nLine ),
+				col: this.replaceCharactersOfLine( a[nLine-1]).length+1,
+				index: parseInt( nIndex )
+				}
+			},
+		getColumnMax :function( nLine ){ // Sans nLine retourne le résultat pour la source
+			if( nLine ) return this.a[nLine-1] ? this.a[nLine-1].length : 0
+			var nMax = 0, nColumnMaxLine = 1
+			for(var i=0, ni=this.a.length, n ; i<ni ; i++ ){
+				n = this.a[i].length
+				if( n > nMax ){
+					nMax = n
+					nColumnMaxLine = i+1
+					}
+				}
+			this.nColumnMaxLine = nColumnMaxLine
+			return this.nColumnMax = nMax
+			},
+		refreshColumnMax :function( nValue, nLine ){ // PRIVATE
+			if( nValue > this.nColumnMax ){
+				this.nColumnMax = nValue
+				this.nColumnMaxLine = nLine
+				}
+			}
+		}
+	return P
+	})()
+--></div>
+
+<div><h2>A faire</h2>
+<ul>
+	<li>
+		Calculer la colonne la plus à gauche selon un clique souris.<br>
+		<b>Objectif: Finaliser la sélection des mots par double clique.</b>
+	</li>
+</ul>
+</div>
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script>
+_( 'eEditeur1,eContents,eStats,eTOKENS' )
+
+BenchmarkFunctions(
+	eStats, Editor.Modules.Positions.prototype,
+	'replaceCharactersOfLine,calculateColumn,getIndex,getFromEvent,getFromIndex,getFromView,getColumnMax,refreshColumnMax'
+	)
+
+var oChrono = new Chrono
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS' })
+var D = oEditor.newDoc( 'Source', eContents.firstChild.data )
+
+oEditor.execCommand( 'FOLD_LEVEL_3' )
+
+// Affiche le texte servant à analyser les espaces blancs "
+;(getWhitesSpaces=function(){
+	eTOKENS.value = oEditor.oActiveDocument.oPositions.a.join('\n')
+	})();
+Events.add(
+	oEditor.oActiveDocument,
+		'update', getWhitesSpaces,
+	oEditor,
+		'TabSizeChange', getWhitesSpaces,
+		'SoftTabChange', getWhitesSpaces
+	)
+</script>
+
+<script src="config.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC("Module.Positions.htm")</script>
+</body>
+</html>

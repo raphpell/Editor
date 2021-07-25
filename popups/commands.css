@@ -1,0 +1,11 @@
+.dialog_commands TABLE {
+	background: #FFF;
+	}
+.dialog_commands TR {
+	transition: 250ms ease;
+	}
+.dialog_commands TH {
+	cursor: pointer;
+	background: #333;
+	color: #FFF;
+	}

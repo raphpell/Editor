@@ -1,0 +1,40 @@
+.xml {
+	color: #000; /* don't erase */
+	}
+
+/* Element */
+.xml .elt {
+	color: blue;
+	}
+.xml .elt .attr {
+	color: lightskyblue;
+	}
+.xml .elt .value {
+	color: lightblue;
+	}
+
+/* CDATA */
+.xml .cdata  {
+	color: lightgreen;
+	}
+.xml .cdata .elt  {
+	color: green;
+	}
+.xml  .cdata .elt .attr {
+	color: green;
+	}
+.xml  .cdata .elt .value {
+	color: darkgreen;
+	}
+
+/* Comment */
+.xml .comment ,
+.xml .comment  b {
+	color: White !important;
+	}
+
+/* Others syntaxes */
+.xml .php .comment,
+.xml .php .comment b {
+	color: GhostWhite ;
+	}

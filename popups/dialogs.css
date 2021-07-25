@@ -1,0 +1,9 @@
+.dialog_dialogs UL {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	}
+.dialog_dialogs INPUT {
+	min-width: 200px;
+	overflow: auto;
+	}

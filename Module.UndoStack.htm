@@ -1,0 +1,370 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>L'historique</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/_codeComments.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+		#eSource {
+			display: none;
+			}
+		#eSource,
+		#eHistory,
+		#eEditeur1 {
+			float: left;
+			height: 508px;
+			width: 70%;
+			}
+		#eHistory {
+			border: 1px solid #ddd;
+			float:left;
+			font: normal 0.7em Verdana;
+			margin: 0 1em 0 0;
+			overflow: scroll;
+			padding: 2px;
+			width: 25%;
+			}
+		#eHistory DT,
+		#eHistory DD {
+			background: #eee;
+			border: 1px solid #ddd;
+			position: relative;
+			margin: 0 0 2px 0;
+			overflow: hidden;
+			padding: 1px;
+			}
+		#eHistory H6 {
+			font: bold 1em Verdana;
+			margin:0;
+			padding:0;
+			text-align: right;
+			}
+		#eHistory DD {
+			background: #333;
+			}
+		#eHistory DIV {
+			color: #FFF;
+			display: inline-block;
+			position: relative;
+			font: bold 1.5em Verdana;
+			text-align: center;
+			width: 100%;
+			}
+		#eHistory PRE {
+			background: lightyellow;
+			display: inline;
+			margin:0;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1> L'historique</h1>
+	<div>
+		<p>
+			N'ayant pas trouvé de solution native pour gérer l'historique, il faut en créer une !<br>
+			Le contenu est mise à jour quand du texte est inséré, effacé ou remplacé.
+		</p>
+	</div>
+	
+<div><h2>Description</h2>
+	<div><h3> Historique minimaliste</h3>
+		<table border="1" cellspacing="0" cellpadding="10">
+			<tr>
+				<th>Action primitive</th>
+				<td>Méthode</td>
+				<td>REDO (Rétablir)</td>
+				<td>UNDO (Annuler)</td>
+			</tr>
+			<tr>
+				<th>Ajout</th>
+				<td>oCaret.insert</td>
+				<td>index<br> texte ajouté</td>
+				<td>index<br> texte effacé = texte ajouté</td>
+			</tr>
+			<tr>
+				<th>Suppression</th>
+				<td>oSelection.remove</td>
+				<td>index<br> texte effacé</td>
+				<td>index<br> texte ajouté = texte effacé</td>
+			</tr>
+			<tr>
+				<th>Modification</th>
+				<td>oSelection.replace</td>
+				<td>index<br> texte effacé<br> texte ajouté</td>
+				<td>index<br> texte effacé = texte ajouté<br> texte ajouté = texte effacé</td>
+			</tr>
+		</table>
+	</div>
+	<div><h3> Historique évolué</h3>
+		<p>Principe de fonctionnement :</p>
+		<ul>
+			<li>Au lieu d'appliquer une action primitive, elle en applique plusieurs à la suite.</li>
+			<li>Les suites sont identifiées par un même identifiant.</li>
+			<li>A chaque extrémité des suites d'actions, on exécute une fonction optionnelle. Objectif: fixer la sélection et la position du curseur.</li>
+		</ul>
+		<p>Exemple : <b>Glissé/Déposé d'une sélection</b></p>
+		<ul>
+			<li><i>Copie du texte sélectionné.</i></li>
+			<li>Suppression du texte sélectionné.</li>
+			<li>Insertion au curseur du texte copié.</li>
+			<li><i>Sélection du texte inséré.</i></li>
+		</ul>
+	</div>
+</div>
+
+<div><h2>Aperçu</h2>
+<input type="checkbox" id="eHistoryComplete" checked><label for="eHistoryComplete">Historique complète.</label>
+<div class="test"><dl id="eHistory"></dl></div>
+		
+<div id="eContents"><!--Editor.addModule('UndoStack',(function(){
+	return function( D, fApplyMethod ){
+		var a,n,US=this
+		,_Next={
+			Redo :function(){return US.haveRedo()?a[++n]:null},
+			Undo :function(){return US.haveUndo()?a[n--]:null}
+			}
+		,_move =function( s ){
+			var o = _Next[s]()
+			if( !o ) return;
+			if( !(o.added||o.deleted||o.Undo||o.Redo))
+				throw new Error( JSON.stringify(o))
+			var f
+			if( f=o[s] ){ f(); return US.onchange()}
+			if( s=='Undo' )
+				o={start:o.start,deleted:o.added,added:o.deleted,action:o.action}
+			if( f=fApplyMethod ) f( o, true )
+			if( o.action && US['have'+s]())
+				if( o.action==a[n+(s=='Redo'?1:0)].action )
+					return _move( s )
+			var S=D.oSelection, nIndex=o.start+o.added.length
+			D.oCaret.setIndex( nIndex )
+			if( o.added ) S.set( o.start, nIndex ); else S.collapse()
+			US.onchange()
+			}
+		Events.add( US, 'change', CallBack( US, function(){
+			var m = D.oEditor.oTopMenu
+			if( m = m && m.MenuItem.set ){
+				m('UNDO',US.haveUndo()?"enable":"disable")
+				m('REDO',US.haveRedo()?"enable":"disable")
+				}
+			}))
+		US.acquire({
+			clear :function(){a=[];n=-1;US.onchange()},
+			haveRedo :function(){return n<a.length-1},
+			haveUndo :function(){return n>-1},
+			redo :function(){_move('Redo')},
+			undo :function(){_move('Undo')},
+			getList :function( bComplete ){
+				if( bComplete ) return {n:n,a:a}
+				var aInfo=[], nPos=-1, sAction=''
+				for(var i=0, ni=a.length; i<ni; i++ ){
+					var o = a[i]
+					if( !sAction || sAction!=o.action ) aInfo.push(o)
+					sAction = o.action||''
+					if( i==n ) nPos = aInfo.length-1
+					}
+				return {n:nPos,a:aInfo}
+				},
+			moveTo :function( nPos, b ){
+				var o=US.getList(b)
+				, nPos=Math.max( -1, Math.min( nPos, o.a.length-1 ))
+				if(nPos<o.n) while(nPos<o.n){US.undo();o=US.getList(b)}
+				        else while(nPos>o.n){US.redo();o=US.getList(b)}
+				},
+			push :function( m ){
+				if( n<a.length-1 ) a=a.slice(0,n+1)
+				var o = a[a.length-1]
+				if( o && !o.action && !(o.deleted&&o.added)){
+					if( o.added && m.added && o.start+o.added.length==m.start ){
+						o.added += m.added
+						US.onchange()
+						return o
+						}
+					if( o.deleted && m.deleted ){
+						var b1=o.start==m.start+m.deleted.length
+						, b2=o.start==m.start
+						if( b1 ) o.deleted = m.deleted + o.deleted
+						if( b2 ) o.deleted += m.deleted
+						if( b1 || b2 ){
+							o.start = m.start
+							US.onchange()
+							return o
+							}
+						}
+					}
+				a.push( m )
+				++n
+				US.onchange()
+				return m
+				}
+			})
+		US.clear()
+		}
+	})())--></div>
+<textarea id="eSource" wrap="off"></textarea>
+<div id="eEditeur1"></div>
+
+<div id="eStats" class="stats"></div>
+<pre id="eDEBUG" style="clear:left;"></pre>
+</div>
+
+	<div><h2>Diagrammes</h2>
+		<p>L'objet historique à 2 propriétés privées:</p>
+		<ul>
+			<li>Un tableau : liste des actions stockées dedans. Les index vont de 0 à i , i est égale à la longueur du tableau - 1.</li>
+			<li>Un nombre : position du pointeur dans l'historique. Sa valeur va de -1 à i. </li>
+		</ul>
+		
+		<img src="diagram/Class.UndoStack.gif">
+		
+		<p>Intégration aux autres composants</p>
+		<img src="diagram/Sequence.UndoStack.gif">
+	</div>
+	
+	<div><h2>Code commenté</h2>
+		<div id="eTest" class="comments"></div>
+	</div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/_codeComments.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script type="Text/JavaScript">
+_( 'eEditeur1,eSource,eContents,eTest,eDEBUG,eHistory,eHistoryComplete,eStats' )
+	
+eSource.value = eContents.firstChild.data
+
+function translateAction ( bCompleteInfo, o, index ){
+	// return JSON.stringify( o )
+	var a = []
+	if( bCompleteInfo ){
+		if( o.action ){
+			var aAction = o.action.split('@')
+			a.push( '<b>'+ aAction[0] +'</b>' )
+			a.push( 'id <b>' + aAction[1] +'</b>' )
+			}
+		if( o.start ) a.push( 'start <b>' + o.start + '</b>' )
+		if( o.deleted ) a.push( 'deleted <pre>'+ o.deleted +'</pre>' )
+		if( o.added ) a.push( 'added <pre>'+ o.added +'</pre>' )
+		if( o.detail )
+			a.push( 'selection <b>['+ o.detail[0] +','+ o.detail[1] +'[</b> curseur <b> '+ o.detail[2] +'</b>' )
+		if( o.Undo ) a.push( '<i>executé au Undo</i>' )
+		if( o.Redo ) a.push( '<i>executé au Redo</i> ')
+		}
+	else{
+		if( o.action ){
+			var aAction = o.action.split( '@' )
+			a.push( aAction[0])
+		}else{
+			if( o.added && o.deleted ) a.push( 'Remplacement <pre>'+ o.added +'</pre> par <pre>'+ o.deleted +'</pre>' )
+			else if( o.added ) a.push( 'Ajout <pre>'+ o.added +'</pre>'  )
+			else if( o.deleted ) a.push( 'Suppression <pre>'+ o.deleted +'</pre>'  )
+			}
+		}
+	return '<dt id="'+ index +'"><h6>['+ index + ']</h6>'  + a.join( '<br>' )+'</dt>'
+	}
+
+var oEditor = new Editor ( eEditeur1, {
+	bWhiteSpaces:false,
+	sFontSize: '11px',
+	sSyntax:'JS',
+	sTopMenu:'FULLSCREEN,|,UNDO,REDO,|,WhiteSpaces,TabSize,|,ZOOM_IN,ZOOM_OUT'
+	})
+var D = oEditor.newDoc( 'Source', eSource.value )
+oEditor.execCommand( 'FOLD_LEVEL_3' )
+D.oFold.unfold( 33, true )
+oEditor.execCommand( 'FOLD_LEVEL_4' )
+
+BenchmarkFunctions(
+	eStats, oEditor.oActiveDocument.oUndoStack,
+	'clear,haveRedo,haveUndo,redo,undo,getList,moveTo,push'
+	)
+	
+var bCompleteInfo = true
+var bDoing = false
+oEditor.onhistorychange =function(){
+	if ( ! bDoing ){
+		bDoing = true
+		var H=this.oActiveDocument.oUndoStack
+		setTimeout( function(){
+			bCompleteInfo = eHistoryComplete.checked ? true : false
+			var o = H.getList( bCompleteInfo ), aHistory =[]
+			if( o.n==-1 ) aHistory.push( '<dd id='+ o.n +'><div>'+ o.n +'</div></dd>' )
+			for( var i=0, ni=o.a.length; i<ni; i++ ){
+				aHistory.push( translateAction( bCompleteInfo, o.a[i], i ))
+				if( o.n==i ) aHistory.push( '<dd id='+ o.n +'><div>'+ o.n +'</div></dd>' )
+				}
+			aHistory.reverse()
+			eHistory = Tag.replaceHtml( eHistory, aHistory.join(''))
+		//	eHistory.getElementsByTagName( 'DD' )[0].scrollIntoView()
+			oEditor.focus()
+			bDoing = false
+			}, 250 )
+		}
+	}
+oEditor.onhistorychange()
+
+Events.add(
+	eHistoryComplete,
+		'change', CallBack( oEditor, 'onhistorychange' ),
+	eHistory.parentNode,
+		'click', function( evt ){
+			var H=oEditor.oActiveDocument.oUndoStack
+			bCompleteInfo = eHistoryComplete.checked ? true : false
+			var e = Events.element( evt )
+			while( ! in_array( e.nodeName, ['DT','DD','DL','DIV'])) e = e.parentNode
+			if( e.nodeName=='DIV' && e.className!='test' ) e = e.parentNode
+			switch( e.nodeName ){
+				case 'DT': H.moveTo( e.id, bCompleteInfo ); break;
+				case 'DD': H.undo(); break;
+				case 'DL': H.moveTo( -1, bCompleteInfo )
+				}
+			oEditor.focus()
+			}
+	)
+
+_('eTest').innerHTML = getCodeComments( oEditor, {
+	2:"<code>fApplyMethod</code> est la méthode utilisée pour mettre à jour le contenu... voir la méthode <code>D.updateContents</code>",
+	3:"<code>a</code> Liste des actions sauvegardées<br> <code>n</code> Position du pointeur.",
+	4:[7,"<b>Déplace le pointeur de l'historique d'une place et retourne la valeur dépassée si elle existe.</b>"],
+	8:[9,"<b>Effectue un Undo ou un Redo</b>"],
+	14:[14,"fixe normalement la sélection et la position du curseur... (fin de la suite d'actions)."],
+	16:[16,"inversion ( added/deleted ) pour le Undo"],
+	17:"met à jour le contenu...",
+	20:[20,"continue la suite d'actions."],
+	21:[23,"position du curseur et sélection par défaut."],
+	26:[32,"met à jour l'affichage des icônes du TopMenu si il existe"],
+	34:"<b>Nettoyage de l'historique</b>",
+	37:"<b>Rétablissement d'une modification</b>",
+	38:"<b>Annulation d'une modification</b>",
+	39:[39,"..."],
+	50:[55,"<b>Déplace le pointeur</b>"],
+	56:"<b>Ajoute une action à l'historique :<br> m={start, added [, deleted][, action]}<br> m={ Undo||Redo [, action]}</b>",
+	57:"supprime la portion de l'historique suivant la position courante.",
+	59:"compression de l'historique",
+	60:[64,"les ajouts à la suite sont aggrégés entre eux"],
+	65:[75,"idem pour les supressions "],
+	77:[78,"ajoute une action et déplace la position du pointeur."]
+	})
+</script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC("Module.UndoStack.htm")</script>
+</body>
+</html>

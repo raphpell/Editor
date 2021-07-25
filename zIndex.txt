@@ -1,0 +1,54 @@
+fixed       .fullscreen                         1000
+relative    .editor
+fixed       .editor TEXTAREA
+absolute    .editor .charSizeTest
+absolute    .editor .dialogBox                     12 et 13
+
+absolute    .editor DL                          1
+            .editor DL.lines                     
+            .editor DL.cols                     
+            .editor DL.selection                3
+            .editor DL.highlight                4
+            .editor DL.fold                     48
+            
+absolute    .editor .selection DT
+absolute    .editor .menu                       11
+relative    .editor .menu A
+absolute    .editor .menu SPAN                  20
+absolute    .editor .tab_menu                   2
+absolute    .editor .tab_menu .nav              3
+relative    .editor .tab_menu DL
+relative    .editor .tab_menu DT                1
+relative    .editor .tab_menu DT.current        3
+absolute    .editor .tab_contents
+absolute    .editor .textZoneControl            1
+absolute    .editor .textZoneControl .showMe    100000
+
+absolute    .editor UL.gutter                   101
+absolute    .editor .highlight DT                 
+            .editor .highlight DT.style1        5
+            .editor .highlight DT.style2        4
+            .editor .highlight DT.style3        3
+            .editor .highlight DT.style4        2
+            .editor .highlight DT.style5        1
+            
+absolute    .editor .fold DT                    100
+            .editor .fold DT.in                 100
+absolute    .editor .fold DD                                 
+            .editor .fold DD.in                 99
+absolute    .editor .foldEnd                  
+            
+absolute    .editor DIV.status                  1
+absolute    .editor DIV.grip                    1
+absolute    .editor DIV.currentLine             2
+absolute    .editor DIV.bracket                 51
+            .editor DIV.bracketSelection        49
+absolute    .editor DIV.caret                   52
+absolute    .editor PRE.textZone                50
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                

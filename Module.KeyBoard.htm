@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Le clavier</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<link rel="stylesheet" type="text/css" href="src/view.commands.css">
+	<style>
+		.info {
+			float: left;
+			margin: 1px 1% 0;
+			}
+		.info PRE {
+			background:#EEE;
+			margin:0;
+			padding:0;
+			}
+		#eSource {
+			display: none;
+			}
+		#eEditeur1 {
+			float: left;
+			height: 400px;
+			overflow: visible;
+			width: 65%;
+			}
+		#eEditeur1 TEXTAREA {
+			position: relative;
+			float: left;
+			left: 100%;
+			height: 40%;
+			width: 50%;
+			}
+		#eKeyboard {
+			height: 400px;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1> Le clavier</h1>
+
+<div><h2>Objectif</h2>
+	<ul>
+		<li>Capturer le texte saisie au clavier.</li>
+		<li>Ajouter des touches raccourcies</li>
+		<li>Copier/couper du texte pour le coller à l'extérieur de l'éditeur.</li>
+	</ul>
+</div>
+<div class=""><h2>A noter</h2>
+	<ul>
+		<li>
+			La liste des touches raccourcies est étendue pendant l'exécution.<br>
+			<code>Editor.extend( 'KeyBoard', { 'CTRL+1':'MARK_STYLE_1', 'CTRL+2':'MARK_STYLE_2' })</code>
+		</li>
+		<li>
+			Comment consulter la liste des touches raccourcies ? (associées à des commandes...)
+			<ol>
+				<li>rendre actif l'éditeur</li>
+				<li>presser les touches <kbd>CTRL+W</kbd></li>
+				<li>cliquer sur "Commandes et raccourcies"</li>
+			</ol>
+		</li>
+	</ul>
+</div>
+<div class=""><h2>Diagramme</h2>
+	<img src="diagram/Class.KeyBoard.gif">
+</div>
+	
+<div><h2>Les touches raccourcies</h2>
+	<!-- SOURCE -->
+<textarea id="eSource" wrap="off">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+	RegExp.extend({
+		escape :function( s ){
+			// Bracket test 2
+			var re1 = /(\.|\?|\*|\+|\\|\(|\)|\[|\]|\}|\{|\$|\^|\|)/g
+			, re2 = /("|')/gm
+			return s.replace( re1 , "\\$1" )
+			}
+		})
+
+/* 2 - PHP */
+	<?php
+	function phpSafe ( $strText ){
+		// a single line comment ( a double quote ")
+		$tmpString = $strText ;
+		$tmpString = str_replace( chr(92) , "" , $tmpString ); 
+		return rawurldecode( $tmpString );
+		}
+		
+	/*
+	a  multi line comment ( a single quote  )
+	*/
+	$hiddencontent = phpSafe( $_POST[ 'content' ]);
+	?>
+</textarea>
+<div id="eKeyboard" title="ShortCuts"></div>
+<div style="float:left; width:75%;">
+	<div id="eEditeur1"></div>
+</div>
+<div style="clear:left;;"></div>
+</div>
+
+<div><h2>Comment ca marche</h2>
+	<dl>
+	<dt><b>La capture des touches pressées</b></dt>
+	<dd>
+		Elle se fait avec un élément textarea en arrière plan, actif lorsque le curseur clignote dans l'éditeur.
+	</dd>
+	<dt><b>Le coupé et le copié de la sélection</b></dt>
+	<dd>
+		Elle se fait avec un autre élément textarea.<br>
+		On a donc un second textarea en arrière plan, actif lorsqu'une sélection existe. <br>
+		Son contenu, totalement sélectionné, est la sélection dans l'éditeur.
+	</dd>
+	</dl>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Snippet.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur1,eSource,eKeyboard' )
+
+Editor.Modules.KeyBoard.ShortCuts['SHIFT+9']= function(D,C,S,T,V){ alert('ok')}
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS' })
+var D = oEditor.newDoc( '', eSource.value )
+
+oEditor.newDoc( 'chemin/test/test.css', 'BODY.fullscreen  {\r\n\
+	overflow: hidden !important;\r\n\
+	position: relative;\r\n\
+	}' )
+oEditor.newDoc( 'chemin/test/index.html', [
+	'<html>',
+	'	<head>',
+	'		<title>{title}</title>',
+	'		<style>',
+	'		</style>',
+	'	</head>',
+	'	<body class="fullscreen">',
+	'		<script>',
+	'		</'+'script>',
+	'	</body>',
+	'</html>'
+	].join('\r')
+	)
+
+var aKeys = [], sChar, sShortcut, oShortCuts = Editor.Modules.KeyBoard.ShortCuts
+for(var sAttr in oShortCuts ){
+	sChar = sAttr.charAt(0)
+	if( sChar.toUpperCase()==sChar ){
+		sShortcut = str_replace( [ /\bUP/,/\bDOWN/,'RIGHT','LEFT'], ['&uarr;','&darr;','&rarr;','&larr;'], sAttr )
+		var sCommandName = oShortCuts[sAttr]
+		var sClass = ! Editor.Modules.Commands[ sCommandName] ? 'red' : ''
+		aKeys.push( '<KBD id="'+ sAttr 
+			+'" title="'+ oCommandsDesc[sCommandName] +'"> '
+			+ sShortcut 
+			+' <I id="_'+sCommandName+'" class="'+sClass+'">'+ sCommandName +'</I></KBD>' )
+		}
+	}
+
+</script>
+<script src="src/view.commands.js"></script>
+<!-- 
+	<div><h2> Conclusion</h2>
+		<p>
+			Quelque soit son implémentation l'ensemble du système fonctionne avec des petits textes. 
+			Mais dés que la longueur du texte grandie il faut impérativement éviter :
+		</p>
+		<ul>
+			<li>Accéder aux dimensions des éléments non fixées</li>
+			<li>Affecter l'attribut innerHTML d'un élément avec un grand texte.</li>
+		</ul>
+	</div>
+ -->
+</div>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC("Module.KeyBoard.htm")</script>
+</body>
+</html>

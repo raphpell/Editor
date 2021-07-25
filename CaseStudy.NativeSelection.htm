@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>La sélection native</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<style>
+		TEXTAREA {
+			height: 150px;
+			width: 600px;
+			}
+		.caret {
+			background:lime !important;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1> La sélection native</h1>
+	<ul style="float:left; margin-right:3em;;">
+		<li>Elle a un début et une fin.</li>
+		<li>Elle peut-être étendue progressivement :
+			<ul>
+				<li>à un mot = double clique</li>
+				<li>à une ligne = triple clique</li>
+				<li>"caractère/caractère" = <kbd>SHIFT</kbd> + flèches</li>
+				<li>"mot/mot" = <kbd>SHIFT</kbd> + <kbd>CTRL</kbd> + flèches</li>
+			</ul></li>
+		<li>Elle peut-être modifiée :
+			<ul>
+				<li>sélection + <kbd>SHIFT</kbd> + clique</li>
+			</ul></li>
+		<li><strike>Elle peut-être multiple (touche <kbd>CTRL</kbd>).</strike> mis de coté</li>
+		<li>Elle peut-être effacée, extraite ou remplacée</li>
+		<li>Elle peut-être glissée et déposée ailleurs.</li>
+		<li>Le bout est toujours visible lorsqu'on l'étend.</li>
+	</ul>
+
+	<div style="float:left;"><h2> La sélection dans un textarea</h2>
+<textarea id="eSource" wrap="off" style="height: 144px; width: 456px;">
+// Les symboles spéciaux : >, <, &amp
+// Exemple: <hr>, &amp;lt
+
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",	
+
+		/*
+		a multi line comment 	( a double quote " )
+		*/
+		})
+
+</textarea>
+	</div>
+
+	<div style="clear:both;"></div>
+
+	<div><h2> La sélection native d'un document HTML</h2>
+		<p>
+			N'étant pas motivé pour en créer une, je conserve la sélection par défaut dans la zone HTML. 
+			Mon objectif est de pouvoir déjà supporter la sélection simple.
+		</p>
+		<p>
+			La sélection native possède un début et une fin ayant chacun comme attribut :
+		</p>
+		<ul>
+			<li>Un élément html ou texte</li>
+			<li>Un index dans l'élément.</li>
+		</ul>
+		<p>
+			Il faut créer un objet pour gérer la sélection selon l'index des caractères dans la source.
+		</p>
+		
+		<div><h3> Passage Sélection / Index</h3>
+			<p>
+				Une fois une sélection réalisé, pour son début et sa fin il faut calculer un index dans la source :
+			</p>
+			<ul>
+				<li>somme = index dans l'élément</li>
+				<li>parcours [ fréres précédants ]
+				<ul>
+					<li>si ils ont une longeur, somme += leur .</li>
+					<li>sinon si ils ont un contenu html, somme += longueur de son "contenu texte" (éléments html exclus!)</li>
+				</ul></li>
+				<li>si le parent de l'élément est la zone d'édition on retourne la somme</li>
+				<li>sinon on continue la même opération avec le parent et la somme, puis on retourne le résultat.</li>
+			</ul>
+		</div>
+		<div><h3> Passage Index / Sélection</h3>
+			<p>C'est possible aussi... mais là on utilise des objets javascript natifs.</p>
+		</div>
+	</div>
+
+	<div><h2> Résultat</h2>
+		<div id="eEditeur1"></div>
+		<div style="margin:1em 0 0;">
+			<div style="float:right;">
+				<label for="eCharPosition">nIndex</label> : <input id="eCharPosition" wrap="off" size="4"><br>
+				<label for="eText">sText : </label><br>
+				<textarea id="eText" style="width:400px; height:150px;" wrap="off"></textarea>
+			</div>
+			<ul style="float:left;">
+				<div>Editeur</div>
+				<li>-<button onclick="eText.value = oEditor.oActiveDocument.oSource.charAt( eCharPosition.value )">oActiveDocument.oSource.charAt( nIndex )</button>
+				</li><li>-<button onclick="alert( oEditor.oActiveDocument.oSource.lineNumberAt( eCharPosition.value ))">oActiveDocument.oSource.lineNumberAt( nIndex )</button>
+				</li><li>-<button onclick="eText.value = oEditor.getContents()">getContents()</button>
+				</li><li>-<button onclick="oEditor.setContents( eText.value )">setContents( sText )</button>
+			</li></ul>
+			<ul style="float:left;">
+				<div>Curseur</div>
+				<li>-<button onclick="eCharPosition.value = getC().position.index">position.index </button>
+				</li><li>-<button onclick="getC().setIndex( parseInt( eCharPosition.value ))">setIndex( nIndex )</button>
+				</li><li>-<button onclick="getC().insert( eText.value )">insert( sText )</button>
+			</li></ul>
+			<ul style="float:left;">
+				<div>Selection</div>
+				<li>-<button onclick="var o = getS().get(); eSelectionPosition.value = o.start +','+ o.end">get()</button><input id="eSelectionPosition" size="10">
+				</li><li>-<button onclick="var a = _('eSelectionPosition').value.split(','); getS().set( parseInt(a[0]), parseInt(a[1]) )">set...</button>
+				</li><li>-<button onclick="getS().expand()">expand()</button>
+				</li><li>-<button onclick="eText.value = getS().cloneContents()">cloneContents()</button>
+				</li><li>-<button onclick="getS().replace( eText.value )">replace( sText )</button>
+			</li></ul>
+			<!--
+			<ul style="float:left;">
+				<div>Range properties</div>
+				<li><button onclick="eText.value = Selection.getRange().collapsed">collapsed</button></li>
+				<li><button onclick="eText.value = Selection.getRange().endContainer.data">endContainer.data</button></li>
+				<li><button onclick="eText.value = Selection.getRange().endOffset">endOffset</button></li>
+				<li><button onclick="eText.value = Selection.getRange().startContainer.data">startContainer.data</button></li>
+				<li><button onclick="eText.value = Selection.getRange().startOffset">startOffset</button></li>
+			</ul>
+			<ul style="float:left;">
+				<div>Range methods</div>
+				<li><button onclick="eText.value = Selection.getRange().cloneContents()">cloneContents()</button></li>
+				<li><button onclick="eText.value = Selection.getRange().cloneRange()">cloneRange()</button></li>
+				<li><button onclick="eText.value = Selection.getRange().collapse( false )">collapse( false )</button></li>
+				<li><button onclick="eText.value = Selection.getRange().collapse( true )">collapse( true )</button></li>
+				<li>_<button onclick="eText.value = Selection.getRange().compareBoundaryPoints( 0, Selection.getRange() )">compareBoundaryPoints( 0, ... )</button></li>
+				<li><button onclick="eText.value = Selection.getRange().deleteContents(  )">deleteContents(  )</button></li>
+				<li>_<button onclick="eText.value = Selection.getRange().detach( )">detach(  )</button></li>
+				<li>*<button onclick="eText.value = Selection.getRange().extractContents(  )">extractContents(  )</button></li>
+				<li><button onclick="eText.value = Selection.getRange().insertNode( document.createTextNode( 'ok' ))">insertNode( ... )</button></li>
+				<li><button onclick="eText.value = Selection.getRange().selectNode( Selection.getRange().endContainer )">selectNode( endContainer )</button></li>
+				<li><button onclick="eText.value = Selection.getRange().selectNodeContents( Selection.getRange().endContainer )">selectNodeContents( endContainer )</button></li>
+				<li><button onclick="eText.value = Selection.getRange().setEnd( Selection.getRange().endContainer, 5 )">setEnd( endContainer, 5 )</button></li>
+				<li><button onclick="eText.value = Selection.getRange().setEndAfter( Selection.getRange().endContainer )">setEndAfter( endContainer )</button></li>
+				<li><button onclick="eText.value = Selection.getRange().setEndBefore( Selection.getRange().endContainer )">setEndBefore( endContainer )</button></li>
+				<li>_<button onclick="eText.value = Selection.getRange().surroundContents(  )">surroundContents( ... )</button></li>
+				<li><button onclick="eText.value = Selection.getRange().toString(  )">toString( )</button></li>
+			</ul>
+			-->
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div><h2> Les soucis avec un éditeur</h2>
+		<ul>
+			<li>le clique sur la sélection avec Safari et Chrome.... ?</li>
+			<li>Les sauts de lignes ne sont pas visibles dans la sélection.</li>
+			<li>le glissé/déposé de texte sélectionné sur Opera... ?</li>
+			<li>On ne peut pas couper le texte et ainsi le mettre dans le presse papier !</li>
+		</ul>
+	</div>
+	
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/SelectionNative.js"></script>
+<script type="Text/JavaScript">
+_( 'eEditeur1,eCols1,eSource,eCharPosition,eText,eSelectionPosition' )
+_( 'eIndex,eStart,eEnd' )
+
+// Barre Info
+show ={
+	caret :function(){
+		eCharPosition.value = getC().position.index
+		},
+	selection :function(){
+		var o = getS().get()
+		eSelectionPosition.value = o.start +','+ o.end
+		}
+	}
+var bSelectionStart = false
+Events.add(
+	eEditeur1,
+		'click', function(){ 
+			show.caret()
+			show.selection()
+			},
+		'mousedown', function(){ 
+			show.caret()
+			bSelectionStart = true
+			},
+		'mousemove', function(){ 
+			if( bSelectionStart ){
+				show.selection()
+				}
+			},
+		'mouseup', function(){ 
+			bSelectionStart = false
+			show.selection()
+			}
+	)
+
+// Editeur
+var oEditor = new Editor ( eEditeur1 )
+var D = oEditor.newDoc( '', eSource.value )
+function getS (){ return oEditor.oActiveDocument.oSelection }
+function getC (){ return oEditor.oActiveDocument.oCaret }
+
+// oEditor.oActiveDocument.oCaret.e.style.width = oEditor.oActiveDocument.oCharacter.nWidth + 'px'
+// Events.preventSelection( true, oEditor.eTZ )
+
+// Visualisation de la hauteur des lignes  et  de la largeur des colonnes ( optionnel ) 
+	oEditor.setAttribute( 'whiteSpaces', 1 )
+	oEditor.setAttribute( 'lines', 0 )
+	oEditor.setAttribute( 'columns', 0 )
+
+</script>
+
+	<div><h2> Conclusion</h2>
+		<p>
+			Par la suite je me suis rendu compte qu'utiliser la sélection native n'était pas possible. 
+			Je n'ai pas réussi à simuler le copier sans perdre le focus sur la sélection !.
+		</p>
+		<p>Finalement je vais tenter de créer une simulation de <b>sélection simple</b> :</p>
+		<ul>
+			<li>Je vais avoir un élément html par ligne (et pour une sélection multiple plusieurs...)</li>
+			<li>Une fois la sélection réalisée un textarea avec tout le contenu sélectionné aura le focus 
+				(Pour le couper <kbd>CTRL+X</kbd> et le copié <kbd>CTRL+C</kbd>).</li>
+			<li>Lorsque le curseur aura la priorité je vais avoir un deuxième textarea pour capturer le texte tapé...</li>
+		</ul>
+	</div>
+
+</div>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script> setTOC( "CaseStudy.NativeSelection.htm" ) </script>
+</body>
+</html>

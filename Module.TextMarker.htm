@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Surlignage</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+		#eSource {
+			display: none;
+			}
+		#eEditeur1 {
+			float: left;
+			height: 300px;
+			width: 75%;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1>Surlignage</h1>
+
+<div class=""><h2>Objectifs</h2>
+	<ul>
+		<li>Surligner temporairement toutes les occurences d'un mot sélectionné.</li>
+		<li>Surligner des portions de texte ainsi que ses occurences.</li>
+	</ul>
+</div>
+<div class=""><h2>A noter</h2>
+	<ul>
+		<li>Ce module est chargé automatiquement lors de l'ouverture de la boite de dialogue 'recherche'.</li>
+	</ul>
+</div>
+
+<div class=""><h2>Diagramme</h2>
+	<img src="diagram/Class.TextMarker.gif">
+</div>
+
+
+<div class=""><h2>Aperçu</h2>
+	<textarea id="eSource" wrap="off"></textarea>
+<div id="eContents"><!--Editor.addModule('TextMarker',(function(){
+	Events.add(
+		Editor.prototype, 'documentinit', function( D ){
+			D.oTextMarker = new Editor.Modules.TextMarker(D)
+			}
+		)
+	var Layers =function(){
+		return {
+			oLists: {},
+			aNames: [],
+			add :function( sLayer ){
+				this.aNames.push( sLayer )
+				return this.oLists[ sLayer ]=[]
+				},
+			get :function( sLayer ){
+				return this.oLists[ sLayer ]||this.add( sLayer )
+				},
+			remove :function( sLayer ){
+				delete this.oLists[ sLayer ]
+				this.aNames.remove( sLayer )
+				},
+			init :function(){
+				this.oLists = { smart:this.oLists.smart }
+				this.aNames = [ 'smart' ]
+				}
+			}
+		}
+	var TM =function( D ){
+		this.oDocument = D
+		this.oLayers = new Layers()
+		var f=CallBack( this, 'refresh' )
+		Events.add(
+			D.eTZC, 'dblclick', f,
+			D.oCaret, 'change', f,
+			D.oSelection, 'change', f,
+			D.oView, 'change', f,
+			D.oView, 'update', CallBack( this, 'update' )
+			)
+		}
+	TM.prototype={
+		add :function( sLayer, nStart, nEnd ){
+			var P=this.oDocument.oPositions
+			this.oLayers.get( sLayer ).push({
+				start: P.getFromIndex( nStart ),
+				end: P.getFromIndex( nEnd )
+				})
+			},
+		smartHighLighting :function( s, bBoundaries ){
+			var sBound = bBoundaries ? '\\b' : ''
+			this.oLayers.remove('smart')
+			if( ! /\s+/.test( s ))
+				this.oDocument.oSource.getValue().replace(
+					new RegExp ( sBound + RegExp.escape( s ) + sBound, 'gi' ),
+					CallBack( this, function( sMatched, nIndex ){
+						this.add( 'smart', nIndex, nIndex + sMatched.length )
+						})
+					)
+			},
+		mark :function( sLayer, s ){
+			this.oDocument.oSource.getValue().replace(
+				new RegExp ( RegExp.escape( s ), 'g' ),
+				CallBack( this, function( sMatched, nIndex ){
+					this.add( sLayer, nIndex, nIndex + sMatched.length )
+					})
+				)
+			this.refresh()
+			},
+		unmark: function( sLayer ){
+			this.oLayers[sLayer?'remove':'init']( sLayer )
+			this.oDocument.eHighlight.innerHTML = ''
+			this.refresh()
+			},
+		refresh :function(){
+			var D=this.oDocument, V=D.oView
+			if( ! D.oSelection.exist()) this.oLayers.remove('smart')
+			if( V ) this.displayLines( V.nLineStart, V.nLineEnd )
+			},
+		displayLines :function( nStart, nEnd ){
+			if( isNaN( nStart ) || isNaN( nEnd )) return ;
+			var D=this.oDocument, P=D.oPositions, V=D.oView, S=D.oSelection
+			, nLineHeight = D.oCharacter.nHeight
+			, nCharWidth = D.oCharacter.nWidth
+			, e = D.eHighlight
+			, oLayers = this.oLayers
+			e.style.marginLeft = D.Padding.get('left')+'px'
+			e.innerHTML = ''
+			if( S.exist()) this.smartHighLighting( S.cloneContents(), true )
+			for(var i=0, sLayer; sLayer=oLayers.aNames[i]; i++ ){
+				for(var j=0, a=oLayers.get( sLayer ), nj=a.length, o; j<nj ; j++ ){
+					o=a[j]
+					if( ! o || o.start.line > nEnd || o.end.line < nStart ) continue;
+					for( var k=Math.max( o.start.line, nStart ), nk=Math.min( o.end.line, nEnd ); k<=nk ; k++ ){
+						var bSameLine = o.start.line==o.end.line
+						if( ! bSameLine ){
+							var sLine = D.oSource.getLine( k )
+							, nWidth = k==o.start.line
+								? P.getFromIndex( sLine.index+sLine.length-1 ).col - o.start.col + 1
+								: k==o.end.line
+									? o.end.col-1
+									: P.getFromIndex( sLine.index+sLine.length-1 ).col
+							}
+						var nViewLine = V.getLine( k )
+						if( nViewLine )
+							e.appendChild( Tag('DT',{
+								className: sLayer,
+							//	innerHTML: D.oSource.getValue().substring( o.start.index, o.end.index ),
+								style:{
+									left: ( k==o.start.line ? o.start.col-1 : 0 ) * nCharWidth +'px',
+									top: (nViewLine-1)*nLineHeight+2 +'px',
+									width: ( bSameLine ? o.end.col - o.start.col : nWidth ) * nCharWidth +'px',
+									height: nLineHeight-4 +'px'
+									}
+								}))
+						}
+					}
+				}
+			},
+		update :function(){
+			var D=this.oDocument, P=D.oPositions, S=D.oSelection
+			if( ! D.oUpdates ) return ;
+			var n0 = D.oUpdates.oAdded.text.length - D.oUpdates.oDeleted.text.length
+			, n1 = D.oUpdates.nIndex
+			, n2 = n1 + D.oUpdates.oDeleted.text.length
+			, oLayers = this.oLayers
+			for(var i=0, sLayer; sLayer=oLayers.aNames[i]; i++ ){
+				for(var j=0, a=oLayers.get( sLayer ), nj=a.length, o; j<nj ; j++ ){
+					o=a[j]
+					if( o ){
+						if( o.end.index < n1 ) continue;
+						if( o.start.index > n2 ){
+							o.start = P.getFromIndex( o.start.index + n0 )
+							o.end = P.getFromIndex( o.end.index + n0 )
+							}
+						else a[j] = null
+						}
+					}
+				}
+			}
+		}
+	return TM
+	})())
+--></div>
+
+	<div id="eKeyboard" title="ShortCuts"></div>
+	<div id="eEditeur1"></div>
+	<div id="eStats" class="stats"></div>
+	<div style="clear:left;;"></div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur1,eSource,eContents,eKeyboard' )
+eSource.value = eContents.firstChild.data
+
+_( 'eCounter,eIndex,eDeleted,eAdded,eLinesNew,eLinesOld' )
+
+BenchmarkFunctions(
+	eStats, Editor.Modules.TextMarker.prototype,
+	'add,smartHighLighting,mark,unmark,refresh,displayLines,update'
+	)
+
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS' })
+var D = oEditor.newDoc( 'Source', eSource.value )
+D.oTextMarker.mark( 'style2', 'function' )
+D.oTextMarker.mark( 'style4', 'this.oLists' )
+D.oSelection.set( 65, 74 )
+D.oCaret.setIndex( 74 )
+
+D.oFold.fold( 3, true )
+oEditor.execCommand( 'FOLD_LEVEL_3')
+D.oFold.unfold( 8, true )
+D.oFold.fold( 28, true )
+oEditor.execCommand( 'FOLD_LEVEL_4')
+
+var aKeys = [], sChar, sShortcut, oShortCuts = Editor.Modules.KeyBoard.ShortCuts
+for(var sAttr in oShortCuts ){
+	sChar = sAttr.charAt(0)
+	if( sChar.toUpperCase()==sChar ){
+		sShortcut = str_replace( [ /\bUP/,/\bDOWN/,'RIGHT','LEFT'], ['&uarr;','&darr;','&rarr;','&larr;'], sAttr )
+		var sCommandName = oShortCuts[sAttr]
+		if( sCommandName.indexOf && ~sCommandName.indexOf( 'MARK_' )){
+			var sClass = ! Editor.Modules.Commands[sCommandName] ? 'red' : ''
+			aKeys.push( '<KBD id="'+ sAttr 
+				+'" title="'+ oCommandsDesc[sCommandName] +'"> '
+				+ sShortcut 
+				+' <I id="_'+ sCommandName +'" class="'+ sClass +'">'+ sCommandName +'</I></KBD>' )
+			}
+		}
+	}
+
+</script>
+<link rel="stylesheet" type="text/css" href="src/view.commands.css">
+<script src="src/view.commands.js"></script>
+
+</div>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC('Module.TextMarker.htm')</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>La coloration syntaxique</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+	.editor {
+		float: left;
+		height: 400px;
+		width: 50%;
+		}
+	TEXTAREA {
+		float: right;
+		height: 400px;
+		width: 48%;
+		}
+	#eResult1 {
+		border: 1px solid #000;
+		overflow: auto;
+		}
+	.info DT {
+		display: inline;
+		}
+	#eSource {
+		display: none;
+		}
+	.info {
+		margin: 1%;
+		float: left;
+		width: 47%;
+		}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div>
+<h1>La coloration syntaxique</h1>
+
+<p>La coloration syntaxique est réaliser depuis l'<a href="Analyses/index.htm">analyse lexicale</a> du texte source dépendant d'un langage de programmation.</p>
+
+<div id="eEditeur1"></div>
+<textarea id="eSource" wrap="off">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+	RegExp.extend({
+		escape :function( s ){
+			// Bracket test 2
+			var re1 = /(\.|\?|\*|\+|\\|\(|\)|\[|\]|\}|\{|\$|\^|\|)/g
+			, re2 = /("|')/gm
+			return s.replace( re1 , "\\$1" )
+			}
+		})
+
+/* 2 - PHP */
+	<?php
+	function phpSafe ( $strText ){
+		// a single line comment ( a double quote ")
+		$tmpString = $strText ;
+		$tmpString = str_replace( chr(92) , "" , $tmpString ); 
+		return rawurldecode( $tmpString );
+		}
+		
+	/*
+	a  multi line comment ( a single quote  )
+	*/
+	$hiddencontent = phpSafe( $_POST[ 'content' ]);
+	?>
+</textarea>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Fold.js"></script> 
+<script src="src/js/Brackets.js"></script>
+<script>
+_( 'eEditeur1,eSource' )
+
+var oSource = new Editor.Modules.Source ( null, eSource.value )
+var oChrono = new Chrono
+var sSource = oSource.getValue()
+
+var oEditor = new Editor ( eEditeur1, {
+	sSyntax: 'JS',
+	sTopMenu:'DOCUMENT_SAVE,DOCUMENT_NEW,|,FULLSCREEN,|,Syntax,LineHeight,FontSize,TabSize,UNDO,REDO,WhiteSpaces,|,BACK_TAB,TAB,|,ZOOM_IN,ZOOM_OUT,|,DIALOG_CONFIG,INFO'
+	})
+var D = oEditor.newDoc( '', sSource )
+
+oEditor.newDoc( 'chemin/test/styles.css', 'BODY.fullscreen  {\r\n\
+	overflow: hidden !important;\r\n\
+	position: relative;\r\n\
+	}' )
+	
+oEditor.newDoc( 'chemin/test/index.html', [
+	'<html>',
+	'	<head>',
+	'		<title>{title}</title>',
+	'		<style>\n',
+	'		</style>',
+	'	</head>',
+	'	<body class="fullscreen">',
+	'		<script>',
+	'		</'+'script>',
+	'	</body>',
+	'</html>'
+	].join('\r')
+	)
+</script>
+
+<div class="info">
+	<label>Lignes vues : </label>
+	<select id="eStart"></select><select id="eEnd"></select><input type="button" value="Show" onclick="show( eStart.value, eEnd.value )">
+	<b id="eTime1"></b>
+	<pre id="eResult1" class="js"></pre>
+</div>
+<script>
+_( 'eResult1,eTime1,eStart,eEnd' )
+var sLineStart = 11
+var sLineEnd = 26
+function show ( nStart, nEnd ){
+	oChrono.start()
+	var s = oEditor.oDocuments.doc1.oSyntax.getLines( nStart, nEnd ).join('')
+	eTime1.innerHTML = oChrono.stop() +"ms"
+	eResult1.innerHTML = s
+	}
+var a = []
+for(var i=1, ni=sSource.countLines(); i<=ni; i++) a.push(''+i)
+Tag.addChildNodes( eStart, 'OPTION', a, sLineStart )
+Tag.addChildNodes( eEnd, 'OPTION', a, sLineEnd )
+show( sLineStart, sLineEnd )
+</script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC( "Strategy.Highlighting.Syntax.htm")</script>
+</body>
+</html>

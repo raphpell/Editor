@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>La sélection</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+		TEXTAREA {
+			height: 250px;
+			width: 600px;
+			}
+		#eEditeur1 {
+			width: 100%;
+			}
+		#eSource {
+			display: none;
+			}
+		/*
+		.editor TEXTAREA {
+			position:inherit !important;
+			left:100%;
+			height: 100px;
+			width: 50%;
+			}
+		*/
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1> La sélection</h1>
+	
+<div><h2>Objectif</h2>
+	<p>Sélection simple pour l'instant.</p>
+	<p>Méthodologie affichage :</p>
+	<ol>
+		<li>Suppression de la <a href="1.3.La selection native.htm">sélection native</a> de texte.</li>
+		<li>Utilisation d'un élément html par ligne pour rendre visible la sélection.</li>
+	</ol>
+</div>
+
+	
+<div class=""><h2>Diagramme</h2>
+	<img src="diagram/Class.Selection.gif">
+</div>
+
+<div class=""><h2>Aperçu</h2>
+<p>L'édition au clavier n'est pas active.</p>
+<div id="eContents"><!--
+// Les symboles spéciaux : <, >, &amp
+// Exemple: <hr>, &amp;lt
+
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",	
+
+		/*
+		a multi line comment 	( a double quote " )
+		*/
+		})
+
+/* 2 - PHP */
+	<?php
+	function phpSafe ( $strText ){
+		// a single line comment ( a double quote ")
+		$tmpString = $strText ;
+		$tmpString = str_replace( chr(92) , "" , $tmpString ); 
+		return rawurldecode( $tmpString );
+		}
+		
+	/*
+	a  multi line comment ( a single quote  )
+	*/
+	$hiddencontent = phpSafe( $_POST[ 'content' ]);
+	?>
+--></div>
+	<div style="float:left;">
+		<div style="float:right;">
+			<label for="eCharPosition">nIndex</label> : <input id="eCharPosition" wrap="off" size="4"><br>
+			<label for="eText">sText : </label><br>
+			<textarea id="eText" style="width:400px; height:300px;" wrap="off"></textarea>
+			<pre id="eInfo"></pre>
+		</div>
+		<ul style="float:left;">
+			<div>oEditor</div>
+			<li><button onclick="eText.value = oEditor.oActiveDocument.oSource.charAt( eCharPosition.value )">oActiveDocument.oSource.charAt( nIndex )</button>
+			</li><li><button onclick="alert( oEditor.oActiveDocument.oSource.lineNumberAt( eCharPosition.value ))">oActiveDocument.oSource.lineNumberAt( nIndex )</button>
+			</li><li><button onclick="eText.value = oEditor.getContents()">getContents()</button>
+			</li><li><button onclick="oEditor.setContents( eText.value )">setContents( sText )</button>
+		</li></ul>
+		<ul style="float:left;">
+			<div>oEditor.oActiveDocument.oCaret</div>
+			<li><button onclick="eCharPosition.value = getCaret().position.index">position.index</button>
+			</li><li><button onclick="getCaret().setIndex( parseInt( eCharPosition.value ) )">setIndex( nIndex )</button>
+			</li><li><button onclick="getCaret().insert( eText.value )">insert( sText )</button>
+		</li></ul>
+		<ul style="float:left;">
+			<div>oEditor.oActiveDocument.oSelection</div>
+			<li><button onclick="var o = getSel().get(); eSelectionPosition.value = o.start +','+ o.end">get()</button><input id="eSelectionPosition" size="10">
+			</li><li><button onclick="var a = _( 'eSelectionPosition' ).value.split( ',' ); getSel().set( a[0], a[1] )">set...</button>
+			</li><li><button onclick="getSel().expand()">expand()</button>
+			</li><li><button onclick="getSel().expand('line')">expand('line')</button>
+			</li><li><button onclick="getSel().expand('all')">expand('all')</button>
+			</li><li><button onclick="getSel().collapse()">collapse()</button>
+			</li><li><button onclick="eText.value = getSel().cloneContents()">cloneContents()</button>
+			</li><li><button onclick="getSel().replace( eText.value )">replace( sText )</button>
+		</li></ul>
+	</div>
+	<div style="clear:both;">
+	<div id="eEditeur1"></div>
+	<div id="eStats" class="stats"></div>
+</div>
+
+<div style="clear:both;"></div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script>
+_( 'eEditeur1,eCols1,eSource,eContents,eTOKENS,eCharPosition,eText,eSelectionPosition,eInfo,eStats' )
+
+BenchmarkFunctions(
+	eStats, Editor.Modules.Selection.prototype,
+	'exist,includesIndex,showInfo,addRangeFromPosition,clearLayout,updateClipBoard,collapse,get,set,setIndex,expand,cloneContents,replace,remove'
+	)
+
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS', bLines:1, bColumns:1 })
+var D = oEditor.newDoc( '', eContents.firstChild.data )
+var getCaret =function(){ return oEditor.oActiveDocument.oCaret }
+var getSel =function(){ return oEditor.oActiveDocument.oSelection }
+
+oEditor.setAttribute( 'whiteSpaces', 1 )
+
+</script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC("Module.Selection.htm")</script>
+</body>
+</html>

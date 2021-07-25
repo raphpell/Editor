@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<popup>
+	<contents css="1" js="1"><![CDATA[
+	<ul>
+		<li><input type="button" title="editor" value="@DIALOG_EDITOR@">
+		<li><input type="button" title="modules" value="@DIALOG_MODULES@">
+		<li><input type="button" title="document" value="@DIALOG_DOCUMENT@">
+		<li><input type="button" title="search" value="@DIALOG_SEARCH@">
+		<li><input type="button" title="commands" value="@DIALOG_COMMANDS@">
+		<li><input type="button" title="recent_documents" value="@DIALOG_RECENT_DOCUMENTS@">
+	</ul>
+	]]></contents>
+</popup>

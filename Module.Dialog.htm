@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Les fenêtres modales</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<link rel="stylesheet" type="text/css" href="src/view.commands.css">
+	<style>
+		#eSource {
+			display: none;
+			}
+		#eEditeur1 {
+			float: left;
+			height: 300px;
+			width: 75%;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1>Les fenêtres modales</h1>
+
+<div class=""><h2>Objectifs</h2>
+	<ul>
+		<li>Ouvrir des fenêtres diverses : recherche, configuration, aide, ...</li>
+		<li>Regrouper la gestion des fenêtres.</li>
+	</ul>
+</div>
+<div class=""><h2>A noter</h2>
+	<ul>
+		<li>Cette fonctionnalité existe uniquement avec le protocole http.</li>
+		<li>Les <a href="popups/index.htm">fichiers des fenêtres</a> sont dans le dossier <code>popups/</code>.</li>
+	</ul>
+</div>
+
+<div class=""><h2>Diagramme</h2>
+	<img src="diagram/Class.Dialog.gif">
+</div>
+
+
+<div class=""><h2>Aperçu</h2>
+	<textarea id="eSource" wrap="off"></textarea>
+<div id="eContents"><!--
+...
+--></div>
+
+	<div id="eKeyboard" title="ShortCuts"></div>
+	<div id="eEditeur1"></div>
+	<div id="eStats" class="stats"></div>
+	<div style="clear:left;;"></div>
+</div>
+
+<div class=""><h2>A faire</h2>
+	<p>Y étudier plus sérieusement.</p>
+</div>
+
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur1,eSource,eContents,eKeyboard' )
+eSource.value = eContents.firstChild.data
+
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS', sTopMenu: 'FULLSCREEN,|,Language,|,DIALOGS' })
+var D = oEditor.newDoc( '', eSource.value )
+
+var aKeys = [], sChar, sShortcut, oShortCuts = Editor.Modules.KeyBoard.ShortCuts
+for(var sAttr in oShortCuts ){
+	sChar = sAttr.charAt(0)
+	if( sChar.toUpperCase()==sChar ){
+		var sCommandName = oShortCuts[sAttr]
+		if( sCommandName.indexOf && ~sCommandName.indexOf( 'DIALOG' )){
+			sShortcut = str_replace( [ /\bUP/,/\bDOWN/,'RIGHT','LEFT'], ['&uarr;','&darr;','&rarr;','&larr;'], sAttr )
+			var sClass = ! Editor.Modules.Commands[sCommandName] ? 'red' : ''
+			aKeys.push( '<KBD id="'+ sAttr 
+				+'" title="'+ oCommandsDesc[sCommandName] +'"> '
+				+ sShortcut 
+				+' <I id="_'+ sCommandName +'" class="'+ sClass +'">'+ sCommandName +'</I></KBD>' )
+			}
+		}
+	}
+
+</script>
+<script src="src/view.commands.js"></script>
+
+</div>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC('Module.Dialog.htm')</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Les onglets</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+		#eSource {
+			display: none;
+			}
+		#eEditeur {
+			float: left;
+			height: 400px;
+			width: 50%;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1>Les onglets</h1>
+
+<div class=""><h2>Objectifs</h2>
+	<ul>
+		<li>Regrouper des commandes dans une barre de menu.</li>
+		<li>Afficher un seul document.</li>
+		<li>Connaitre le document visualisé.</li>
+	</ul>
+</div>
+
+<div class=""><h2>Diagramme</h2>
+	<img src="diagram/Class.TabMenu.gif">
+</div>
+
+<div class=""><h2>Aperçu</h2>
+<!-- SOURCE -->
+<textarea id="eSource" wrap="off">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+	RegExp.extend({
+		escape :function( s ){
+			// Bracket test 2
+			var re1 = /(\.|\?|\*|\+|\\|\(|\)|\[|\]|\}|\{|\$|\^|\|)/g
+			, re2 = /("|')/gm
+			return s.replace( re1 , "\\$1" )
+			}
+		})
+
+/* 2 - PHP */
+	<?php
+	function phpSafe ( $strText ){
+		// a single line comment ( a double quote ")
+		$tmpString = $strText ;
+		$tmpString = str_replace( chr(92) , "" , $tmpString ); 
+		return rawurldecode( $tmpString );
+		}
+		
+	/*
+	a  multi line comment ( a single quote  )
+	*/
+	$hiddencontent = phpSafe( $_POST[ 'content' ]);
+	?>
+</textarea>
+
+	<div id="eTest"></div>
+	<div id="eEditeur"></div>
+	<ul style="float:left; margin-right: 2em;">
+		<li><input type="button" onclick="Button.newDoc()" value="oEditor.execCommand('DOCUMENT_NEW')"></li>
+		<li>oTabMenu = oEditor.oTabMenu</li>
+		<li><input type="button" onclick="Button.hide()" value="oTabMenu.hide()"></li>
+		<li><input type="button" onclick="Button.show()" value="oTabMenu.show()"></li>
+		<li><input type="button" onclick="Button.toggle()" value="oTabMenu.toggle()"></li>
+		<li><label for="eDocName">sDocName = </label><input id="eDocName" type="text" value="doc1"></li>
+		<li><input type="button" onclick="Button.setActive()" value="oTabMenu.setActive( sDocName )"></li>
+		<li><input type="button" onclick="Button.open()" value="oTabMenu.open( sDocName )"></li>
+		<li><input type="button" onclick="Button.close()" value="oTabMenu.close( sDocName )"></li>
+	</ul>
+	<div id="eStats" class="stats"></div>
+	<div style="clear:left;"></div>
+</div>
+
+	<div><h2>A faire</h2>
+		<ol>
+			<li>Glisser/déposer un onglet</li>
+			<li>Renommer un document</li>
+		</ol>
+	</div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur,eSource,eDocName' )
+BenchmarkFunctions(
+	_('eStats'), Editor.HTMLZones.TabMenu.prototype,
+	'open,close,setActive,getDimension,show,hide,toggle'
+	)
+	
+var oEditor = new Editor ( eEditeur, { sSyntax:'JS' })
+var D = oEditor.newDoc( '', eSource.value )
+Button={
+	newDoc :function(){ oEditor.execCommand('DOCUMENT_NEW')},
+	hide :function(){ oEditor.oTabMenu.hide()},
+	show :function(){ oEditor.oTabMenu.show()},
+	toggle :function(){ oEditor.oTabMenu.toggle()},
+	setActive :function(){ oEditor.oTabMenu.setActive( eDocName.value )},
+	open :function(){ oEditor.oTabMenu.open( eDocName.value )},
+	close :function(){ oEditor.oTabMenu.close( eDocName.value )}
+	}
+
+</script>
+
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC('HTMLZone.TabMenu.htm')</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Le curseur</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/_codeComments.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+		.info DT {
+			display: inline;
+			}
+		#eEditeur1 {
+			width: 100%;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1>Le curseur</h1>
+
+<div><h2>Objectif</h2>
+	<ul>
+		<li>Offrir à l'utilisateur un point d'insertion dans le texte.</li>
+		<li>Positionner le curseur avant ou après un caractère (même pour une tabulation).</li>
+		<li>Le faire clignoter pour le situer plus rapidemment.</li>
+		<li>Le rendre toujours visible quand on le déplace.</li>
+	</ul>
+	<p>Note : </p>
+	<ul>
+		<li>Le module <a href="Module.Positions.htm">Positions</a> détermine des positions précises.</li>
+		<li>Le module <a href="Module.View.htm">View</a> détermine les lignes visibles.</li>
+		<li>La zone html <a href="HTMLZone.TextZoneControl.htm">TextZoneControl</a> détermine l'espace visible.</li>
+	</ul>
+</div>
+
+<textarea id="eSource" wrap="off" style="height: 144px; width: 456px; display:none;">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",	
+
+		/*
+		a multi line comment 	( a double quote " )
+		*/
+		})
+
+</textarea>
+
+<div style="clear:both;"></div>
+
+	<div><h2>Diagrammes UML</h2>
+		<img src="diagram/Class.Caret.gif" title="Diagramme de classe">
+		<p>Autre diagramme</p>
+		<ol>
+			<li><a href="diagram/graphCaretInsertion.html">Insertion de texte au curseur</a></li>
+		</ol>
+	</div>
+
+	<div><h2>Aperçu: le curseur html</h2>
+	<dl class="info">
+		<dt><b>position</b>( </dt>
+		<dt>index: <b id="eIndex">...</b> , </dt>
+		<dt>colonne: <b id="eCol">...</b> , </dt>
+		<dt>ligne logique: <b id="eLine">...</b> , </dt>
+		<dt>ligne réel: <b id="eViewLine">...</b></dt>
+		<dt> )</dt>
+	</dl>
+	</div>
+	<div id="eEditeur1"></div>
+	<div id="eStats" class="stats"></div>
+	<div style="clear:left;"></div>
+	
+	<div><h2>Code commenté</h2>
+		<p>Le placement du curseur est réalisé depuis <code>Editor.prototype.placeHandle(evt)</code>.</p>
+		<div id="eTest" class="comments"></div>
+		<div id="eContents"><!--Caret =(function(){
+	var C =function( D ){
+		this.e = D.eCaret
+		this.oDocument = D
+		this.position = { col:1, line:1, index:0 }
+		Events.add( D, 'layout', CallBack( this, 'refresh' ))
+
+		var _getIndex =function(){ // return nIndex // getPosition, setPosition == PRIVILEGIED
+			var o = this.position
+			return o.index = ( o.line>0 && o.col>0 )
+				? D.oPositions.getIndex( o.line, o.col )
+				: 0
+			}
+				
+		// setPosition: ATTENTION oPosition DOIT CONTENIR index QUE SI C'EST UNE VALEUR JUSTE
+		this.setPosition =function( oPosition ){ // viewLine, line et col commence à 1
+			//
+			if( oPosition.viewLine && ! oPosition.line )
+				oPosition = D.oPositions.getFromView( oPosition )
+			//
+			if( ! oPosition.viewLine )
+				oPosition.viewLine = D.oView.getLine( oPosition.line )
+			//
+			this.position = oPosition
+			if( oPosition.index==undefined ) _getIndex.call( this )
+			// 
+			if( this.bShowInfo ) this.showInfo()
+			if( this.onchange ) this.onchange()
+			return this.refresh()
+			}
+	
+		if( this.bShowInfo ) this.showInfo()
+		}
+	C.prototype={
+		bShowInfo: true,
+		nTime: 500,
+		showInfo :function(){
+			var o = this.position, St=this.oDocument.oEditor.oStatus
+			if( St ) St.setSlot( 2, 'VL:'+o.viewLine+' Ln:'+o.line+' Col:'+o.col+' Index:'+ o.index )
+			},
+		getIndex :function (){ return this.position.index },
+		insert :function( sText, bWithoutFlow, sAction ){ // sAction sert dans UndoStack (UndoRedoManager)
+			if( ! sText ) return ;
+			var n = this.position.index
+			this.oDocument.updateContents({
+				start: n,
+				added: sText,
+				action: sAction
+				})
+			if( bWithoutFlow ) return ;
+			this.setIndex( n + sText.length )
+			this.setActive( true )
+			},
+		setActive :function ( m ){
+			var oStyle = this.e.style
+			switch( m ){
+				case true:
+					this.setActive( false )
+					oStyle.display = ''
+					this.nInterval = setInterval( CallBack( this, function(){ oStyle.display = oStyle.display ? '' : 'none' }), this.nTime )
+					break;
+				case false:
+					this.nInterval = clearInterval( this.nInterval )
+					oStyle.display = 'none' 
+					break;
+				case null:
+					this.nInterval = clearInterval( this.nInterval )
+					oStyle.display = '' 
+					break;
+				}
+			},
+		setIndex :function ( nIndex, bPreventScrolling, bUpdate ){ // nLine et nCol  commence à 1
+			var D=this.oDocument, V=D.oView
+			, o = D.oPositions
+			, sLine = D.oSource.lineAt( nIndex, 'setIndex' )
+			if( sLine==null ) throw new Error( nIndex )
+			var sLinePortion = sLine.substring( 0, nIndex-sLine.index )
+			var nCol = this.position.index==nIndex && ! bUpdate
+				? this.position.col
+				: o.replaceCharactersOfLine( sLinePortion ).length+1
+			var bHidden = this.setPosition({
+				index: nIndex,
+				viewLine: V.getLine( sLine.line ),
+				line: sLine.line,
+				col: nCol
+				})
+			if( ! bPreventScrolling ) D.scrollToPosition()
+			return bHidden
+			},
+		refresh :function (){
+			var oStyle = this.e.style
+			, D=this.oDocument, V=D.oView
+			, oChar = D.oCharacter
+			, oPos = this.position
+			, nLine = oPos.viewLine||( V.haveHiddenRange() ? V.aVisibleLinesFlipped[ oPos.line+1 ] : oPos.line )
+			, bHidden = V.haveHiddenRange() && ! in_array( oPos.line, V.aVisibleLines )
+			if( ! bHidden ){
+				this.nLEnd = this.nLStart = null
+				oStyle.top = ( nLine-1 )*oChar.nHeight +'px'
+				oStyle.left = D.Padding.get('left') + parseInt( ( oPos.col-1 )*oChar.nWidth ) +'px' // Math.max( 0, )
+				}
+			else oStyle.top = oStyle.left = '-1000em'
+			D.oCurrentLine.setPosition( nLine, oStyle.top, bHidden )
+			return bHidden
+			}
+		}
+	return C
+	})()--></div>
+	</div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/_codeComments.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script type="Text/JavaScript">
+_( 'eEditeur1,eSource,eContents,eStats' )
+eSource.value = eContents.firstChild.data
+_( 'eIndex,eCol,eLine,eViewLine' )
+
+BenchmarkFunctions(
+	eStats, Editor.HTMLZones.Caret.prototype,
+	'showInfo,insert,setActive,setIndex,refresh'
+	)
+
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS' })
+var D = oEditor.newDoc( '', eSource.value )
+
+oEditor.oncaretchange =function( o ){
+	eIndex.innerHTML = o.index
+	eCol.innerHTML = o.col
+	eLine.innerHTML = o.line
+	eViewLine.innerHTML = o.viewLine
+	}
+
+oEditor.execCommand( 'FOLD_LEVEL_3' )
+	
+_('eTest').innerHTML = getCodeComments( oEditor, {
+	1:"Caret = curseur texte",
+	3:[3,"..."],
+	16:[17,"Positionne le curseur",'lightskyblue'],
+	37:[40,"Met à jour les infos du curseur dans la barre de status (si elle existe)",'lightskyblue'],
+	41:[41,"Récupère l'index au curseur",'lightskyblue'],
+	42:[43,"Insère du texte au curseur",'lightskyblue'],
+	54:[71,"Active ou désactive le curseur (visuel)<ul style='text-align:left;'><li>true: il a le focus.<li>false: il perd le focus<li>null: il est masqué</ul>",'lightskyblue'],
+	72:[73,"Change l'index du curseur",'lightskyblue'],
+	90:[105,"Rafraichit l'emplacement du curseur depuis son attribut <code>position</code>.",'lightskyblue']
+	})
+</script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC("HTMLZone.Caret.htm")</script>
+</body>
+</html>

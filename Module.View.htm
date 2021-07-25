@@ -1,0 +1,393 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Les lignes vues</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+	#eEditeur1 {
+		width:100%;
+		height:350px;
+		}
+	#eResult1 {
+		border: 1px solid #000;
+		}
+	.info {
+		background:#eee;
+		border: 1px solid #333;
+		font:normal 0.8em Courier;
+		padding: 0 1em;
+		}
+	.info DT {
+		float: left;
+		margin: 1em 1% 0 0;
+		min-width: 23%;
+		}
+	.info DD {
+		margin: 1em 0 0;
+		}
+	.info B,
+	.info PRE {
+		font:bold 1em Arial;
+		letter-spacing: -0.05em;
+		margin: 0;
+		}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<h1>Les lignes vues</h1>
+<p>
+	Cette classe est entre autre utilisée par le module <a href="Module.Fold.htm">Fold</a>.
+</p>
+
+<div><h2>Objectif</h2>
+	<ul>
+		<li>Gérer les intervalles de lignes cachés.</li>
+	</ul>
+</div>
+
+<div><h2>Diagramme</h2>
+	<img src="diagram/Class.View.gif">
+</div>
+
+<div><h2>Aperçu</h2>
+
+<div id="eContents"><!--var View =(function(){
+	var V=function( D ){
+		this.oDocument = D
+		this.aVisibleLines = []
+		this.aHiddenRanges = []
+		this.aVisibleRanges = []
+		this.aRealVisibleRanges = []
+		Events.add(
+			D.oCharacter, 'sizechange', CallBack( this, function(){
+				this.refresh()
+				})
+			)
+		}
+	V.prototype={
+		bUpdateCalcul: true,
+		nLength: 0,
+		calculateVisibleRanges :function(){
+			if( ! this.bUpdateCalcul ) return ;
+			var aVisible=[], nLines=0, nLine =1, nLineEnd
+			var _add=function( nS, nE ){
+				aVisible.push([ nS, nE ])
+				nLines += nE-nS+1
+				}
+			for(var i=0, aRange; aRange=this.aHiddenRanges[i]; i++ ){
+				if( nLine < aRange[0]){
+					_add( nLine, aRange[0]-1 )
+					nLine =aRange[1]+1
+					}
+				if( nLine == aRange[0]) nLine =aRange[1]+1
+				}
+			if( nLine <= this.oDocument.oSource.nLines )
+				_add( nLine, this.oDocument.oSource.nLines )
+			this.aRealVisibleRanges = aVisible
+			this.nLines = nLines
+			this.bUpdateCalcul = false
+			},
+		getLine :function( nLine ){
+			if( this.haveHiddenRange()){
+				var a = this.aVisibleLinesFlipped
+				return a[nLine] ? parseInt(a[nLine])+1 : null
+				}
+			return nLine
+			},
+		getClosestLine :function( sDirection, nLine ){
+			if( this.haveHiddenRange()){
+				var a = this.aVisibleLines, nPreviousLine
+				for( var i=0, ni=a.length; i<ni; i++ ){
+					if( a[i]>=nLine && sDirection=='top' ) return nPreviousLine||1
+					if( a[i]>nLine && sDirection=='bottom' ) return a[i]
+					nPreviousLine = a[i]
+					}
+				return a[a.length-1]
+				}
+			return sDirection=='top'?(nLine>2?nLine-1:1):nLine+1
+			},
+		getLinePlusPlus :function( nLine, n, bViewLine ){
+			if( this.haveHiddenRange()){
+				var a = this.aVisibleLines, nTmp = 0
+				switch( n<0 ){
+					case true:
+						for( var i=a.length-1, ni=-1; i>ni; i-- ){
+							if( a[i]<nLine ) nTmp--
+							if( nTmp==n ) return bViewLine ? i+1 : a[i] 
+							}
+						return 1
+					case false:
+						for( var i=0, ni=a.length; i<ni; i++ ){
+							if( a[i]>nLine ) nTmp++
+							if( nTmp==n ) return bViewLine ? i+1 : a[i]
+							}
+						return a[a.length-1]
+					}
+				}
+			return nLine+n
+			},
+		haveHiddenRange :function(){
+			return this.aHiddenRanges.length > 0
+			},
+		hideRange :function( nLStart, nLEnd, bWithoutFlow ){
+			this.bUpdateCalcul = true
+			if( ! this.isHiddenRange( nLStart, nLEnd ))
+				this.aHiddenRanges.push([nLStart,nLEnd])
+			this.aHiddenRanges.sortBy('0')
+			if( ! bWithoutFlow ){
+				this.refresh()
+				if( this.onhide()) this.onhide()
+				}
+			},
+		isHiddenRange :function( nLStart, nLEnd ){
+			var b = false
+			for(var i=0, a; a=this.aHiddenRanges[i]; i++){
+				if( a[0]==nLStart && a[1]==nLEnd )
+					return i+1
+				if( a[0]>nLStart ) break;
+				}
+			return b
+			},
+		isLineVisible :function( nLine ){
+			return in_array( nLine, this.aVisibleLines )
+			},
+		refresh :function( sAction ){
+			this.aVisibleLines = []
+			var aVisibleLines = []
+			, D=this.oDocument, T=D.oSource
+			, oUpdates = D.oUpdates
+			, nLineHeight = D.oCharacter.nHeight
+			, nViewHeight = D.oEditor.nTextZoneHeight + nLineHeight // +1 résoud un bug d'affichage ?
+			, nLength = Math.ceil( nViewHeight/nLineHeight )
+			if( isNaN( nViewHeight )) return false
+			if( oUpdates ){
+				var oD = oUpdates.oDeleted
+				var oA = oUpdates.oAdded
+				if( oD.text )
+					for(var j=oD.nLineStart, nj=oD.nLineEnd; j<=nj; j++ )
+						this.showLine( j, true )
+				if( oA.text && oA.nLineStart<oA.nLineEnd )
+						this.showLine( oA.nLineStart+1, true )
+				var nPlus = oUpdates.nLineShift // oUpdates.nLinesNew - oUpdates.nLinesOld
+				if( nPlus ){
+					this.bUpdateCalcul = true
+					var nGrr = oD ? oD.nLineEnd : oA.nLineStart
+					for(var i=0, ni=this.aHiddenRanges.length; i<ni; i++ ){
+						var a = this.aHiddenRanges[i]
+						if( a[0]>=nGrr )
+							this.aHiddenRanges[i]=[ a[0]+nPlus, a[1]+nPlus ]
+						}
+					}
+				if( this.onupdate ) this.onupdate()
+				}
+			// CALCUL DE LA DIMENSION DE LA VUE...
+			// Comportement reduction de bloc
+			if( this.haveHiddenRange()){
+				this.calculateVisibleRanges()
+				var nLines = this.nLines
+				, nLineAtTop = nLineAtBottom = null
+				, bLineEndHidden = true
+				, nLinesHeight = nLines * nLineHeight
+				, nMaxScrollTop = nLinesHeight-nViewHeight
+				, nScrollTop = Math.min( D.eTZC.scrollTop, nMaxScrollTop )
+				, nViewLineStart = Math.max( 1, Math.ceil( nScrollTop / nLineHeight ))
+				, nLineEnd, nLineStart
+				, aVisibleRangesInView = []
+
+				var n1=0, n2=Math.min( nLines-1, nLength-1), bSearchStart=true, bSearchEnd=true, nStart
+					
+				var f =function( a ){
+					if( nStart ) nStart = a[0]
+					for( var i=a[0], ni=a[1]+1; i<ni; i++ ){
+						aVisibleLines.push(i)
+						if( bSearchEnd ){
+							if( bSearchStart ){
+								n1++
+								if( n1==nViewLineStart ){
+									nLineAtTop = n1-1
+									nLineStart = nStart = i
+									bSearchStart = false
+									continue;
+									}
+								}
+							else {
+								n2--
+								if( n2==0 ){
+									nLineAtBottom = Math.max( 0,nLines-nLineAtTop-nLength )
+									nLineEnd = i
+									bSearchEnd = false
+									}
+								}
+							}
+						}
+					if( nStart ) aVisibleRangesInView.push([ nStart, nLineEnd || a[1]])
+					if( nLineEnd ) nStart=null
+					}
+				for(var i=0, ni= this.aRealVisibleRanges.length; i<ni; i++ )
+					f( this.aRealVisibleRanges[i])
+				
+				this.aVisibleRanges = aVisibleRangesInView
+				this.aVisibleLinesFlipped = Array.flip( aVisibleLines )
+				}
+			// Comportement par défaut
+			else{
+				var nLines = T.nLines
+				, nLinesHeight = nLines * nLineHeight
+				, nMaxScrollTop = nLinesHeight-nViewHeight
+				, nScrollTop = Math.min( D.eTZC.scrollTop, nMaxScrollTop )
+				, nLineStart = Math.max( 1, Math.ceil( nScrollTop / nLineHeight ))
+				, nLineEnd = Math.min( nLineStart+nLength-1, nLines )
+				, nLineAtTop = nLineStart-1
+				, nLineAtBottom = nLines-nLineEnd
+				this.aVisibleRanges = [[nLineStart,nLineEnd]]
+				this.aRealVisibleRanges = [[1,nLines]]
+				}
+			this.acquire({
+				aVisibleLines: aVisibleLines,
+				nLength: nLength,
+				nLines: nLines,
+				nLineAtTop: nLineAtTop,
+				nLineAtBottom: nLineAtBottom,
+				nLineStart: nLineStart,
+				nLineEnd: nLineEnd,
+				nLinesHeight: nLinesHeight,
+				height: Math.min( nLength*nLineHeight, nLinesHeight ) +'px',
+				top: ( nLineAtTop )*nLineHeight +'px',
+				bottom: ( nLineAtBottom )*nLineHeight +'px'
+				})
+			if( this.onchange ) this.onchange( sAction )
+			return true
+			},
+		showLine :function( mLines, bWithoutFlow ){
+			this.bUpdateCalcul = true
+			var aLines = to_array( mLines )
+			for( var j=0, nj=aLines.length; j<nj; j++ )
+				for( var i=0, ni=this.aHiddenRanges.length; i<ni; i++ ){
+					var a = this.aHiddenRanges[i]
+					if( a[0]<=aLines[j] && aLines[j]<=a[1] ){
+						this.aHiddenRanges.splice( i, 1 )
+						;i--;ni--;
+						}
+					}
+			if( ! bWithoutFlow ){
+				this.refresh()
+				if( this.onshow()) this.onshow()
+				}
+			},
+		showRange :function( nLStart, nLEnd, bWithoutFlow ){
+			this.bUpdateCalcul = true
+			for(var i=0, a; a=this.aHiddenRanges[i]; i++){
+				if( a[0]==nLStart && a[1]==nLEnd ){
+					this.aHiddenRanges.splice( i, 1 )
+					break;
+					}
+				}
+			if( ! bWithoutFlow ){
+				this.refresh()
+				if( this.onshow()) this.onshow()
+				}
+			}
+		}
+	return V
+	})()
+--></div>
+<textarea id="eSource" wrap="off" style="display:none;"></textarea>
+
+	<div id="eEditeur1"></div>
+	<div id="eStats" class="stats"></div>
+	<div style="clear:both;"></div>
+	<dl class="info">
+		<dd><input type="checkbox" id="eUpdateInfo" checked><label for="eUpdateInfo">Mettre à jour les infos.</label></dd>
+		<dd>V.aVisibleLines: <b id="eVisibleLines">...</b></dd>
+		<dt>V.aHiddenRanges: <pre id="eHiddenRanges">...</pre></dt>
+		<dt>V.aRealVisibleRanges: <pre id="eRealVisibleRanges">...</pre></dt>
+		<dt>V.aVisibleRanges: <pre id="eVisibleRanges">...</pre></dt>
+		<dt>
+			V.nLineStart: <b id="eLineStart">...</b><br>
+			V.nLineEnd: <b id="eLineEnd">...</b>
+			<hr>
+			V.nLines: <b id="eCountLines">...</b> V.nLinesHeight: <b id="eLinesHeight">...</b><br>
+			V.nLineAtTop: <b id="eLineAtTop">...</b> V.top: <b id="eTop">...</b><br>
+			V.nLength: <b id="eLength">...</b> V.height: <b id="eHeight">...</b><br>
+			V.nLineAtBottom: <b id="eLineAtBottom">...</b> V.bottom: <b id="eBottom">...</b>
+			<hr>
+			D.oCharacter.nHeight: <b id="eCharHeight">...</b><br>
+			D.oEditor.nTextZoneHeight: <b id="eTextZoneHeight">...</b>
+		</dt>
+		<div style="clear:both;">&nbsp;</div>
+	</dl>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script>
+_( 'eEditeur1,eSource,eContents,eStats' )
+eSource.value = eContents.firstChild.data
+
+Events.add(
+	_( 'eUpdateInfo' ), 'change', CallBack( oEditor, 'onviewchange' )
+	)
+Editor.prototype.onviewchange =function(){
+	var D = this.oActiveDocument
+	var V = D.oView
+	if( ! _( 'eUpdateInfo' ).checked ) return ;
+	_( 'eHiddenRanges' ).innerHTML = V.aHiddenRanges.join("\n")
+	_( 'eRealVisibleRanges' ).innerHTML = V.aRealVisibleRanges.join("\n")
+	_( 'eVisibleRanges' ).innerHTML = V.aVisibleRanges.join("\n")
+	_( 'eLineStart' ).innerHTML = V.nLineStart
+	_( 'eLineEnd' ).innerHTML = V.nLineEnd
+	_( 'eCountLines' ).innerHTML = V.nLines
+	_( 'eLength' ).innerHTML = V.nLength
+	_( 'eLineAtTop' ).innerHTML = V.nLineAtTop
+	_( 'eLineAtBottom' ).innerHTML = V.nLineAtBottom
+	_( 'eLinesHeight' ).innerHTML = V.nLinesHeight +' px'
+	_( 'eTop' ).innerHTML = V.top
+	_( 'eHeight' ).innerHTML = V.height
+	_( 'eBottom' ).innerHTML = V.bottom
+	_( 'eVisibleLines' ).innerHTML = V.aVisibleLines.join(", ")
+	_( 'eCharHeight' ).innerHTML = D.oCharacter.nHeight+' px'
+	_( 'eTextZoneHeight' ).innerHTML = D.oEditor.nTextZoneHeight+' px'
+	}
+
+BenchmarkFunctions(
+	eStats, Editor.Modules.View.prototype,
+	'calculateVisibleRanges,getLine,getClosestLine,getLinePlusPlus,haveHiddenRange,hideRange,isHiddenRange,isLineVisible,refresh,showLine,showRange'
+	)
+
+var oEditor = new Editor ( eEditeur1, {
+	sTopMenu :'DOCUMENT_NEW,DOCUMENT_SAVE,|,FULLSCREEN,|,UNDO,REDO,|,SHOW_INVISIBLES,|,ZOOM_IN,ZOOM_OUT',
+	sSyntax:'JS'
+	})
+var D = oEditor.newDoc( 'Source', eSource.value )
+	
+BenchmarkFunctions(
+	eStats, oEditor.oActiveDocument.oView,
+	'onchange'
+	)
+
+oEditor.execCommand( 'FOLD_LEVEL_2' )
+oEditor.execCommand( 'FOLD_LEVEL_3' )
+</script>
+
+<script src="config.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC("Module.View.htm")</script>
+</body>
+</html>

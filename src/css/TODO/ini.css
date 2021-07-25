@@ -1,0 +1,39 @@
+.ini .section {
+	color: Blue;
+	text-shadow:-1px -1px 3px Blue;
+	}
+.ini .operator {
+	color: Peru;
+	}
+	
+/* COMMENTS */
+.ini .comment ,
+.ini .comment b {
+	color: White ;
+	}
+	
+/* KEYS */
+.ini .key {
+	color: DarkGreen;
+	}
+.ini .invalid {
+	color: Red;
+	}
+	
+/* VALUES */
+.ini .value {
+	color: Yellow;
+	text-shadow:-1px -1px 3px Yellow;
+	}
+.ini .reserved  {
+	color: LightSeaGreen;
+	text-shadow:-1px -1px 3px LightSeaGreen;
+	}
+.ini .number {
+	color: YellowGreen;
+	text-shadow:-1px -1px 3px YellowGreen;
+	}
+.ini .string {
+	color: LimeGreen;
+	text-shadow:-1px -1px 3px LimeGreen;
+	}

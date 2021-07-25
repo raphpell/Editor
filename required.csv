@@ -1,0 +1,9 @@
+0;src/css/styles.css
+1;src/css/syntaxes.css
+2;src/js/Editor.js
+3;src/js/Commands.js
+4;src/js/KeyBoard.js
+5;src/js/Syntax.js
+6;src/js/Fold.js
+7;src/js/Brackets.js
+8;src/js/TextMarker.js

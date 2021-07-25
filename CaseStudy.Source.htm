@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Le texte source</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1> Le texte source</h1>
+	<p>Le texte source est la principale entrée dans l'éditeur : il s'agit d'une simple chaîne de caractère.</p>
+
+	<div><h2>Les sauts de ligne</h2>
+		<p>Ils sont définis différemment selon les cas :</p>
+		<ul>
+			<li>windows: "\r\n"</li>
+			<li>mac: "\r"</li>
+			<li>unix: "\n"</li>
+		</ul>
+		<p>Pour l'éditeur, il est nécessaire d'utiliser un saut de ligne à un caractère pour avoir la concordance "texte source / <a href="CaseStudy.NativeSelection.htm">sélection native</a>".</p>
+		<ol>
+			<li>Le choix se porte sur les caractères "\n" ou "\r".</li>
+			<li>Par défaut on utilise le caractère "\n".</li>
+		</ol>
+		<p>
+			On doit impérativement identifier le type de sauts de ligne utilisé dans la source auparavant, 
+			pour pouvoir le restaurer en cas de sauvegarde par exemple (sauf choix utilisateur).
+		</p>
+	</div>
+	
+	<div><h2>Les tabulations</h2>
+		<p>Elles sont définies avec le caractère "\t".</p>
+		<ul>
+			<li>Leur taille varie selon les navigateurs et les systèmes d'exploitations.</li>
+			<li>Il n'est pas possible de définir la taille des tabulations pour tous les navigateurs.</li>
+		</ul>
+		<p>Avec l'éditeur, on doit pouvoir :</p>
+		<ul>
+			<li>définir la taille de tabulations (en nombre de caractère).</li>
+			<li>utiliser des tabulations souples... si on le souhaite.</li>
+		</ul>
+	</div>
+
+	<div><h2>Autres espaces blancs</h2>
+		<p>A part les espaces, je ne considère aucun autre type d'espaces blancs...</p>
+	</div>
+
+	<div><h2>Conclusion</h2>
+		<p>L'éditeur doit permettre l'affichage des espaces blancs.</p>
+	</div>
+</div>
+
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script> setTOC( "CaseStudy.Source.htm" ) </script>
+</body>
+</html>

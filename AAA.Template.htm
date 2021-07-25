@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>{title}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<link rel="stylesheet" type="text/css" href="src/view.commands.css">
+	<style>
+		#eEditeur1 {
+			float: left;
+			height: 300px;
+			width: 75%;
+			}
+		#eKeyboard {
+			height: 300px;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1>{title}</h1>
+
+	<div><h2>{subtitle1}</h2>
+		<ul>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+
+	<div><h2>{subtitle2}</h2>
+<div id="eContents"><!--
+...
+--></div>
+		<div id="eKeyboard" title="ShortCuts"></div>
+		<div id="eEditeur1"></div>
+		<div style="clear:left;;"></div>
+	</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur1,eContents,eKeyboard' )
+
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS' })
+var D = oEditor.newDoc( '', eContents.firstChild.data )
+
+var aKeys = [], sChar, sShortcut, oShortCuts = Editor.Modules.KeyBoard.ShortCuts
+for(var sAttr in oShortCuts ){
+	sChar = sAttr.charAt(0)
+	if( sChar.toUpperCase()==sChar ){
+		sShortcut = str_replace( [ /\bUP/,/\bDOWN/,'RIGHT','LEFT'], ['&uarr;','&darr;','&rarr;','&larr;'], sAttr )
+		var sCommandName = oShortCuts[sAttr]
+		if( sCommandName.indexOf && ~sCommandName.indexOf( 'DIALOG' )){
+			var sClass = ! Editor.Modules.Commands[sCommandName] ? 'red' : ''
+			aKeys.push( '<KBD id="'+ sAttr 
+				+'" title="'+ oCommandsDesc[sCommandName] +'"> '
+				+ sShortcut 
+				+' <I id="_'+ sCommandName +'" class="'+ sClass +'">'+ sCommandName +'</I></KBD>' )
+			}
+		}
+	}
+</script>
+<script src="src/view.commands.js"></script>
+
+</div>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC('III.')</script>
+</body>
+</html>

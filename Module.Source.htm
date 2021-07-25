@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Le texte source</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+	.editor {
+		float: left;
+		width:60%;
+		height:508px;
+		}
+	.info {
+		float: left;
+		height: 508px;
+		width: 35%;
+		}
+	#eINFO {
+		overflow:scroll;
+		margin: 0;
+		padding: 0;
+		}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<h1>Le texte source</h1>
+
+<div><h2>Objectif</h2>
+	<ul>
+		<li>Gérer le texte source d'un document.</li>
+		<li>Être indépendant des différents type de saut de ligne: \r\n, \n, \r.</li>
+		<li>Connaître la position de mots.</li>
+	</ul>
+</div>
+
+<div><h2>Diagramme</h2>
+	<img src="diagram/Class.Source.gif">
+</div>
+
+<div><h2>Aperçu</h2>
+<div id="eContents"><!--Source =(function(){
+	var T =function( sSource ){
+		var sValue, aLines, oLines
+		, _setValue =function( s ){
+			aLines = s.split( this.sNewLine )
+			oLines = {}
+			this.countLines()
+			return sValue = s
+			}
+		this.countLines =function(){ // return n
+			return this.nLines = aLines.length
+			}
+		this.charAt =function( nIndex ){
+			return sValue.charAt( nIndex )
+			},
+		this.lineAt =function( nIndex, sError ){ // return s.{line,index}
+			nIndex = nIndex || 0
+			var n = sValue.charAt( nIndex )==this.sNewLine ? -1 : 0
+			var b = 0 <= nIndex && nIndex <= sValue.length
+			if( ! b ){
+				var s = (sError||'') + '\nErreur index: '+ nIndex +'=='+ sValue.length +" ?\nTexte source:\n"+ sValue
+			//	alert( s )
+				throw new Error( s )
+				}
+			return b
+				? this.getLine( sValue.substring( 0, nIndex+1 ).split( this.sNewLine ).length + n )
+				: null
+			}
+		this.getLine =function( n ){ // return s.{line,index}
+			if( oLines[ n ]) return oLines[ n ]
+			if( 1<=n && n<=aLines.length ){
+				var sLine = new String ( aLines[ n-1 ] + ( n!=this.nLines ? this.sNewLine : '' ) )
+				sLine.line = n
+				sLine.index = aLines.slice( 0, n-1 ).join( this.sNewLine ).length + ( n > 1 ? 1 : 0 )
+				return oLines[ n ] = sLine
+				}
+			return null
+			}
+		this.getLines =function( nStart, nEnd ){ // return s
+			var bLast = nEnd==aLines.length
+			return aLines.slice( nStart-1, nEnd ).join( this.sNewLine ) + ( bLast ? '' : this.sNewLine )
+			}
+		this.getValue =function( bOS ){
+			return bOS ? aLines.join( T.LineBreaks[ this.sOS ]) : sValue
+			}
+		this.setValue =function( s ){
+			this.sOS = s ? this.determineOS( s ) : "UNIX"
+			// Needed to create a bridge for characters positions between String, Textarea, Caret and Selection
+			if( Browser.isOpera ) s = s.toString()
+			s = s.replace( /\r\n|\r|\n/g, this.sNewLine )
+			return _setValue.call( this, s )
+			}
+		this.updateValue =function( o ){
+			o.deleted = o.deleted || ''
+			o.added = o.added || ''
+			var nLinesOld = aLines.length
+			, sLineStart = this.lineAt( o.start )
+			, sLineEndDeleted = this.lineAt( o.start + o.deleted.length )
+			, sNewContents = sValue.substring( 0, o.start ) + o.added + sValue.substring( o.start + o.deleted.length )
+			_setValue.call( this, sNewContents )
+			var sLineEndAdded = this.lineAt( o.start + o.added.length )
+			, sNewLinesContents = sNewContents.substring( sLineStart.index, sLineEndAdded.index + sLineEndAdded.length )
+			return {
+				nIndex: o.start,
+				nLinesNew: aLines.length,
+				nLinesOld: nLinesOld,
+				oDeleted:{
+					text: o.deleted,
+					nLineStart: sLineStart.line,
+					nLineEnd: sLineEndDeleted.line,
+					sNewContents: this.lineAt( o.start )
+					},
+				oAdded:{
+					text: o.added,
+					nLineStart: sLineStart.line,
+					nLineEnd: sLineEndAdded.line,
+					aNewContents: sNewLinesContents.split( this.sNewLine )
+					}
+				}
+			}
+		this.setValue( sSource || '' )
+		}
+	T.LineBreaks ={ DOS:"\r\n",MAC:"\r",UNIX:"\n" }
+	T.oRe ={
+		'selection': /(?:\s+|\w+|[^\s\w]+)/g,
+		'spaceLeft': /(?:\s*(?:\w|\d)+|\s*[^\s\w\d]+|\s+)/g,
+		'spaceRight': /(?:\s+|(?:\w|\d)+\s*|[^\s\w\d]+\s*)/g
+		}
+	T.prototype ={
+		nLines: 1,
+		sOS: null, // DOS, MAC, UNIX
+		sNewLine: "\n", // "\n", // TODO : Must be a character :  \r or \n, caractère définissant les nouvelles lignes
+		determineOS :function( s ){
+			if( /\r\n/.test( s )) return 'DOS'
+			if( /\r/.test( s )) return 'MAC'
+			if( /\n/.test( s )) return 'UNIX'
+			},
+		getWordPositionAt :function( nIndex, sType ){ // return {start,end,next,previous}
+			var re = T.oRe[ sType || 'selection' ]
+			var f = CallBack( this, function( nIndex ){
+				var s = this.lineAt( nIndex )
+				if( s==null ){
+					return nIndex < 0
+						? { start:0, end:0 } 
+						: { start:nIndex, end:nIndex }
+					}
+					
+				var sPrefixe = this.getLine( s.line-1 ) || ''
+				, sSuffixe = this.getLine( s.line+1 ) || ''
+				, n = sPrefixe.index || 0
+				s = sPrefixe+s+sSuffixe
+				var a = s.match( re )
+				, nStart = n
+				, nEnd = n
+				if( a ){
+					for( var i=0, ni=a.length; i<ni; i++ ){
+						var sWord = a[i]
+						if( nIndex < nStart + sWord.length ){
+							nEnd += sWord.length
+							break
+							}
+						else nStart = nEnd += sWord.length
+						}
+					return { start:nStart, end:nEnd } 
+					}
+				return { start:nIndex, end:nIndex }
+				})
+			var o = f( nIndex )
+			o.previous = o.start > 0 ? f( o.start-1 ).start : 0
+			o.next = f( o.end ).end
+			return o // end non inclus dans le mot
+			}
+		}
+	return T
+	})()
+--></div>
+	<textarea id="eSource" wrap="off" style="display:none;"></textarea>
+
+	<div id="eEditeur1"></div>
+	<div class="info">
+		Résultat de la fonction <code>updateValue</code><br>
+		<code>oDocument.oUpdates =</code>
+		<pre id="eINFO"></pre>
+		Voir les diagrammes:
+		<ul  style="margin:0; padding: 0 0 0 2em;">
+			<li><a href="diagram/graphCaretInsertion.html">Insertion au curseur</a></li>
+			<li><a href="diagram/graphSelectionReplacement.html">Remplacement de la sélection</a></li>
+		</ul>
+	</div>
+	<div id="eStats" class="stats"></div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script>
+_( 'eEditeur1,eSource,eContents,eStats' )
+eSource.value = eContents.firstChild.data
+
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS' })
+var D = oEditor.newDoc( 'Source', eSource.value )
+
+oEditor.execCommand( 'FOLD_LEVEL_3' )
+
+
+oEditor.newDoc( 'chemin/test/styles.css', 'BODY.fullscreen  {\r\n\
+	overflow: hidden !important;\r\n\
+	position: relative;\r\n\
+	}' )
+
+BenchmarkFunctions(
+	eStats, oEditor.oActiveDocument.oSource,
+	'countLines,charAt,lineAt,getLine,getLines,getValue,setValue,updateValue,getWordPositionAt'
+	)
+
+_( 'eINFO' )
+oEditor.oncontentchange =function( o ){
+	eINFO.innerHTML = JSON.stringify( o, null, '\t' ).str_replace( ['&','<','>'],['&amp;','&lt;','&gt;'])
+	}
+</script>
+
+
+
+<script src="config.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC("Module.Source.htm")</script>
+</body>
+</html>

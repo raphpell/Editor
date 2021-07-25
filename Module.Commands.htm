@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Les commandes</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<link rel="stylesheet" type="text/css" href="src/view.commands.css">
+	<style>
+		.info DT {
+			display: inline;
+			}
+		#eSource {
+			display: none;
+			}
+		#eEditeur1 {
+			float:left;
+			height: 500px;
+			width: 70%;
+			}
+		#eKeyboard {
+			height: 500px;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1> Les commandes</h1>
+
+<div><h2>Objectif</h2>
+	<ul>
+		<li>Regrouper les actions éxecutées dans l'éditeur.</li>
+	</ul>
+</div>
+
+<div><h2>A noter</h2>
+	<ul>
+		<li>Les commandes sont exécutées par <code>oEditor.execCommand</code>.</li>
+		<li>Elles peuvent être associées à des touches raccourcies <del>et à des boutons de l'éditeur</del>.</li>
+		<li>
+			La liste des commandes est étendue pendant l'exécution.<br>
+			<code>Editor.extend( 'Commands', { COMMAND_NAME:function(D,C,S,T,V){} })</code>
+	<pre>
+	/*
+		this = oEditor
+		D = this.oActiveDocument
+		C = D.oCaret
+		S = D.oSelection
+		T = D.oSource
+		V = D.oView
+	*/</pre>
+		</li>
+		<li>Pour consulter la liste des commandes, presser les touches <kbd>CTRL+W</kbd> quand l'éditeur est actif.</li>
+	</ul>
+</div>
+
+<div class=""><h2>Diagramme</h2>
+	<img src="diagram/Class.Commands.gif">
+</div>
+
+<div class=""><h2>Aperçu</h2>
+<!-- SOURCE -->
+<textarea id="eSource" wrap="off">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+	RegExp.extend({
+		escape :function( s ){
+			// Bracket test 2
+			var re1 = /(\.|\?|\*|\+|\\|\(|\)|\[|\]|\}|\{|\$|\^|\|)/g
+			, re2 = /("|')/gm
+			return s.replace( re1 , "\\$1" )
+			}
+		})
+
+/* 2 - PHP */
+	<?php
+	function phpSafe ( $strText ){
+		// a single line comment ( a double quote ")
+		$tmpString = $strText ;
+		$tmpString = str_replace( chr(92) , "" , $tmpString ); 
+		return rawurldecode( $tmpString );
+		}
+		
+	/*
+	a  multi line comment ( a single quote  )
+	*/
+	$hiddencontent = phpSafe( $_POST[ 'content' ]);
+	?>
+</textarea>
+
+	<div id="eKeyboard" title="Commands"></div>
+	<div id="eEditeur1"></div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur1,eSource,eKeyboard' )
+_( 'eTime,eDeleted,eAdded,eLinesNew,eLinesOld' )
+
+var oEditor = new Editor ( eEditeur1, {
+	bSoftTab: 1,
+	bWhiteSpaces: 1,
+	sSyntax:'JS'
+	})
+var D = oEditor.newDoc( '', eSource.value )
+
+var aKeys = []
+var Commands = Editor.Modules.Commands
+for( var sAttr in Commands ){
+	if( sAttr.toUpperCase()==sAttr && Commands[sAttr]){
+		aKeys.push( '<KBD id="_'+ sAttr +'" title="'+ oCommandsDesc[sAttr] +'">' + sAttr + '</KBD>' )
+		}
+	}
+</script>
+<script src="src/view.commands.js"></script>
+
+</div>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script> setTOC( "Module.Commands.htm" ) </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Les sauts de ligne</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+	.editor {
+		width:100%;
+		height:400px;
+		}
+	#eResult1 {
+		border: 1px solid #000;
+		}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<h1>Les sauts de ligne</h1>
+
+<p>.</p>
+
+<div><h2>Diagramme</h2>
+	<img src="diagram/Class.NewLine.gif">
+</div>
+
+<div><h2>Aperçu</h2>
+<textarea id="eSource" wrap="off" style="width:45%; height:400px; display:none;">
+
+</textarea>
+<div id="eEditeur1"></div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script>
+_( 'eEditeur1,eSource' )
+var oChrono = new Chrono
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS' })
+var D = oEditor.newDoc( '', eSource.value )
+
+oEditor.execCommand( 'FOLD_LEVEL_3' )
+</script>
+
+<script src="config.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC("Module.NewLine.htm")</script>
+</body>
+</html>

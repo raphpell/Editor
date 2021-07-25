@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+  <!--Created by yFiles for Java 2.11-->
+  <key for="graphml" id="d0" yfiles.type="resources"/>
+  <key for="port" id="d1" yfiles.type="portgraphics"/>
+  <key for="port" id="d2" yfiles.type="portgeometry"/>
+  <key for="port" id="d3" yfiles.type="portuserdata"/>
+  <key attr.name="url" attr.type="string" for="node" id="d4"/>
+  <key attr.name="description" attr.type="string" for="node" id="d5"/>
+  <key for="node" id="d6" yfiles.type="nodegraphics"/>
+  <key attr.name="Description" attr.type="string" for="graph" id="d7"/>
+  <key attr.name="url" attr.type="string" for="edge" id="d8"/>
+  <key attr.name="description" attr.type="string" for="edge" id="d9"/>
+  <key for="edge" id="d10" yfiles.type="edgegraphics"/>
+  <graph edgedefault="directed" id="G">
+    <data key="d7"/>
+    <node id="n0">
+      <data key="d4"><![CDATA[../Module.KeyBoard.htm]]></data>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="165.0" width="210.0" x="465.0" y="375.0"/>
+          <y:Fill color="#99CCFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" modelName="custom" textColor="#000000" visible="true" width="73.1845703125" x="68.40771484375" y="3.0">Keyboard<y:LabelModel>
+              <y:SmartNodeLabelModel distance="4.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="-0.03703090122767855" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="false">
+            <y:AttributeLabel>&lt;object&gt;
+    + ShortCuts</y:AttributeLabel>
+            <y:MethodLabel>&lt;constructor&gt;
+    + KeyBoard( oEditor )
+
+&lt;instance&gt;
+    + addShortCuts( oShortCuts )
+    + fireShortCut( sKeys )</y:MethodLabel>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <node id="n1">
+      <data key="d4"/>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="196.0" width="247.0" x="735.0" y="375.0"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" modelName="custom" textColor="#000000" visible="true" width="76.4951171875" x="85.25244140625" y="3.0">ShortCuts<y:LabelModel>
+              <y:SmartNodeLabelModel distance="4.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="-0.03703090122767855" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="false">
+            <y:AttributeLabel>ALT+0                   "FOLD_ALL"
+ALT+1                   "FOLD_LEVEL_1"
+ALT+2                   "FOLD_LEVEL_2"
+ALT+3                   "FOLD_LEVEL_3"
+ALT+4                   "FOLD_LEVEL_4"
+ALT+5                   "FOLD_LEVEL_5"
+ALT+6                   "FOLD_LEVEL_6"
+ALT+7                   "FOLD_LEVEL_7"
+ALT+8                   "FOLD_LEVEL_8"
+ALT+SHIFT+0       "UNFOLD_ALL"
+...
+ALT+SHIFT+1       "UNFOLD_LEVEL_1"
+ALT+SHIFT+2             "UNFOLD_LEVEL_2"
+ALT+SHIFT+3             "UNFOLD_LEVEL_3"
+ALT+SHIFT+4             "UNFOLD_LEVEL_4"
+ALT+SHIFT+5             "UNFOLD_LEVEL_5"
+ALT+SHIFT+6             "UNFOLD_LEVEL_6"
+ALT+SHIFT+7             "UNFOLD_LEVEL_7"
+ALT+SHIFT+8             "UNFOLD_LEVEL_8"
+BACKSPACE               "DELETE_BACK"
+CTRL+1                  "MARK_STYLE_1"
+CTRL+2                  "MARK_STYLE_2"
+CTRL+3                  "MARK_STYLE_3"
+CTRL+4                  "MARK_STYLE_4"
+CTRL+5                  "MARK_STYLE_5"
+CTRL+:                  "SHOW_COLUMNS"
+CTRL+;                  "SHOW_LINES"
+CTRL+A                  "SELECT_ALL"
+CTRL+C                  "COPY"
+CTRL+D                  "SELECTION_DUPLICATE"
+CTRL+DELETE             "DEL_WORD_RIGHT"
+CTRL+DIVIDE             "SET_ZOOM"
+CTRL+↓                  "LINE_SCROLL_DOWN"
+CTRL+END                "DOCUMENT_END"
+CTRL+F11                "FULLSCREEN"
+CTRL+HOME               "DOCUMENT_START"
+CTRL+J                  "LINES_JOIN"
+CTRL+L                  "LINE_DELETE"
+CTRL+←                  "WORD_LEFT"
+CTRL+M                  "DIALOG_CONFIG"
+CTRL+MINUS              "ZOOM_OUT"
+CTRL+N                  "DOCUMENT_NEW"
+CTRL+PLUS               "ZOOM_IN"
+CTRL+Q                  "COMMENT_LINE"
+CTRL+→                  "WORD_RIGHT"
+CTRL+S                  "DOCUMENT_SAVE"
+CTRL+SHIFT+1            "UNMARK_STYLE_1"
+CTRL+SHIFT+2            "UNMARK_STYLE_2"
+CTRL+SHIFT+3            "UNMARK_STYLE_3"
+CTRL+SHIFT+4            "UNMARK_STYLE_4"
+CTRL+SHIFT+5            "UNMARK_STYLE_5"
+CTRL+SHIFT+6            "UNMARK_ALL"
+CTRL+SHIFT+:            "SOFT_TAB"
+CTRL+SHIFT+;            "SHOW_INVISIBLES"
+CTRL+SHIFT+BACKSPACE    "DEL_LINE_LEFT"
+CTRL+SHIFT+DELETE       "DEL_LINE_RIGHT"
+CTRL+SHIFT+↓            "LINES_CLIMB_DOWN"
+CTRL+SHIFT+END          "DOCUMENT_END_EXTEND"
+CTRL+SHIFT+HOME         "DOCUMENT_START_EXTEND"
+CTRL+SHIFT+←            "WORD_LEFT_EXTEND"
+CTRL+SHIFT+Q            "COMMENT_BLOCK"
+CTRL+SHIFT+→            "WORD_RIGHT_END_EXTEND"
+CTRL+SHIFT+U            "UPPERCASE"
+CTRL+SHIFT+↑            "LINES_CLIMB_UP"
+CTRL+T                  "LINE_TRANSPOSE"
+CTRL+U                  "LOWERCASE"
+CTRL+↑                  "LINE_SCROLL_UP"
+CTRL+V                  "PASTE"
+CTRL+W                  "DOCUMENT_CLOSE"
+CTRL+X                  "CUT"
+CTRL+Y                  "REDO"
+CTRL+Z                  "UNDO"
+DELETE                  "CLEAR"
+↓                       "LINE_DOWN"
+END                     "LINE_END"
+ENTER                   "NEW_LINE"
+HOME                    "LINE_START"
+←                       "CHAR_LEFT"
+PAGE_DOWN               "PAGE_DOWN"
+PAGE_UP                 "PAGE_UP"
+→                       "CHAR_RIGHT"
+SHIFT+↓                 "LINE_DOWN_EXTEND"
+SHIFT+END               "LINE_END_EXTEND"
+SHIFT+HOME              "LINE_START_EXTEND"
+SHIFT+←                 "CHAR_LEFT_EXTEND"
+SHIFT+PAGE_DOWN         "PAGE_DOWN_EXTEND"
+SHIFT+PAGE_UP           "PAGE_UP_EXTEND"
+SHIFT+→                 "CHAR_RIGHT_EXTEND"
+SHIFT+TAB               "BACK_TAB"
+SHIFT+↑                 "LINE_UP_EXTEND"
+TAB                     "TAB"
+↑                       "LINE_UP"</y:AttributeLabel>
+            <y:MethodLabel/>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <edge id="e0" source="n1" target="n0">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="-86.5" sy="-17.101665714798855" tx="61.45499585709001" ty="-1.601665714798852"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="diamond" target="none"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+  </graph>
+  <data key="d0">
+    <y:Resources/>
+  </data>
+</graphml>

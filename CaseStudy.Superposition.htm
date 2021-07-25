@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Superposition d'éléments</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<style>
+	.zindex1 { /* PRE BACKGROUND */
+		background: #000;
+		color: lightskyblue;
+		border: 2px solid lightskyblue;
+		z-index: 1;
+		}
+	.zindex2 { /* TEXTAREA + ... */
+		background: transparent !important;
+		color: #000;
+		border: 2px solid #000;
+		height: 180px !important;
+		width: 600px !important;
+		z-index: 2;
+		}
+	.test {
+		position: relative;
+		height: 300px;
+		width: 400px;
+		}
+	.test PRE,
+	.test TEXTAREA {
+		font: normal 16px/20px 'Monaco',Menlo,'Ubuntu Mono',Consolas,'source-code-pro',monospace;
+		margin: 0;
+		padding: 0;
+		position: absolute;
+		left: 0;
+		top: 0;
+		}
+	.test B {
+		font-weight: normal !important;
+		background: yellow;
+		color: red;
+		font: inherit;
+		}
+	.test PRE {
+		background: #000;
+		width: 500px;
+		}
+	.test PRE.editable {
+		overflow: scroll;
+		white-space:pre !important;
+
+		color: #000;
+		z-index: 2;
+		width: auto;
+		}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1> Superposition d'éléments</h1>
+	<p>
+		L'idée constiste à éditer le texte en dessus, et mettre à jour la coloration syntaxique en dessous. 
+		Pour visualiser la coloration il suffirait juste de décaler le texte en dessous.
+	</p>
+	<p>
+		Elle a pour but l'utilisation des zones déditions natives des navigateurs cibles.
+	</p>
+	<div><h2> Superposition d'un <span class="zindex2">TEXTAREA</span> sur un <span class="zindex1">PRE</span></h2>
+		<ul>
+			<li>Les navigateurs laissent tous apparaître un décalage (différent selon les navigateurs).</li>
+			<li>La taille des tabulations varie sur IE (entre un élément TEXTAREA et un PRE). </li>
+		</ul>
+		<div class="test">
+			<pre class="zindex1">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		<b>sDoubleQuoteString</b> : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+			</pre>
+			<textarea class="zindex2" wrap="off">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+			</textarea>
+		</div>
+	</div>
+	<div><h2> Superposition d'un <span class="zindex2">PRE</span> (contenteditable="true") sur un <span class="zindex1">PRE</span></h2>
+		<ul>
+			<li>Ils laissent tous apparaître un petit décalage similaire.</li>
+			<li>Pour Chrome et Safari les lignes sont cassées si la largeur du PRE (contenteditable="true") est fixé.</li>
+		</ul>
+		<div class="test">
+			<pre class="zindex1">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		<b>sDoubleQuoteString</b> : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+		</pre>
+			<pre class="editable zindex2" contenteditable="true">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+			</pre>
+		</div>
+	</div>
+	<div><h2> Conclusion</h2>
+		<p>Il est impossible de superposer 2 textes sans laisser apparaître en dessous le second texte (sauf cas exceptionnel : Opera,..).</p>
+		<p>Il faut rechercher une autre solution !</p>
+		<ul>
+			<li>	
+				Pour ajouter des couleurs au texte (coloration syntaxique, surlignage, ...), 
+				il faut créer son propre éditeur : la source doit-être affichée en html brut.
+			</li>
+		</ul>
+	</div>
+</div>
+
+<script src="shared.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script> setTOC( "CaseStudy.Superposition.htm" ) </script>
+</body>
+</html>

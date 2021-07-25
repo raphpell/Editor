@@ -1,0 +1,15 @@
+.dialog_recent_documents UL {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	}
+.dialog_recent_documents LI {
+	border-radius: .25em;
+	cursor: pointer;
+	padding: 0 2em;
+	margin: .25em 0;
+	}
+.dialog_recent_documents LI:hover {
+	background-color: #333;
+	color: #FFF;
+	}

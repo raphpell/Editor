@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Les caractères</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+		#eSource {
+			display: none;
+			}
+		#eEditeur {
+			float: left;
+			height: 400px;
+			margin-bottom: 2em;
+			width: 100%;
+			}
+		.float50 {
+			width: 48%;
+			float: left;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1>Les caractères</h1>
+
+<div class=""><h2>Description</h2>
+	<p>
+		Cette classe sert à calculer la dimension commune des caractères : 
+		on utilise pour cela obligatoirement une police monospace. <br>
+		Objectif : déterminer la position du curseur dans le texte.
+	</p>
+	<ul>
+		<li>largeur caractère = largeur colonne</li>
+		<li>hauteur caractère = hauteur ligne</li>
+	</ul>
+	<p>
+		(La position du curseur dans l'éditeur doit être affiné, 
+		la ligne et la colonne devant correspondre à un index dans le texte source)
+	</p>
+</div>
+
+<div class=""><h2>Diagrammes</h2>
+	<img src="diagram/Class.Character.gif">
+	<img src="diagram/Sequence.Character.gif">
+</div>
+
+<div class=""><h2>Aperçu</h2>
+<!-- SOURCE -->
+<textarea id="eSource" wrap="off">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+	RegExp.extend({
+		escape :function( s ){
+			// Bracket test 2
+			var re1 = /(\.|\?|\*|\+|\\|\(|\)|\[|\]|\}|\{|\$|\^|\|)/g
+			, re2 = /("|')/gm
+			return s.replace( re1 , "\\$1" )
+			}
+		})
+
+/* 2 - PHP */
+	<?php
+	function phpSafe ( $strText ){
+		// a single line comment ( a double quote ")
+		$tmpString = $strText ;
+		$tmpString = str_replace( chr(92) , "" , $tmpString ); 
+		return rawurldecode( $tmpString );
+		}
+		
+	/*
+	a  multi line comment ( a single quote  )
+	*/
+	$hiddencontent = phpSafe( $_POST[ 'content' ]);
+	?>
+</textarea>
+
+	<div id="eTest"></div>
+	<div id="eEditeur"></div>
+	<div id="eStats" class="stats"></div>
+	<div style="clear:left;"></div>
+</div>
+<div><h2>A faire</h2>
+
+	<ol>
+		<li>...</li>
+	</ol>
+</div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur,eSource,eDocName,eStats' )
+var oEditor = new Editor ( eEditeur, {
+	sSyntax:'JS'
+	, bColumns: 1
+	,sTopMenu: 'DOCUMENT_SAVE,DOCUMENT_NEW,|,FULLSCREEN,|,Syntax,LineHeight,FontSize,TabSize,UNDO,REDO,WhiteSpaces,|,BACK_TAB,TAB,|,ZOOM_IN,ZOOM_OUT,|,DIALOG_CONFIG,INFO'
+	})
+var D = oEditor.newDoc( '', eSource.value )
+	
+BenchmarkFunctions(
+	eStats, oEditor.oActiveDocument.oCharacter,
+	'onsizechange'
+	)
+</script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC('HTMLZone.Character.htm')</script>
+</body>
+</html>

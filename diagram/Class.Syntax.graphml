@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+  <!--Created by yFiles for Java 2.11-->
+  <key for="graphml" id="d0" yfiles.type="resources"/>
+  <key for="port" id="d1" yfiles.type="portgraphics"/>
+  <key for="port" id="d2" yfiles.type="portgeometry"/>
+  <key for="port" id="d3" yfiles.type="portuserdata"/>
+  <key attr.name="url" attr.type="string" for="node" id="d4"/>
+  <key attr.name="description" attr.type="string" for="node" id="d5"/>
+  <key for="node" id="d6" yfiles.type="nodegraphics"/>
+  <key attr.name="Description" attr.type="string" for="graph" id="d7"/>
+  <key attr.name="url" attr.type="string" for="edge" id="d8"/>
+  <key attr.name="description" attr.type="string" for="edge" id="d9"/>
+  <key for="edge" id="d10" yfiles.type="edgegraphics"/>
+  <graph edgedefault="directed" id="G">
+    <data key="d7"/>
+    <node id="n0">
+      <data key="d4"/>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="749.6906774978686" width="412.91015477663245" x="476.62843444688224" y="394.5293933468049"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" modelName="custom" textColor="#000000" visible="true" width="162.90625" x="125.00195238831623" y="3.0">AutomatonLexer<y:LabelModel>
+              <y:SmartNodeLabelModel distance="4.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="-0.03703090122767855" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+          <y:UML clipContent="false" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+            <y:AttributeLabel>&lt;prototype&gt;
+    eEndToken
+    eScanParent
+    nShift
+    nLineShift
+    eRoot
+    nLine
+    nPos
+    sText
+    nTextLength
+    eCurrentParent
+    aStack
+    bParent
+    sPreviousToken</y:AttributeLabel>
+            <y:MethodLabel>&lt;object&gt;
+    + rescan( eRootScanned, sTextScanned, nPos, nDeleted, nAdded )
+    + insert( fModule )
+    + addToken( sTokenName, sEngine )
+    + addRule( sRuleName, aTokens )
+
+&lt;constructor&gt;
+    + AutomatonLexer( sText, sLexerRule )
+&lt;prototype&gt;
+    + addTokens( aTokens )
+    + addRules( aRules )
+    + addCSSClass( sCSSClasses )
+    + setPreviousTokenOf( sToken, sPreviousTokens )
+    + setTokensTranslation( sTranslations )
+    + invalidPreviousToken( sToken )
+    + searchToken( sToken )
+    + isWhiteSpace( sToken )
+    + isIgnoredToken( sToken )
+    + getNextEndToken()
+    + isEndToken( eNode )
+    + isFirstChild( e )
+    + isLastChild( e )
+    + isParent( e )
+    + isPartOfDeletedRange( e, nPos, nDeleted )
+    + isRoot( e )
+    + removeNode( e )
+    + updateValues( eFirst )
+    + markEndTag( bIncrementalScanning )
+    + readToken( bIncrementalScanning )
+    + init( sTextScanned, sTokensRules )
+    + rescan( eRootScanned, sTextScanned, nPos, nDeleted, nAdded )
+    + scan( sTextScanned, sTokensRules )
+    + insert(fModule)</y:MethodLabel>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <node id="n1">
+      <data key="d4"><![CDATA[../Strategy.Highlighting.Syntax.htm]]></data>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="201.1707055680439" width="240.28082144329892" x="562.9431011135489" y="1178.7893793117173"/>
+          <y:Fill color="#99CCFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" modelName="custom" textColor="#000000" visible="true" width="69.5859375" x="85.34744197164946" y="3.0">Syntax<y:LabelModel>
+              <y:SmartNodeLabelModel distance="4.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="-0.03703090122767855" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+            <y:AttributeLabel>&lt;instance&gt;
+    - D
+    - oRootNode</y:AttributeLabel>
+            <y:MethodLabel>&lt;constructor&gt;
+    + Syntax( D )
+&lt;prototype&gt;
+    + getLine( nLine )
+    + getLines( nLineStart, nLineEnd )
+    + getContents()
+    + update( oUpdates )</y:MethodLabel>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <edge id="e0" source="n0" target="n1">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="diamond" target="diamond"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+  </graph>
+  <data key="d0">
+    <y:Resources/>
+  </data>
+</graphml>

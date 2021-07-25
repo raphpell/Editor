@@ -1,0 +1,71 @@
+.dialog_search  .tabs {
+    white-space: nowrap;
+    width: 100%;
+	position: relative;
+	}
+.dialog_search  .tabs > TABLE {
+	border-top: 1px solid #000;
+	margin: -1px 0 1em 0; 
+	}
+.dialog_search TABLE {
+    width: 100%;
+	}
+.dialog_search TD {
+	padding:0;
+	}
+.dialog_search .tabs > LABEL {
+    background: #999;
+    border: 1px solid #000000;
+    border-radius: .5em .5em 0 0;
+    color: #FFF;
+    cursor: pointer;
+    padding: 0 10px;
+    margin: 0;
+    height: 20px;
+    line-height: 20px;
+    display: inline-block;
+	width: auto;
+	}
+.dialog_search .tabs > INPUT {
+    display: none;
+	}
+.dialog_search FIELDSET {
+	padding-right: 2em;
+	}
+.dialog_search .tabc1,
+.dialog_search .tabc2,
+.dialog_search .tabc3 {
+    height: 0;
+	position: absolute;
+	left: -1000em;
+	}
+.dialog_search  .tabs INPUT:checked + LABEL {
+    background: #EEE;
+    border-bottom-color: #EEE;
+    color: #000;
+	}
+.dialog_search  .tabs INPUT:checked.tab1 ~ TABLE .tabc1,
+.dialog_search  .tabs INPUT:checked.tab2 ~ TABLE .tabc2,
+.dialog_search  .tabs INPUT:checked.tab3 ~ TABLE .tabc3 {
+    height: auto;
+	width: auto;
+	position: relative;
+	left:0;
+	}
+.dialog_search .buttons {
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+	}
+.dialog_search .checkboxes {
+    margin: 0 1em 0 0;
+	}
+.dialog_search .buttons { text-align: right; }
+.dialog_search .buttons INPUT { width: 12em; }
+.dialog_search .text {
+    width: 100%;
+	}
+.dialog_search .inputs TD {
+	text-align: right;
+    min-width: 7em;
+	}

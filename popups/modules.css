@@ -1,0 +1,24 @@
+.dialog_modules UL {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	}
+.dialog_modules LI {
+	border-radius: .25em;
+	cursor: pointer;
+	padding: 0 2em;
+	margin: .25em 0;
+	}
+.dialog_modules LI:hover {
+	background-color: #333;
+	color: #FFF;
+	}
+
+.dialog_modules .ok {
+	color: green;
+	font-weight: bold;
+	}
+.dialog_modules .loaded {
+	background: url("../images/checked.png") no-repeat scroll left center / contain !important;
+	color: #999 !important;
+	}

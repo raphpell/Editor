@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>La colorisation lexicale</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+	.editor {
+		float: left;
+		width: 100%;
+		height:300px;
+		}
+	#eResult1 {
+		border: 1px solid #000;
+		}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<h1>La colorisation lexicale</h1>
+
+<div><h2>Objectif</h2>
+	<p>Offrir et tester différents analyseurs lexicales ou syntaxiques. Celui par défaut :</p>
+	<ul>
+		<li>affiche les tabulations si désirées.</li>
+		<li>ne gère pas les tabulations souples.</li>
+		<li>n'affiche pas les sauts de lignes.</li>
+		<li>ne colorise rien de tout...</li>
+	</ul>
+</div>
+
+<div><h2>Diagramme</h2>
+	<img src="diagram/Class.Highlighting.gif">
+</div>
+
+<div><h2>Aperçu</h2>
+	<textarea id="eSource" wrap="off" style="width:45%; height:400px; display:none;"></textarea>
+	<label for="eStrategy">oEditor.oActiveDocument.oSyntax.setStrategy( </label>
+	<select id="eStrategy">
+		<option value="Default">Default</option>
+		<option value="Syntax" selected>Syntax</option>
+	</select>
+	<label for="eStrategy"> ) </label>
+	<a href="Strategy.Highlighting.Syntax.htm">Stratégie colorisation Syntax</a>
+	<div id="eEditeur1"></div>
+	<div id="eStats" class="stats"></div>
+</div>
+
+<div id="eContents"><!--var Highlighting:(function(){
+	var Strategies ={
+		Default :(function(){
+			var generateContents =function( s ){ // return array
+				var _SEPARATOR = "@GRR_END_LINE@"
+				, a = s.str_replace(
+					[ '&', '<', '>', /\t/g, /(\n|\r)/g ],
+					[ '&amp;', '&lt;', '&gt;', Modules.Tabulation.HTML, Modules.NewLine.HTML+_SEPARATOR ]
+					).split( _SEPARATOR )
+				a.pop()
+				return a
+				}
+			return function( D ){
+				D.oTabulation.bSoftTab = D.bSoftTab = false
+				this.getElementsByTagName =function( sNodeName ){
+					return []
+					}
+				this.getContents =function(){
+					return generateContents( D.oSource.getValue())
+					}
+				this.getLine =function( nLine ){
+					return generateContents( D.oSource.getLine( nLine ))[0] || ''
+					}
+				this.getLines =function( nStart, nEnd ){
+					return generateContents( D.oSource.getLines( nStart, nEnd ))
+					}
+				this.update =function(){
+					var o = D.oUpdates
+					o.nLineShift = o.nLinesNew - o.nLinesOld
+					o.nLineStart = o.oDeleted.text ? o.oDeleted.nLineStart : o.oAdded.nLineStart
+					o.nLineEnd = o.oDeleted.text && o.oAdded.text
+						? Math.max( o.oDeleted.nLineEnd , o.oAdded.nLineEnd )
+						: ( o.oDeleted.text ? o.oDeleted.nLineEnd : o.oAdded.nLineEnd )
+					}
+				}
+			})()
+		}
+	var HS =function( D, sStrategyName ){
+		this.setStrategy =function( s ){
+			if( ! Strategies[ s ]) throw new Error ( '"'+ s +'" render strategy undefined.' )
+			this.oStrategy = new Strategies[ this.sStrategyName=s ](D)
+			}
+		this.setStrategy( this.sName = sStrategyName||'Default' )
+		}
+	HS.prototype={
+		getElementsByTagName :function( sNodeName ){ return this.oStrategy.getElementsByTagName( sNodeName )},
+		getContents :function(){ return this.oStrategy.getContents()},
+		getLine :function( nLine ){ return this.oStrategy.getLine( nLine )},
+		getLines :function( nStart, nEnd ){ return this.oStrategy.getLines( nStart, nEnd )},
+		update :function( oUpdates ){ return this.oStrategy.update( oUpdates )}
+		}
+	HS.get =function( s ){ return Strategies[ s ]}
+	HS.addStrategy =function( s, o ){
+		if( o.getContents && o.getLine && o.getLines && o.update )
+			return Strategies[ s ] = o
+		var oP = o.prototype
+		if( oP.getContents && oP.getLine && oP.getLines && oP.update )
+			return Strategies[ s ] = o
+		throw new Error (
+			'"'+ s +'" highlighting strategy is not valid.'
+			 + ( o.getContents ? '' : '\n getContents undefined.' )
+			 + ( o.getLine ? '' : '\n getLine undefined.' )
+			 + ( o.getLines ? '' : '\n getLines undefined.' )
+			 + ( o.update ? '' : '\n update undefined.' ) 
+			)
+		}
+	return HS
+	})()
+--></div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<!---->
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script>
+_( 'eEditeur1,eSource,eContents,eTOKENS,eStats,eStrategy' )
+eSource.value = eContents.firstChild.data
+
+Events.add(
+	Editor.prototype, 'documentinit', function( D ){ D.oSyntax.setStrategy( eStrategy.value )},
+	eStrategy, 'change', function(){ oEditor.oActiveDocument.oSyntax.setStrategy( eStrategy.value )}
+	)
+
+BenchmarkFunctions(
+	eStats, Editor.Strategies.Highlighting.prototype,
+	'getLine,getLines,getContents,getElementsByTagName,getElementsByLine,update'
+	)
+		
+var oEditor = new Editor ( eEditeur1, { bWhiteSpaces: 1, sSyntax:'JS' })
+var D = oEditor.newDoc( 'Source', eSource.value )
+
+var F=oEditor.oActiveDocument.oFold
+F.fold( 3, true )
+F.fold( 10, true )
+F.fold( 13, true )
+oEditor.execCommand( 'FOLD_LEVEL_5' )
+</script>
+
+<script src="config.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC("Strategy.Highlighting.htm")</script>
+</body>
+</html>

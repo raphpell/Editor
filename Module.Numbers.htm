@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Incrémentation et décrémentation de nombre</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+		#eSource {
+			display: none;
+			}
+		#eEditeur1 {
+			float: left;
+			height: 300px;
+			width: 75%;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1>Incrémentation et décrémentation de nombre</h1>
+
+<div class=""><h2>Objectifs</h2>
+	<p>Changer la valeur d'un nombre au curseur texte avec des touches raccourcies par 0.1, 1 ou 10.</p>
+</div>
+
+<div class=""><h2>Diagramme</h2>
+	<img src="diagram/Class.Numbers.gif">
+</div>
+
+
+<div class=""><h2>Aperçu</h2>
+	<textarea id="eSource" wrap="off"></textarea>
+<div id="eContents"><!--Editor.addModule('Numbers',(function(){
+	var N ={
+		getPrecision :function( n ){
+			var s = n.toString()
+			return s.indexOf('.')==-1 ? 0 : s.split('.')[1].length
+			},
+		trim :function( n ){
+			return n.toString().replace( /\.0*$/, '' )
+			},
+		get :function(C,T){
+			var n = C.position.index, s = '+-0123456789.', src = T.getValue()
+			if( s.indexOf( T.charAt( n ))==-1 ) n--
+			var nStart=n, nEnd=n
+			while( nStart>-1 && s.indexOf( T.charAt( nStart ))>-1 ) nStart--
+			nStart++
+			while( nEnd < src.length && s.indexOf( T.charAt( nEnd ))>-1 ) nEnd++
+			var sNumber = src.slice( nStart, nEnd )
+			if( ! /[+-]?(\d+\.\d*|\.?\d+)/.test( sNumber )) return null
+			sNumber = this.trim( sNumber )
+			return {
+					nStart: nStart,
+					nEnd: nEnd,
+					nValue: new Number ( sNumber ),
+					nFixed: this.getPrecision( sNumber )
+					}
+			},
+		set :function(C,S,T,n){
+			var o = this.get(C,T)
+			if( o ){
+				o.nValue += n
+				o.nValue = o.nValue.toFixed( o.nFixed || this.getPrecision( n ))
+				if( S ){
+					S.set( o.nStart, o.nEnd )
+					S.replace( this.trim( o.nValue ), false )
+					}
+				C.setIndex( o.nStart )
+				}
+			}
+		}
+	var _increment =function( n ){ return function(D,C,S,T){ N.set(C,S,T,n)}}
+	Editor.extend( 'Commands', {
+		INCREMENT_DOT :_increment(.1),
+		INCREMENT_ONE :_increment(1),
+		INCREMENT_TEN :_increment(10),
+		DECREMENT_DOT :_increment(-.1),
+		DECREMENT_ONE :_increment(-1),
+		DECREMENT_TEN :_increment(-10)
+		})
+	Editor.extend( 'KeyBoard', {
+		'ALT+UP':'INCREMENT_DOT',
+		'ALT+DOWN':'DECREMENT_DOT',
+		'CTRL+UP':'INCREMENT_ONE', // Efface le raccourcie de la commande LINE_SCROLL_UP
+		'CTRL+DOWN':'DECREMENT_ONE', // Efface le raccourcie de la commande LINE_SCROLL_DOWN
+		'CTRL+ALT+UP':'INCREMENT_TEN',
+		'CTRL+ALT+DOWN':'DECREMENT_TEN'
+		})
+	return N
+	})())--></div>
+
+	<div id="eKeyboard" title="ShortCuts"></div>
+	<div id="eEditeur1"></div>
+	<div id="eStats" class="stats"></div>
+	<div style="clear:left;;"></div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/Numbers.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur1,eSource,eContents,eKeyboard' )
+eSource.value = eContents.firstChild.data
+
+_( 'eCounter,eIndex,eDeleted,eAdded,eLinesNew,eLinesOld' )
+
+BenchmarkFunctions(
+	eStats, Editor.Modules.Numbers,
+	'getPrecision,trim,get,set'
+	)
+
+var oEditor = new Editor ( eEditeur1, { sSyntax:'JS' })
+var D = oEditor.newDoc( 'Source', eSource.value )
+oEditor.execCommand( 'FOLD_LEVEL_3')
+
+var aKeys = [], sChar, sShortcut, oShortCuts = Editor.Modules.KeyBoard.ShortCuts
+for(var sAttr in oShortCuts ){
+	sChar = sAttr.charAt(0)
+	if( sChar.toUpperCase()==sChar ){
+		sShortcut = str_replace( [ /\bUP/,/\bDOWN/,'RIGHT','LEFT'], ['&uarr;','&darr;','&rarr;','&larr;'], sAttr )
+		var sCommandName = oShortCuts[sAttr]
+		if( sCommandName.indexOf && ~sCommandName.indexOf( 'CREMENT_' )){
+			var sClass = ! Editor.Modules.Commands[sCommandName] ? 'red' : ''
+			aKeys.push( '<KBD id="'+ sAttr 
+				+'" title="'+ oCommandsDesc[sCommandName] +'"> '
+				+ sShortcut 
+				+' <I id="_'+ sCommandName +'" class="'+ sClass +'">'+ sCommandName +'</I></KBD>' )
+			}
+		}
+	}
+
+</script>
+<link rel="stylesheet" type="text/css" href="src/view.commands.css">
+<script src="src/view.commands.js"></script>
+
+</div>
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC('Module.Numbers.htm')</script>
+</body>
+</html>

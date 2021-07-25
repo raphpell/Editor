@@ -1,0 +1,21 @@
+.tooltip DIV {
+	background-color: #EEE;
+	background-image: linear-gradient(#FFF, #DDD);
+	border: 1px solid #333;
+	border-radius: 0.5em;
+	box-shadow: 0 0 0.5em #666;
+	font: normal 0.8em Verdana;
+	padding: 0.5em 1em;
+	position: absolute;
+	display: none;
+	}
+H1 {
+	text-align: center;
+	}
+.yimagetable {
+	text-align: center;
+	width: 100%;
+	}
+.yimage {
+	
+	}

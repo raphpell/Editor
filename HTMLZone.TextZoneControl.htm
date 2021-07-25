@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>La zone texte</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+		#eSource {
+			display: none;
+			}
+		#eEditeur {
+			float: left;
+			height: 400px;
+			width: 50%;
+			}
+		.float50 {
+			width: 48%;
+			float: left;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1>La zone texte</h1>
+
+<div class=""><h2>Description</h2>
+	<p>
+		Espace contenant les lignes de code...
+	</p>
+</div>
+
+<div class=""><h2>Diagramme</h2>
+	<img src="diagram/Class.TextZone.gif">
+</div>
+
+<div class=""><h2>Aperçu</h2>
+<!-- SOURCE -->
+<textarea id="eSource" wrap="off">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+	RegExp.extend({
+		escape :function( s ){
+			// Bracket test 2
+			var re1 = /(\.|\?|\*|\+|\\|\(|\)|\[|\]|\}|\{|\$|\^|\|)/g
+			, re2 = /("|')/gm
+			return s.replace( re1 , "\\$1" )
+			}
+		})
+
+/* 2 - PHP */
+	<?php
+	function phpSafe ( $strText ){
+		// a single line comment ( a double quote ")
+		$tmpString = $strText ;
+		$tmpString = str_replace( chr(92) , "" , $tmpString ); 
+		return rawurldecode( $tmpString );
+		}
+		
+	/*
+	a  multi line comment ( a single quote  )
+	*/
+	$hiddencontent = phpSafe( $_POST[ 'content' ]);
+	?>
+</textarea>
+
+	<div id="eTest"></div>
+	<ul style="float:left; margin-right:2em;">
+		<li>oTZC = oEditor.oActiveDocument.oTextZoneControl</li>
+		<li><input type="button" onclick="Button.hide()" value="oTZC.hide()"></li>
+		<li><input type="button" onclick="Button.show()" value="oTZC.show()"></li>
+		<li><input type="button" onclick="Button.toggle()" value="oTZC.toggle()"></li>
+		<li><input type="button" onclick="Button.refresh()" value="oTZC.refresh()"></li>
+		<dt><p>
+			L'espace surligné sert à rendre visible le curseur.
+		</p></dt>
+	</ul>
+	
+	<div id="eEditeur"></div>
+</div>
+<div style="clear:left;"><h2>A faire</h2>
+
+	<ol>
+		<li>...</li>
+	</ol>
+</div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur,eSource,eDocName' )
+var oEditor = new Editor ( eEditeur, {
+	sSyntax:'JS'
+	,sTopMenu: 'DOCUMENT_SAVE,DOCUMENT_NEW,|,FULLSCREEN,|,Syntax,LineHeight,FontSize,TabSize,UNDO,REDO,WhiteSpaces,|,BACK_TAB,TAB,|,ZOOM_IN,ZOOM_OUT,|,DIALOG_CONFIG,INFO'
+	})
+var D = oEditor.newDoc( '', eSource.value )
+Button={
+	hide :function(){ oEditor.oActiveDocument.oTextZoneControl.hide()},
+	show :function(){ oEditor.oActiveDocument.oTextZoneControl.show()},
+	toggle :function(){ oEditor.oActiveDocument.oTextZoneControl.toggle()},
+	refresh :function(){ oEditor.oActiveDocument.oTextZoneControl.refresh()}
+	}
+
+</script>
+
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC('HTMLZone.TextZoneControl.htm')</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Les numéros de ligne</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<style>
+		#eSource {
+			display: none;
+			}
+		#eEditeur {
+			float: left;
+			height: 400px;
+			width: 50%;
+			}
+		.float50 {
+			width: 48%;
+			float: left;
+			}
+	</style>
+</head>
+<body spellcheck="false">
+
+<a href="./index.htm">index</a>
+
+<div><h1>Les numéros de ligne</h1>
+
+<div class=""><h2>Objectifs</h2>
+	<ul>
+		<li>Connaitre les numéros de ligne.</li>
+		<li>Sélectionner simplement des lignes par glissé.</li>
+		<li>Sélectionner tout le document par double clique.</li>
+		<li>Marquer des lignes (CTRL+clique).</li>
+		<li>Ajouter des annotations.</li>
+	</ul>
+</div>
+
+<div class=""><h2>Diagramme</h2>
+	<img src="diagram/Class.Gutter.gif">
+</div>
+
+<div class=""><h2>Aperçu</h2>
+<!-- SOURCE -->
+<textarea id="eSource" wrap="off">
+/* 1 - JavaScript syntax */
+	var n = nInt1/4 + 4/nInt1 + 10
+	var oEditor = new EditorSample ( eContent ,{
+		// a single line comment ( a single quote ' )
+		aArray : [ true , false , null , undefined , Infinity , NaN ],
+		sDoubleQuoteString : "/* a multi line comment */ // a single line comment " ,
+		sSingleQuoteString : '/* a multi line comment */ // a single line comment '
+		sBracketsTest1_1 : "{[(",
+		sBracketsTest1_2 : "}])",
+		/*
+		a  multi line comment ( a double quote " )
+		*/
+		})
+	RegExp.extend({
+		escape :function( s ){
+			// Bracket test 2
+			var re1 = /(\.|\?|\*|\+|\\|\(|\)|\[|\]|\}|\{|\$|\^|\|)/g
+			, re2 = /("|')/gm
+			return s.replace( re1 , "\\$1" )
+			}
+		})
+
+/* 2 - PHP */
+	<?php
+	function phpSafe ( $strText ){
+		// a single line comment ( a double quote ")
+		$tmpString = $strText ;
+		$tmpString = str_replace( chr(92) , "" , $tmpString ); 
+		return rawurldecode( $tmpString );
+		}
+		
+	/*
+	a  multi line comment ( a single quote  )
+	*/
+	$hiddencontent = phpSafe( $_POST[ 'content' ]);
+	?>
+</textarea>
+
+	<div id="eTest"></div>
+	<ul style="float:left; margin-right:2em;">
+		<li>oGutter = oEditor.oActiveDocument.oGutter</li>
+		<li><input type="button" onclick="Button.hide()" value="oGutter.hide()"></li>
+		<li><input type="button" onclick="Button.show()" value="oGutter.show()"></li>
+		<li><input type="button" onclick="Button.toggle()" value="oGutter.toggle()"></li>
+		<li><input type="button" onclick="Button.refresh()" value="oGutter.refresh()"></li>
+		<li><input type="button" onclick="Button.markLine()" value="oGutter.markLine( nLine, sAnnotation )"></li>
+		<li><label for="eLine">nLine = </label><input type="text" id="eLine" value="1" size="3"></li>
+		<li><label for="eAnnotation">sAnnotation = </label><input type="text" id="eAnnotation" value="???" size="10"></li>
+	</ul>
+	<div id="eEditeur"></div>
+	<div id="eStats" class="stats"></div>
+</div>
+<div style="clear:left;"><h2>A faire</h2>
+	<p>En faire plus avec les annotations :</p>
+	<ol>
+		<li>Marquage différent selon des cas.</li>
+		<li>Modifier le principe des infos-bulles.</li>
+	</ol>
+</div>
+</div>
+
+<script src="shared.js"></script>
+<script src="src/js/Editor.js"></script>
+<script src="src/js/Commands.js"></script>
+<script src="src/js/KeyBoard.js"></script>
+<script src="src/js/Selection.js"></script>
+<script src="src/js/UndoStack.js"></script>
+<script src="src/js/Syntax.js"></script>
+<script src="src/js/Fold.js"></script>
+<script src="src/js/TextMarker.js"></script>
+<script src="src/js/Brackets.js"></script>
+<script src="src/js/CommandsDesc.js"></script>
+<link rel="stylesheet" type="text/css" href="src/stats.css">
+<script src="src/stats.js"></script>
+<script type="text/JavaScript">
+_( 'eEditeur,eSource,eStats,eDocName,eLine,eAnnotation' )
+
+BenchmarkFunctions(
+	eStats, Editor.HTMLZones.Gutter.prototype,
+	'markLine,toLeft,toggleMark,refreshWidth,show,hide,toggle,refresh'
+	)
+	
+var oEditor = new Editor ( eEditeur, {
+	sSyntax:'JS'
+	,sTopMenu: 'DOCUMENT_SAVE,DOCUMENT_NEW,|,FULLSCREEN,|,Syntax,LineHeight,FontSize,TabSize,UNDO,REDO,WhiteSpaces,|,BACK_TAB,TAB,|,ZOOM_IN,ZOOM_OUT,|,DIALOG_CONFIG,INFO'
+	})
+var D = oEditor.newDoc( '', eSource.value )
+
+Button={
+	hide :function(){ oEditor.oActiveDocument.oGutter.hide()},
+	show :function(){ oEditor.oActiveDocument.oGutter.show()},
+	toggle :function(){ oEditor.oActiveDocument.oGutter.toggle()},
+	refresh :function(){ oEditor.oActiveDocument.oGutter.refresh()},
+	markLine :function(){ oEditor.oActiveDocument.oGutter.markLine( eLine.value, eAnnotation.value )}
+	}
+
+</script>
+
+
+	<link rel="stylesheet" type="text/css" href="src/_toc.css">
+	<script src="src/_toc.js"></script>
+	<script>setTOC('HTMLZone.Gutter.htm')</script>
+</body>
+</html>

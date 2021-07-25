@@ -1,0 +1,77 @@
+<html>
+	<head><title>Insertion au curseur</title>
+		<link rel="stylesheet" type="text/css" href="_uml.css">
+		<script src="_uml.js" type="text/javascript"></script>
+	</head>
+<body>
+<h1>Insertion au curseur</h1>
+
+<div class="tooltip">
+	<div id="n0">IF( oUndoStack )</div>
+	<div id="n1">IF( bWithoutFlow )</div>
+	<div id="n2">oSource.updateValue</div>
+	<div id="n3">oCaret.insert</div>
+	<div id="n4">oDocument.oCaret</div>
+	<div id="n5">oDocument</div>
+	<div id="n6">oDocument.oSource</div>
+	<div id="n7">oDocument.oUndoStack</div>
+	<div id="n8">Insertion de texte <br>au curseur</div>
+	<div id="n9">Fin des mises à jour</div>
+	<div id="n10">Déclenche un événement (mise à jour de ses composants)</div>
+	<div id="n11">oDocument.updateContents</div>
+	<div id="n12">oDocument.oUpdates =</div>
+	<div id="n13">oSource.updateValue( o )</div>
+	<div id="n14">Retourne les modifications<br>à réaliser</div>
+	<div id="n15">oDocument.oUpdates = null</div>
+	<div id="n16">Met à jour la source</div>
+	<div id="n17">oDocument.updateContents( o )</div>
+	<div id="n18">oDocument.onupdate()</div>
+	<div id="n19">Positionne le curseur après le texte inséré</div>
+	<div id="n20">Rend le curseur actif</div>
+	<div id="n21">oCaret.setActive( b )</div>
+	<div id="n22">oCaret.setIndex( n )</div>
+	<div id="n23">Fin de la fonction</div>
+	<div id="n24">oUndoStack.push( o )</div>
+	<div id="n25">Met à jour l'historique d'édition</div>
+	<div id="n26">oCaret.insert( sText, bWithoutFlow, sAction)</div>
+	<div id="e5">oSource.lineAt( nIndex )</div>
+</div>
+
+<map name="image1_1">
+  <area shape="rect" coords="135,399,159,423" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n23')"/>
+  <area shape="rect" coords="135,447,159,471" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n22')"/>
+  <area shape="rect" coords="135,495,159,519" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n21')"/>
+  <area shape="rect" coords="170,519,314,543" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n20')"/>
+  <area shape="rect" coords="170,471,386,495" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n19')"/>
+  <area shape="rect" coords="135,99,159,123" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n26')"/>
+  <area shape="rect" coords="675,219,843,243" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n25')"/>
+  <area shape="rect" coords="351,315,375,339" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n18')"/>
+  <area shape="rect" coords="351,111,375,135" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n17')"/>
+  <area shape="rect" coords="386,147,531,171" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n16')"/>
+  <area shape="rect" coords="351,351,375,375" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n15')"/>
+  <area shape="rect" coords="410,183,555,219" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n14')"/>
+  <area shape="rect" coords="567,123,591,147" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n13')"/>
+  <area shape="rect" coords="351,219,375,243" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n12')"/>
+  <area shape="rect" coords="351,111,375,375" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n11')"/>
+  <area shape="rect" coords="440,315,772,339" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n10')"/>
+  <area shape="rect" coords="195,339,339,363" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n9')"/>
+  <area shape="rect" coords="170,134,314,169" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n8')"/>
+  <area shape="rect" coords="747,39,843,61" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n7')"/>
+  <area shape="rect" coords="531,39,627,63" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n6')"/>
+  <area shape="rect" coords="315,39,411,63" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n5')"/>
+  <area shape="rect" coords="99,39,195,63" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n4')"/>
+  <area shape="rect" coords="135,99,159,519" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n3')"/>
+  <area shape="rect" coords="567,123,591,230" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n2')"/>
+  <area shape="rect" coords="78,387,411,555" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n1')"/>
+  <area shape="rect" coords="783,267,807,291" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n24')"/>
+  <area shape="rect" coords="331,255,842,303" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('n0')"/>
+  <area shape="poly" coords="591,175,693,175,693,171,693,175,696,175,697,171,695,175,698,176,699,172,696,175,698,177,701,174,697,175,697,177,698,181,701,181,701,181,701,177,697,176,697,179,701,179,698,177,696,179,699,181,698,178,695,179,697,182,696,178,693,179,693,183,693,179,600,178,600,186,693,187,694,187,694,187,697,186,698,186,699,186,701,185,702,184,702,184,704,182,705,181,705,180,705,177,701,173,701,173,701,177,705,176,705,173,705,172,704,172,702,170,702,169,701,169,699,167,698,167,697,167,694,167,694,167,693,167,591,167,591,175,591,175" alt="" onmouseout="hideTooltip()" onmouseover="showTooltip('e5')"/>
+</map>
+
+	<table class="yimagetable" cellspacing="0" cellpadding="0" border="0">
+		<tr>
+			<td><img class="yimage" src="graphCaretInsertion_1_1.png" usemap="#image1_1" border="0" alt=""/></td>
+		</tr>
+	</table>
+</body>
+</html>
