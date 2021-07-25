@@ -84,24 +84,24 @@ var oIndexes = {}
 	}
 , sSummary = Item('ROOT','',[
 	 Item("Etude de cas",					'',
-			[// Item("Superposition d'éléments",	'1.1.Superposition.htm'),
+			[// Item("Superposition d'Ã©lÃ©ments",	'1.1.Superposition.htm'),
 			Item("Le texte source",			'CaseStudy.Source.htm')
-			,Item("La sélection native",	'CaseStudy.NativeSelection.htm')
+			,Item("La sÃ©lection native",	'CaseStudy.NativeSelection.htm')
 			,Item("Le copier-coller",		'CaseStudy.Clipboard.htm')
 			])
-	,Item("L'éditeur",						'Editor.htm',
+	,Item("L'Ã©diteur",						'Editor.htm',
 			[Item("Les documents",			'Document.htm')
-	//		,Item("Les marges intérieurs",		'')
+	//		,Item("Les marges intÃ©rieurs",		'')
 			,Item("Les bloques HTML",		'HTMLZone._.htm',
 					[Item("<small>Editeur</small>" )
 					,Item("Les onglets<i>TabMenu</i>",			'HTMLZone.TabMenu.htm')
 					,Item("Le menu<i>TopMenu</i>",				'HTMLZone.TopMenu.htm')
 					,Item("La barre de status<i>Status</i>",	'HTMLZone.Status.htm')
-					,Item("La poignée dimension<i>Grip</i>",	'HTMLZone.Grip.htm')
+					,Item("La poignÃ©e dimension<i>Grip</i>",	'HTMLZone.Grip.htm')
 					,Item( "<small>Document</small>" )
-					,Item("Les caractères<i>Character</i>",		'HTMLZone.Character.htm')
+					,Item("Les caractÃ¨res<i>Character</i>",		'HTMLZone.Character.htm')
 					,Item("Le curseur<i>Caret</i>",				'HTMLZone.Caret.htm')
-					,Item("Les numéros de ligne<i>Gutter</i>",	'HTMLZone.Gutter.htm')
+					,Item("Les numÃ©ros de ligne<i>Gutter</i>",	'HTMLZone.Gutter.htm')
 					,Item("Les lignes<i>Lines</i>", 			'')
 					,Item("Les colonnes<i>Cols</i>", 			'')
 					,Item("La ligne courante<i>CurrentLine</i>",'HTMLZone.CurrentLine.htm')
@@ -116,22 +116,22 @@ var oIndexes = {}
 					,Item("Les lignes vues<i>View</i>",				'Module.View.htm')
 			//		,Item("Les intervalles de temps<i>Interval</i>",'')
 					,Item("<small>Extensions</small>" )
-					,Item("Sélection simple<i>Selection</i>",		'Module.Selection.htm')
-					,Item("Historique d'édition<i>UndoStack</i>",	'Module.UndoStack.htm')
+					,Item("SÃ©lection simple<i>Selection</i>",		'Module.Selection.htm')
+					,Item("Historique d'Ã©dition<i>UndoStack</i>",	'Module.UndoStack.htm')
 					,Item("Les commandes",							'Module.Commands.htm')
 					,Item("Le clavier",								'Module.KeyBoard.htm')
 					,Item("Replie de bloque<i>Fold</i>",			'Module.Fold.htm')
 					,Item("Surlignage<i>TextMarker</i>",			'Module.TextMarker.htm')
-					,Item("Symboles opposés<i>Brackets</i>",		'Module.Brackets.htm')
+					,Item("Symboles opposÃ©s<i>Brackets</i>",		'Module.Brackets.htm')
 					,Item("Snippet<i>Snippet</i>",					'Module.Snippet.htm')
 					,Item("Modification des nombres<i>Numbers</i>",	'Module.Numbers.htm')
-					,Item("Les fenêtres modales<i>Dialog</i>",		'Module.Dialog.htm' )
-					,Item("Les thèmes",								'')
+					,Item("Les fenÃªtres modales<i>Dialog</i>",		'Module.Dialog.htm' )
+					,Item("Les thÃ¨mes",								'')
 					])
-			,Item("Les stratégies",			'',
+			,Item("Les stratÃ©gies",			'',
 					[Item("Affichage de la source<i>Render</i>",		'Strategy.Render.htm')
 					,Item("Colorisation lexicale<i>Highlighting</i>",	'Strategy.Highlighting.htm',
-							[Item("La stratégie Syntax",				'Strategy.Highlighting.Syntax.htm' )
+							[Item("La stratÃ©gie Syntax",				'Strategy.Highlighting.Syntax.htm' )
 							])
 					])
 			])
