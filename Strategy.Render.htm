@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>L'affichage de la source</title>
-	
 	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
 	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
 	<style>
@@ -23,11 +22,11 @@
 <h1>L'affichage de la source</h1>
 
 <div><h2>Objectif</h2>
-	<p>Offrir et tester différents moteurs d'affichage. Celui par défaut :</p>
+	<p>Offrir et tester diffÃ©rents moteurs d'affichage. Celui par dÃ©faut :</p>
 	<ul>
-		<li>Affiche uniquement les lignes visibles à l'écran.</li>
-		<li>Met en cache les lignes affichées (Elles sont récupèrer avec l'objet <code>oSyntax</code>).</li>
-		<li>Lors de l'édition, il met à jour le cache sans récupérer les lignes modifiées.</li>
+		<li>Affiche uniquement les lignes visibles Ã  l'Ã©cran.</li>
+		<li>Met en cache les lignes affichÃ©es (Elles sont rÃ©cupÃ¨rer avec l'objet <code>oSyntax</code>).</li>
+		<li>Lors de l'Ã©dition, il met Ã  jour le cache sans rÃ©cupÃ©rer les lignes modifiÃ©es.</li>
 	</ul>
 </div>
 
@@ -35,7 +34,7 @@
 	<img src="diagram/Class.Render.gif">
 </div>
 
-<div><h2>Aperçu</h2>
+<div><h2>AperÃ§u</h2>
 	<label for="eStrategy">oEditor.oActiveDocument.oRender.setStrategy( </label>
 	<select id="eStrategy">
 		<option value="Default" selected>Default</option>
@@ -53,7 +52,7 @@
 		CacheAll :(function(){
 			var redraw =function(){
 				var D=this, V=D.oView, sContents=''
-				// 1- Récupère le contenu affiché
+				// 1- RÃ©cupÃ¨re le contenu affichÃ©
 				for( var aj=V.aVisibleRanges, j=0, nj=aj.length; j<nj; j++ ){
 					var a = aj[j]
 					sContents += '<dt>'+D.aLinesBuffer.slice( a[0]-1, a[1] ).join('<dt>')
@@ -92,7 +91,7 @@
 		StringCaching :(function(){
 			var redraw =function(){
 				var D=this, V=D.oView, sContents=''
-				// 1- Récupère le contenu affiché
+				// 1- RÃ©cupÃ¨re le contenu affichÃ©
 				for( var aj=V.aVisibleRanges, j=0, nj=aj.length; j<nj; j++ ){
 					var a = aj[j]
 					for( var i=a[0]-1; i<a[1]; i++ ){
@@ -137,11 +136,11 @@
 				var D=this, V=D.oView, e= D.eTZ
 				if( e.parentNode ) e=D.eTZC.removeChild( D.eTZ )
 				if( ! D.oSyntax ) return ;
-				// 1- Efface les éléments
+				// 1- Efface les Ã©lÃ©ments
 			//	e.innerHTML = ''
 				while( e.childNodes.length ) e.removeChild( e.firstChild )
 			//	for(var i=0, ni=e.childNodes.length; i<ni; i++ ) e.childNodes[i].style.display = 'none'
-				// 2- Ajoute les éléments à afficher
+				// 2- Ajoute les Ã©lÃ©ments Ã  afficher
 				for( var aj=V.aVisibleRanges, j=0, nj=aj.length; j<nj; j++ ){
 					var a = aj[j]
 					for( var i=a[0]-1; i<a[1]; i++ ){
