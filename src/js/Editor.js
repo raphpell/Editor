@@ -103,7 +103,7 @@ Editor =(function(){
 					Events.add( this, 'sizechange', CallBack( this, function getDimension (){
 						this.e.innerHTML = this.sChars
 						var o = Tag.dimension( this.e )
-						this.nWidth = o.width / this.sChars.length
+						this.nWidth = Math.round10( o.width / this.sChars.length, -2 )
 						this.nHeight = o.height
 						}))
 					}
@@ -563,13 +563,14 @@ Editor =(function(){
 								this.eTabContents.appendChild( D.eTZC ),
 								D
 								]
-							D.oCharacter.onsizechange()
 							}
 						else if( ! this.isOpened( sDocName )){
 							this.eTabMenu.firstChild.appendChild( this.o[ sDocName ][0])
 							this.eTabContents.appendChild( this.o[ sDocName ][1])
 							this.nLength++
 							}
+						E.execCommand('SET_ZOOM')
+						
 						this.setActive( sDocName )
 						if( ( this.nLength>1 || D && D.bTabMenu ) && ! this.bVisible ) this.show()
 						this.displayNav()
@@ -613,14 +614,6 @@ Editor =(function(){
 							var D = a[2]
 							this.oEditor.setDocActive( D )
 							}
-						/*
-						var a = 'ContentEditable/Syntax/FontSize/TabSize/LineHeight/SoftTab/WhiteSpaces/Gutter/Columns/Lines'.split('/')
-						for(var i=0, ni=a.length; i<ni; i++ ){
-							var sEventName = 'on'+ a[i] +'Change'
-							if( this.oEditor[sEventName]) this.oEditor[sEventName]()
-							//	else console.warn( sEventName + ' undefined.' )
-							}
-						*/
 						if( this.onchange ) this.onchange()
 						},
 					getDimension :function(){
@@ -1808,12 +1801,12 @@ Editor =(function(){
 			}
 		var _initContents =function( sSource ){
 			var D=this, E=D.oEditor
-			D.oSource.setValue( sSource )
 			if( E.ondocumentinit ) E.ondocumentinit( D )
 			var S=D.oSelection, C=D.oCaret
 			if( S && S.exist()) S.collapse()
 			if( C ) C.setIndex(0)
 			D.layOut('_initContents')
+			D.oSource.setValue( sSource )
 			}
 		
 		var D=function( oEditor, sDocName, sSource, oSettings ){
@@ -2017,6 +2010,8 @@ Editor =(function(){
 				},
 			layOut :function( s ){
 				var D=this, E=D.oEditor
+				if( ! D.oCharacter.nWidth ) return ;
+				
 				D.nLinesMaxWidth = Math.max(
 					E.nTextZoneViewWidth-D.Padding.get('left'),
 					(D.oPositions.nColumnMax+2) * D.oCharacter.nWidth // ! getColumnMax()
@@ -2479,4 +2474,4 @@ Editor =(function(){
 			}
 		return Editor
 		})()
-	})()		
+	})()

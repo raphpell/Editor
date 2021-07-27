@@ -10,7 +10,7 @@ Editor.addStrategy( 'Highlighting', 'Syntax', (function(){
 			, nTabSize = this.D.oTabulation.size
 			var n = nTabSize - ( nIndex + nShift ) % nTabSize
 			nShift += n-1
-			return '<b class="tab" title="'+valueToString( o )+'" style="width: '+(this.D.oCharacter.nWidth*n)+'px;">'
+			return '<b class="tab" title="'+valueToString( o )+'" style="width: '+Math.round10(this.D.oCharacter.nWidth*n, -2 )+'px;">'
 			}
 		return bNoTitle || ! o.value
 			? '<b class="'+ o.css +'">'
