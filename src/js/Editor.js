@@ -1,104 +1,104 @@
 // 28/07/2021	85307 2480
 //(-)CallBack	84031 2464
+// refactoring	82450 2428
 
 Editor =(function(){
 	var HTMLZone=(function(){
 		var _toggle =function(){ this[ this.bVisible?'hide':'show' ]()}
 		return{
-			Caret:(function(){
-				var C =function( D ){
+			Caret:class{
+				constructor( D ){
+					this.state = -1
+					this.bShowInfo = true
+					this.nTime = 500
 					this.e = D.eCaret
 					this.oDocument = D
 					this.position = { col:1, line:1, index:0 }
 					Events.add(
 						D.oCharacter, 'sizechange', ()=>this.refresh()
 						)
-
-					this.setPosition =function( oPos ){ // ATTENTION oPos DOIT CONTENIR index QUE SI C'EST UNE VALEUR JUSTE
-						var mask = Bitmask( oPos.viewLine, oPos.line, oPos.col, oPos.index!=undefined )
-						switch( mask.s ){
-							case '1010': // la colonne est recalculée !
-								oPos = D.oPositions.getFromView( oPos )
-								break;
-							case '0110':
-								oPos.viewLine = D.oView.getLine( oPos.line )
-								oPos.index = D.oPositions.getIndex( oPos.line, oPos.col )
-								break;
-							case '0111': // ligne caché !
-							case '1111':
-								break;
-							default: alert( 'oCaret.setPosition: ERROR '+ mask.s )
-							}
-						this.position = oPos
-						if( this.bShowInfo ) this.showInfo()
-						if( this.onchange ) this.onchange()
-						return this.refresh()
-						}
-				
 					if( this.bShowInfo ) this.showInfo()
 					}
-				C.prototype={
-					state: -1,
-					bShowInfo: true,
-					nTime: 500,
-					showInfo :function(){
-						var o = this.position, St=this.oDocument.oEditor.oStatus
-						if( St ) St.setSlot( 2, 'VL:'+o.viewLine+' Ln:'+o.line+' Col:'+o.col+' Index:'+ o.index )
-						},
-					insert :function( sText, bWithoutFlow, sAction ){ // sAction sert dans UndoStack (UndoRedoManager)
-						if( ! sText ) return ;
-						var n = this.position.index
-						this.oDocument.updateContents({ start:n, added:sText, action:sAction })
-						if( bWithoutFlow ) return ;
-						this.setIndex( n + sText.length )
-						this.setActive( true )
-						},
-					setActive :function( m ){
-						var oStyle = this.e.style
-						if( ! this.oDocument.bContentEditable ) m = false
-						switch( m ){
-							case true:
-								this.setActive( false )
-								oStyle.display = ''
-								this.nInterval = setInterval( ()=> oStyle.display = oStyle.display ? '' : 'none', this.nTime )
-								break;
-							case false:
-								this.nInterval = clearInterval( this.nInterval )
-								oStyle.display = 'none'
-								break;
-							case null:
-								this.nInterval = clearInterval( this.nInterval )
-								oStyle.display = ''
-								break;
-							}
-						this.state = m
-						},
-					setIndex :function( nIndex, bPreventScrolling ){ // nLine et nCol  commence à 1
-						var D=this.oDocument
-						, bHidden = this.setPosition( D.oPositions.getFromIndex( nIndex ))
-						if( ! bPreventScrolling ) D.scrollToPosition()
-						return bHidden
-						},
-					refresh :function(){
-						var oStyle = this.e.style
-						, D=this.oDocument, V=D.oView
-						, oPos = this.position
-						, nLine = oPos.viewLine||( V.haveHiddenRange() ? V.aVisibleLinesFlipped[ oPos.line+1 ] : oPos.line )
-						, bHidden = V.haveHiddenRange() && ! in_array( oPos.line, V.aVisibleLines )
-						if( ! bHidden ){
-							this.nLEnd = this.nLStart = null
-							oStyle.top = ( nLine-1 )*D.oCharacter.nHeight +'px'
-							oStyle.left = D.Padding.get('left') + parseInt( ( oPos.col-1 )*D.oCharacter.nWidth ) +'px' // Math.max( 0, )
-							}
-						else oStyle.top = oStyle.left = '-1000em'
-						D.oCurrentLine.setPosition( nLine, oStyle.top, bHidden )
-						return bHidden
-						}
+				showInfo (){
+					let o = this.position, St=this.oDocument.oEditor.oStatus
+					if( St ) St.setSlot( 2, 'Ln:'+o.line+' Col:'+o.col+' Index:'+ o.index ) // 'VL:'+(o.viewLine||'...')
 					}
-				return C
-				})(),
-			Character:(function(){
-				var Ch =function( D ){
+				insert ( sText, bWithoutFlow, sAction ){ // sAction sert dans UndoStack (UndoRedoManager)
+					if( ! sText ) return ;
+					var n = this.position.index
+					this.oDocument.updateContents({ start:n, added:sText, action:sAction })
+					if( bWithoutFlow ) return ;
+					this.setIndex( n + sText.length )
+					this.setActive( true )
+					}
+				setActive ( m ){
+					let o = this.e.style
+					if( ! this.oDocument.bContentEditable ) m = false
+					switch( m ){
+						case true:
+							this.setActive( false )
+							o.display = ''
+							this.nInterval = setInterval( ()=> o.display = o.display ? '' : 'none', this.nTime )
+							break;
+						case false:
+							this.nInterval = clearInterval( this.nInterval )
+							o.display = 'none'
+							break;
+						case null:
+							this.nInterval = clearInterval( this.nInterval )
+							o.display = ''
+							break;
+						}
+					this.state = m
+					}
+				setIndex ( nIndex, bPreventScrolling ){ // nLine et nCol  commence à 1
+					var D=this.oDocument
+					, bHidden = this.setPosition( D.oPositions.getFromIndex( nIndex ))
+					if( ! bPreventScrolling ) D.scrollToPosition()
+					return bHidden
+					}
+				setPosition ( oPos ){ // ATTENTION oPos DOIT CONTENIR index QUE SI C'EST UNE VALEUR JUSTE
+					let D = this.oDocument
+					, mask = Bitmask( oPos.viewLine, oPos.line, oPos.col, oPos.index!=undefined )
+					switch( mask.s ){
+						case '1010': // la colonne est recalculée !
+							oPos = D.oPositions.getFromView( oPos )
+							break;
+						case '0110':
+							oPos.viewLine = D.oView.getLine( oPos.line )
+							oPos.index = D.oPositions.getIndex( oPos.line, oPos.col )
+							break;
+						case '0111': // ligne caché !
+						case '1111':
+							break;
+						default: alert( 'oCaret.setPosition: ERROR '+ mask.s )
+						}
+					this.position = oPos
+					if( this.bShowInfo ) this.showInfo()
+					if( this.onchange ) this.onchange()
+					return this.refresh()
+					}
+				refresh (){
+					let o = this.e.style
+					, D=this.oDocument, V=D.oView
+					, oPos = this.position
+					, nLine = oPos.viewLine||( V.haveHiddenRange() ? V.aVisibleLinesFlipped[ oPos.line+1 ] : oPos.line )
+					, bHidden = V.haveHiddenRange() && ! in_array( oPos.line, V.aVisibleLines )
+					if( ! bHidden ){
+						this.nLEnd = this.nLStart = null
+						o.top = ( nLine-1 )*D.oCharacter.nHeight +'px'
+						o.left = D.Padding.get('left') + parseInt( ( oPos.col-1 )*D.oCharacter.nWidth ) +'px' // Math.max( 0, )
+						}
+					else o.top = o.left = '-1000em'
+					D.oCurrentLine.setPosition( nLine, o.top, bHidden )
+					return bHidden
+					}
+				},
+			Character:class{
+				constructor( D ){
+					this.sChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/*-+."
+					this.nHeight = 0
+					this.nWidth = 0
 					this.e = Tag( 'PRE', { className:'charSizeTest' })
 					D.eTZC.appendChild( this.e )
 					Events.add( this, 'sizechange', ()=>{
@@ -108,21 +108,13 @@ Editor =(function(){
 						this.nHeight = o.height
 						})
 					}
-				Ch.prototype ={
-					sChars: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/*-+.",
-					nHeight:0,
-					nWidth:0,
-					onsizechange: null
-					}
-				return Ch
-				})(),
-			Cols:(function(){
-				var Cols =function(D){
-					this.oDocument = D
-					Events.add( D, 'layout', ()=> this.refreshDimension())
-					}
-				Cols.prototype ={
-					refreshDimension :function( evt, b ){
+				},
+			Cols:class{
+					constructor ( D ){
+						this.oDocument = D
+						Events.add( D, 'layout', ()=> this.refreshDimension())
+						}
+					refreshDimension ( evt, b ){
 						var D=this.oDocument, oStyle=D.eCols.style
 						b = D.bColumns = b!=undefined ? b : D.bColumns
 						oStyle.display = b ? '' : 'none'
@@ -141,39 +133,34 @@ Editor =(function(){
 							D.eCols = Tag.replaceHtml( D.eCols, '<dd>&nbsp;</dd>'.repeat( nCols ))
 							}
 						}
-					}
-				return Cols
-				})(),
-			CurrentLine:(function(){
-				var CL =function(D, bVisible ){
+					},
+			CurrentLine:class{
+				constructor ( D, bVisible ){
+					this.toggle =_toggle
 					this.oDocument = D
+					this.bHidden = false
+					this.bVisible = true
 					this.e = D.eCurrentLine
 					Events.add( D, 'layout', ()=> this.refreshDimension())
 					this.bVisible = ! bVisible
 					this.toggle()
 					}
-				CL.prototype ={
-					bHidden: false,
-					bVisible: true,
-					nOldPosition:null,
-					refreshDimension :function(){
-						var D=this.oDocument
-						this.e.style.width = D.Padding.get('left') + D.nLinesMaxWidth +'px' 
-						},
-					setPosition :function( nLine, nTop, bHidden ){
-						var o = this.e.style
-						o.top = nTop
-						if( ! this.bVisible ) return ;
-						o.display = ( this.bHidden = bHidden ) ? 'none' : ''
-						},
-					hide :function(){ this.bVisible = !( this.e.style.display = 'none' )},
-					show :function(){ this.bVisible = !( this.e.style.display = '' ) },
-					toggle: _toggle
+				refreshDimension (){
+					var D=this.oDocument
+					this.e.style.width = D.Padding.get('left') + D.nLinesMaxWidth +'px' 
 					}
-				return CL
-				})(),
-			Grip:(function(){
-				return function( E, bVisible ){
+				setPosition ( nLine, nTop, bLineHidden ){
+					var o = this.e.style
+					o.top = nTop
+					if( ! this.bVisible ) return ;
+					o.display = ( this.bHidden = bLineHidden ) ? 'none' : ''
+					}
+				hide (){ this.bVisible = !( this.e.style.display = 'none' ) }
+				show (){ this.bVisible = !( this.e.style.display = '' ) }
+				},
+			Grip:class{
+				constructor ( E, bVisible ){
+					this.toggle =_toggle
 					this.oEditor = E
 					var eMask = Tag('DIV',{className:'fullscreen'})
 					, eParent = E.eEditor
@@ -183,7 +170,6 @@ Editor =(function(){
 					var bExpanded = false
 					this.hide = ()=> this.bVisible = !( this.e.style.display="none" )
 					this.show = ()=> this.bVisible = !( this.e.style.display="" )
-					this.toggle =_toggle
 					Events.add(
 						this.e,
 							'dblclick', ()=>{
@@ -221,9 +207,17 @@ Editor =(function(){
 					this.bVisible = ! bVisible
 					this.toggle()
 					}
-				})(),
-			Gutter:(function(){
-				var G =function( D ){
+				},
+			Gutter:class{
+				constructor( D ){
+					this.toggle = _toggle
+					this.bVisible = true
+					this.nStart = 0
+					this.nEnd = 0
+					this.nLength = 0
+					this.nWidth = 0
+					this.sLineSelected = ''
+					
 					this.e = D.eGutter
 					this.oDocument = D
 					this.aMark = []
@@ -294,122 +288,107 @@ Editor =(function(){
 								this.aMark[ oD.nLineStart ] = b
 								}
 							if( oA.text ) this.aMark.splice.apply( this.aMark, [ oA.nLineStart+1, 0 ].concat( Array( oA.nLineEnd-oA.nLineStart )))
-							
+
 							var nLength = D.oSource.nLines.toString().length
 							}
 						)
 					}
-				G.prototype ={
-					bVisible: true,
-					nStart:0,
-					nEnd:0,
-					nLength:0,
-					nWidth:0,
-					sLineSelected:'',
-					markLine :function( n, s ){ this.aMark[n]=s||1 },
-					toLeft :function(){
-						clearTimeout( this.nTimeout )
-						var D=this.oDocument
-						, o = D.eGutter.firstChild.style
-						, nScrollLeft = D.eTZC.scrollLeft
-						if( ! o.paddingLeft ) o.paddingLeft = '0px'
-						if( o.opacity=='0' || parseInt( o.paddingLeft )!=nScrollLeft ){
-					//		o.visibility = 'hidden'
-							this.nTimeout =setTimeout( function(){
-								o.paddingLeft = nScrollLeft +'px'
-					//			o.visibility = 'visible'
-								}, 100 )
-							}
-						},
-					toggleMark :function( e, nLineNumber ){
-						Tag.className( e, 'mark', 'toggle' )
-						this.aMark[ nLineNumber ] = Tag.className( e, 'mark' )
-						},
-					refreshWidth :function(){
-						if( ! this.bVisible ) return ;
-						var D=this.oDocument
-						, nLength = D.oSource.nLines.toString().length
-						, n = D.oCharacter.nWidth*( nLength+2)
-						this.nLength = nLength
-						var oStyle = this.e.firstChild.style
-						// oStyle.width = n-D.oCharacter.nWidth +'px'
-						// oStyle.paddingRight = D.oCharacter.nWidth +'px'
-						oStyle.width = n+'px'
-						oStyle.textIndent = D.oCharacter.nWidth*1+'px'
-						n += 4
-						if( this.nWidth != n ){
-							D.Padding.add( 'left', n-this.nWidth )
-							this.nWidth = n
-							}
-						},
-					show :function(){
-						if( this.bVisible ) return ;
-						this.bVisible = true
-						var D=this.oDocument
-						this.refreshWidth()
-						this.refresh()
-						this.e.style.display = ''
-						D.oCaret.refresh()
-						if( this.onshow ) this.onshow()
-						},
-					hide :function(){
-						if( ! this.bVisible ) return ;
-						this.e.innerHTML = '<ul></ul>'
-						this.e.style.display = 'none'
-						this.bVisible = false
-						var D=this.oDocument
-						D.Padding.add( 'left', -this.nWidth )
-						D.oCaret.refresh()
-						this.nWidth = 0
-						D.layOut('render')
-						if( this.onhide ) this.onhide()
-						},
-					toggle :_toggle,
-					refresh :function(){
-						var D=this.oDocument, V=D.oView
-						if( ! V ) return
-						var s='', sHtmlIn
-						for(var j=0, a; a=V.aVisibleRanges[j]; j++)
-							for( var i=a[0]; i<=a[1]; i++ ){
-								sHtmlIn = this.aMark[i] ? ' class="mark"' : ''
-								if( sHtmlIn ) sHtmlIn += this.aMark[i].constructor==String ? ' title="'+ this.aMark[i] +'"' : ''
-								s += '<li'+ sHtmlIn +'>'+ i
-								}
-						Tag.replaceHtml( this.e.firstChild, s )
-						this.e.style.height = D.oView.nLinesHeight +'px' // ! important pour tout sauf firefox...
-						this.e.firstChild.style.paddingTop = V.top
-						var nLength = D.oSource.nLines.toString().length
-						if( this.nLength!=nLength ) this.refreshWidth()
-						D.layOut('render')
+				markLine ( n, s ){ this.aMark[n]=s||1 }
+				toLeft (){
+					clearTimeout( this.nTimeout )
+					var D=this.oDocument
+					, o = D.eGutter.firstChild.style
+					, nScrollLeft = D.eTZC.scrollLeft
+					if( ! o.paddingLeft ) o.paddingLeft = '0px'
+					if( o.opacity=='0' || parseInt( o.paddingLeft )!=nScrollLeft ){
+						this.nTimeout =setTimeout( function(){
+							o.paddingLeft = nScrollLeft +'px'
+							}, 100 )
 						}
 					}
-				return G
-				})(),
-			Lines:(function(){
-				var Lines =function(D){
+				toggleMark ( e, nLineNumber ){
+					Tag.className( e, 'mark', 'toggle' )
+					this.aMark[ nLineNumber ] = Tag.className( e, 'mark' )
+					}
+				refreshWidth (){
+					if( ! this.bVisible ) return ;
+					var D=this.oDocument
+					, nLength = D.oSource.nLines.toString().length
+					, n = D.oCharacter.nWidth*( nLength+2)
+					this.nLength = nLength
+					var oStyle = this.e.firstChild.style
+					oStyle.width = n+'px'
+					oStyle.textIndent = D.oCharacter.nWidth*1+'px'
+					n += 4
+					if( this.nWidth != n ){
+						D.Padding.add( 'left', n-this.nWidth )
+						this.nWidth = n
+						}
+					}
+				show (){
+					if( this.bVisible ) return ;
+					this.bVisible = true
+					var D=this.oDocument
+					this.refreshWidth()
+					this.refresh()
+					this.e.style.display = ''
+					D.oCaret.refresh()
+					if( this.onshow ) this.onshow()
+					}
+				hide (){
+					if( ! this.bVisible ) return ;
+					this.e.innerHTML = '<ul></ul>'
+					this.e.style.display = 'none'
+					this.bVisible = false
+					var D=this.oDocument
+					D.Padding.add( 'left', -this.nWidth )
+					D.oCaret.refresh()
+					this.nWidth = 0
+					D.layOut('render')
+					if( this.onhide ) this.onhide()
+					}
+				refresh (){
+					var D=this.oDocument, V=D.oView
+					if( ! V ) return
+					var s='', sHtmlIn
+					for(var j=0, a; a=V.aVisibleRanges[j]; j++)
+						for( var i=a[0]; i<=a[1]; i++ ){
+							sHtmlIn = this.aMark[i] ? ' class="mark"' : ''
+							if( sHtmlIn ) sHtmlIn += this.aMark[i].constructor==String ? ' title="'+ this.aMark[i] +'"' : ''
+							s += '<li'+ sHtmlIn +'>'+ i
+							}
+					Tag.replaceHtml( this.e.firstChild, s )
+					this.e.style.height = D.oView.nLinesHeight +'px' // ! important pour tout sauf firefox...
+					this.e.firstChild.style.paddingTop = V.top
+					var nLength = D.oSource.nLines.toString().length
+					if( this.nLength!=nLength ) this.refreshWidth()
+					D.layOut('render')
+					}
+				},
+			Lines:class{
+				constructor (D){
 					this.oDocument = D
 					Events.add( D, 'layout', ()=>this.refreshDimension() )
 					}
-				Lines.prototype ={
-					refreshDimension :function( evt, b ){
-						var D=this.oDocument, oStyle=D.eLines.style
-						b = D.bLines = b!=undefined ? b : D.bLines
-						oStyle.display = b ? '' : 'none'
-						if( b ){
-							oStyle.marginLeft = D.Padding.get('left')+'px'
-							CssRules.add( '.editor DL.lines { width:' + D.nLinesMaxWidth + 'px !important; }' )
-							var V=D.oView
-							, n = V.haveHiddenRange() ? V.aVisibleLines.length : D.oSource.nLines
-							D.eLines = Tag.replaceHtml( D.eLines, '<dt>&nbsp;</dt>'.repeat( n ))
-							}
+				refreshDimension ( evt, b ){
+					var D=this.oDocument, oStyle=D.eLines.style
+					b = D.bLines = b!=undefined ? b : D.bLines
+					oStyle.display = b ? '' : 'none'
+					if( b ){
+						oStyle.marginLeft = D.Padding.get('left')+'px'
+						CssRules.add( '.editor DL.lines { width:' + D.nLinesMaxWidth + 'px !important; }' )
+						var V=D.oView
+						, n = V.haveHiddenRange() ? V.aVisibleLines.length : D.oSource.nLines
+						D.eLines = Tag.replaceHtml( D.eLines, '<dt>&nbsp;</dt>'.repeat( n ))
 						}
 					}
-				return Lines
-				})(),
-			Status:(function(){
-				var St =function( E, nSlots, bVisible ){
+				},
+			Status:class{
+				constructor ( E, nSlots, bVisible ){
+					this.toggle =_toggle
 					this.oEditor = E
 					this.nSlots = nSlots
+					this.height = 0
 					var e = E.eStatus
 					if( e ){
 						this.e = Tag.replaceHtml( e, '<DL><DT></DT>'+ '<DD></DD>'.repeat( this.nSlots ) +'</DL>&nbsp;' )
@@ -429,54 +408,54 @@ Editor =(function(){
 							}
 						)
 					}
-				St.prototype ={
-					height: 0,
-					bVisible: null,
-					getDimension :function(){
-						return this.height = Tag.dimension( this.e ).height + 4
-						},
-					hide :function(){
-						var e=this.e, E=this.oEditor
-						if( ! this.bVisible ) return;
-						if( e ){
-							this.bVisible = false
-							e.style.display = 'none'
-							E.oPadding.add( 'bottom', -this.height )
-							var D = E.oActiveDocument
-							if( D ) D.oTextZoneControl.refresh() 
-							this.height = 0
-							}
-						},
-					show :function(){
-						var e=this.e, E=this.oEditor
-						if( this.bVisible ) return;
-						if( e ){
-							this.bVisible = true
-							e.style.display = ''
-							E.oPadding.add( 'bottom', this.getDimension())
-							var D = E.oActiveDocument
-							if( D ) D.oTextZoneControl.refresh() 
-							}
-						},
-					setSlot :function( nSlot, sValue, sTitle ){
-						if( this.e ){
-							var e = this.aSlots[ nSlot ]
-							e.innerHTML = sValue
-							e.title = sTitle||''
-							}
-						},
-					toggle :_toggle
+				getDimension (){
+					return this.height = Tag.dimension( this.e ).height + 4
 					}
-				return St
-				})(),
-			TabMenu:(function(){
-				var TM =function( E ){
+				hide (){
+					var e=this.e, E=this.oEditor
+					if( ! this.bVisible ) return;
+					if( e ){
+						this.bVisible = false
+						e.style.display = 'none'
+						E.oPadding.add( 'bottom', -this.height )
+						var D = E.oActiveDocument
+						if( D ) D.oTextZoneControl.refresh() 
+						this.height = 0
+						}
+					}
+				show (){
+					var e=this.e, E=this.oEditor
+					if( this.bVisible ) return;
+					if( e ){
+						this.bVisible = true
+						e.style.display = ''
+						E.oPadding.add( 'bottom', this.getDimension())
+						var D = E.oActiveDocument
+						if( D ) D.oTextZoneControl.refresh() 
+						}
+					}
+				setSlot ( nSlot, sValue, sTitle ){
+					if( this.e ){
+						var e = this.aSlots[ nSlot ]
+						e.innerHTML = sValue
+						e.title = sTitle||''
+						}
+					}
+				},
+			TabMenu:class{
+				constructor( E ){
+					this.toggle =_toggle
+					this.nLength = 0
+					this.sCurrentDoc = false
+					
 					this.oEditor = E
 					this.o = {}
-					var e = this.eTabMenu = Tag('DIV',{ className:'tab_menu', innerHTML:'<DL></DL>' })
+					let e = this.eTabMenu = Tag('DIV',{ className:'tab_menu', innerHTML:'<DL></DL>' })
+					, eNext
+					, ePrevious
 					e.appendChild( eNext = Tag('DIV',{ className:'nav next', innerHTML:'&nbsp;' }))
 					e.appendChild( ePrevious = Tag('DIV',{ className:'nav previous', innerHTML:'&nbsp;' }))
-					
+
 					this.eTabContents = Tag('DIV',{ className:'tab_contents '+ E.id })
 					E.eEditor.appendChild( this.eTabMenu )
 					E.eEditor.appendChild( this.eTabContents )
@@ -484,7 +463,7 @@ Editor =(function(){
 					o.display = 'none'
 					o.top = E.oPadding.get( 'top' ) +'px'
 					var nScroll=0, nLeft=0
-					
+
 					var nTimeout, nTime = 250
 					this.clearRepeat =function(){
 						clearTimeout( nTimeout )
@@ -515,7 +494,6 @@ Editor =(function(){
 						eNext.style.display =
 						ePrevious.style.display = this.nLength > 1 ? '' : 'none'
 						}
-					
 					Events.preventSelection( true, eNext )
 					Events.preventSelection( true, ePrevious )
 					Events.add(
@@ -544,124 +522,120 @@ Editor =(function(){
 						this, 'change', ()=>{}
 						)
 					}
-				TM.prototype ={
-					nLength:0,
-					bVisible: null,
-					sCurrentDoc: false,
-					isOpened :function( sDocName ){
-						var a = this.o[ sDocName]
-						return a && a[0].parentNode && true
-						},
-					open :function( sDocName ){
-						var E = this.oEditor
-						var D = E.oDocuments[ sDocName ]
-						if( ! this.o[ sDocName ]){
-							this.nLength++
-							this.o[ sDocName ] =[
-								this.eTabMenu.firstChild.appendChild( Tag('DT',{ innerHTML: D.sFileName, title: sDocName })),
-								this.eTabContents.appendChild( D.eTZC ),
-								D
-								]
-							}
-						else if( ! this.isOpened( sDocName )){
-							this.eTabMenu.firstChild.appendChild( this.o[ sDocName ][0])
-							this.eTabContents.appendChild( this.o[ sDocName ][1])
-							this.nLength++
-							}
-						E.execCommand('SET_ZOOM')
-						
-						this.setActive( sDocName )
-						if( ( this.nLength>1 || D && D.bTabMenu ) && ! this.bVisible ) this.show()
-						this.displayNav()
-						if( E.onopen ) E.onopen( sDocName )
-						},
-					close :function( sDocName ){
-						if( ! this.o[ sDocName]) return;
-						var E = this.oEditor
-						var eDT = this.o[ sDocName ][0]
-						if( eDT.parentNode ){
-							this.nLength--
-							var eNeightBour = eDT.previousSibling || eDT.nextSibling
-							this.eTabMenu.firstChild.removeChild( eDT )
-							if( eNeightBour ) this.setActive( eNeightBour.title )
-								else this.eTabContents.removeChild( this.o[ sDocName ][1] )
-							//	else E.newDoc()
-							}
-						this.displayNav()
-						if( E.onclose ) E.onclose( sDocName )
-						},
-					rename :function( sOldName, sNewName ){
-						this.o[ sNewName ] = this.o[ sOldName ]
-						var eDT = this.o[ sNewName ][0]
-						eDT.innerHTML = sNewName.split('/').pop()
-						eDT.title = sNewName
-						this.o[ sOldName ] = null
-						},
-					setActive :function( sDocName ){
-						var a
-						if( ! this.isOpened( sDocName )) return;
-						if( this.sCurrentDoc == sDocName ) return;
-						if( this.sCurrentDoc ){
-							if( a = this.o[ this.sCurrentDoc ]){
-								a[1].style.display = 'none'
-								Tag.className( a[0], 'current', 'delete' )
-								}
-							}
-						if( a = this.o[ this.sCurrentDoc = sDocName ]){
-							a[1].style.display = ''
-							Tag.className( a[0], 'current', 'add' )
-							var D = a[2]
-							this.oEditor.setDocActive( D )
-							}
-						if( this.onchange ) this.onchange()
-						},
-					getDimension :function(){
-						var o = Tag.dimension( this.eTabMenu )
-						this.height = o.height + 1
-						this.width = o.width
-						return o
-						},
-					hide :function(){
-						if( ! this.bVisible ) return ;
-						var e=this.eTabMenu, E=this.oEditor, D=E.oActiveDocument
-						if( e && ! e.style.display ){
-							e.style.display = 'none'
-							this.bVisible = false
-							E.oPadding.add( 'top', -this.height )
-							}
-						if( D ){
-							D.oTextZoneControl.refresh()
-							D.refreshView()
-							}
-						},
-					show :function(){
-						if( this.bVisible ) return ;
-						this.getDimension()
-						this.oEditor.bTabMenu = 1
-						var e=this.eTabMenu, E=this.oEditor, D=E.oActiveDocument, n
-						if( e && e.style.display && this.nLength ){
-							e.style.display = ''
-							e.firstChild.style.left ='0px'
-							this.bVisible = true
-							E.oPadding.add( 'top', this.height )
-							}
-						if( D ) D.oTextZoneControl.refresh()
-						},
-					toggle :_toggle
+				isOpened ( sDocName ){
+					var a = this.o[ sDocName]
+					return a && a[0].parentNode && true
 					}
-				return TM
-				})(),
-			TextZone:(function(){
-				return function( D ){
-					Events.add( D, 'layout', this.refresh = function(){
+				open ( sDocName ){
+					var E = this.oEditor
+					var D = E.oDocuments[ sDocName ]
+					if( ! this.o[ sDocName ]){
+						this.nLength++
+						this.o[ sDocName ] =[
+							this.eTabMenu.firstChild.appendChild( Tag('DT',{ innerHTML: D.sFileName, title: sDocName })),
+							this.eTabContents.appendChild( D.eTZC ),
+							D
+							]
+						}
+					else if( ! this.isOpened( sDocName )){
+						this.eTabMenu.firstChild.appendChild( this.o[ sDocName ][0])
+						this.eTabContents.appendChild( this.o[ sDocName ][1])
+						this.nLength++
+						}
+					E.execCommand('SET_ZOOM')
+
+					this.setActive( sDocName )
+					if( ( this.nLength>1 || D && D.bTabMenu ) && ! this.bVisible ) this.show()
+					this.displayNav()
+					if( E.onopen ) E.onopen( sDocName )
+					}
+				close ( sDocName ){
+					if( ! this.o[ sDocName]) return;
+					var E = this.oEditor
+					var eDT = this.o[ sDocName ][0]
+					if( eDT.parentNode ){
+						this.nLength--
+						var eNeightBour = eDT.previousSibling || eDT.nextSibling
+						this.eTabMenu.firstChild.removeChild( eDT )
+						if( eNeightBour ) this.setActive( eNeightBour.title )
+							else this.eTabContents.removeChild( this.o[ sDocName ][1] )
+						//	else E.newDoc()
+						}
+					this.displayNav()
+					if( E.onclose ) E.onclose( sDocName )
+					}
+				rename ( sOldName, sNewName ){
+					this.o[ sNewName ] = this.o[ sOldName ]
+					var eDT = this.o[ sNewName ][0]
+					eDT.innerHTML = sNewName.split('/').pop()
+					eDT.title = sNewName
+					this.o[ sOldName ] = null
+					}
+				setActive ( sDocName ){
+					var a
+					if( ! this.isOpened( sDocName )) return;
+					if( this.sCurrentDoc == sDocName ) return;
+					if( this.sCurrentDoc ){
+						if( a = this.o[ this.sCurrentDoc ]){
+							a[1].style.display = 'none'
+							Tag.className( a[0], 'current', 'delete' )
+							}
+						}
+					if( a = this.o[ this.sCurrentDoc = sDocName ]){
+						a[1].style.display = ''
+						Tag.className( a[0], 'current', 'add' )
+						var D = a[2]
+						this.oEditor.setDocActive( D )
+						}
+					if( this.onchange ) this.onchange()
+					}
+				getDimension (){
+					var o = Tag.dimension( this.eTabMenu )
+					this.height = o.height + 1
+					this.width = o.width
+					return o
+					}
+				hide (){
+					if( ! this.bVisible ) return ;
+					var e=this.eTabMenu, E=this.oEditor, D=E.oActiveDocument
+					if( e && ! e.style.display ){
+						e.style.display = 'none'
+						this.bVisible = false
+						E.oPadding.add( 'top', -this.height )
+						}
+					if( D ){
+						D.oTextZoneControl.refresh()
+						D.refreshView()
+						}
+					}
+				show (){
+					if( this.bVisible ) return ;
+					this.getDimension()
+					this.oEditor.bTabMenu = 1
+					var e=this.eTabMenu, E=this.oEditor, D=E.oActiveDocument, n
+					if( e && e.style.display && this.nLength ){
+						e.style.display = ''
+						e.firstChild.style.left ='0px'
+						this.bVisible = true
+						E.oPadding.add( 'top', this.height )
+						}
+					if( D ) D.oTextZoneControl.refresh()
+					}
+				},
+			TextZone:class{
+				constructor( D ){
+					Events.add( D, 'layout', this.refresh =function(){
 						var o = D.eTZ.style
 						o.left = D.Padding.get('left') +'px'
 						o.width = D.nLinesMaxWidth +'px' 
 						})
 					}
-				})(),
-			TextZoneControl:(function(){
-				var Tzc =function( D ){
+				},
+			TextZoneControl:class{
+				constructor( D ){
+					this.toggle =_toggle
+					this.bVisible = false
+					this.nShowMeMargin = 0
 					this.oDocument = D
 					this.oEditor = D.oEditor
 					this.e = D.eTZC
@@ -679,63 +653,59 @@ Editor =(function(){
 							}
 						)
 					}
-				Tzc.prototype ={
-					bVisible: false,
-					nShowMeMargin: 0,
-					refresh :function(){
-						var E=this.oEditor, D=E.oActiveDocument
-						D.eTZC.style.top = E.oPadding.get( 'top' )+2 +'px'
-						D.eTZC.style.bottom = (E.oPadding.get( 'bottom' )||2) +'px'
+				refresh (){
+					var E=this.oEditor, D=E.oActiveDocument
+					D.eTZC.style.top = E.oPadding.get( 'top' )+2 +'px'
+					D.eTZC.style.bottom = (E.oPadding.get( 'bottom' )||2) +'px'
 					// 1. OUTER DIMENSION
-						var o = Tag.dimension( this.e )
-						E.nTextZoneHeight = o.height
-						E.nTextZoneWidth = o.width
+					var o = Tag.dimension( this.e )
+					E.nTextZoneHeight = o.height
+					E.nTextZoneWidth = o.width
 					// 2. VIEW DIMENSION ( without scrollbar )
-						var e = this.eShowMe
-						e.style.cssText = ''
-						var o = Tag.dimension( this.e.appendChild( e ))
-						E.nTextZoneViewHeight = o.height
-						E.nTextZoneViewWidth = o.width
-						this.getVisibleArea()
-						this[ this.bVisible ? 'show' : 'hide' ]()
-						},
-					getVisibleArea :function(){
-						var E = this.oEditor
-						, n = this.nShowMeMargin
-						, nPaddingLeft = this.oDocument.Padding.get('left')
-						, nLeft = this.e.scrollLeft + nPaddingLeft
-						, nTop = this.e.scrollTop
-						return this.oVisibleArea ={
-							left: nLeft + n,
-							top: nTop + n,
-							right: nLeft + E.nTextZoneViewWidth - nPaddingLeft - n,
-							bottom: nTop + E.nTextZoneViewHeight - n
-							}
-						},
-					hide :function(){
-						this.bVisible = false
-						if( this.eShowMe.parentNode )
-							this.e.removeChild( this.eShowMe )
-						},
-					show :function(){
-						this.bVisible = true
-						var e = this.e.appendChild( this.eShowMe )
-						, oStyle = e.style
-						, o = this.oVisibleArea
-						oStyle.left = o.left+'px'
-						oStyle.top = o.top+'px'
-						oStyle.width = o.right-o.left+'px'
-						oStyle.height = o.bottom-o.top+'px'
-						},
-					toggle: _toggle,
-					scrollBy :function( n, s ){
-						this.e[s||'scrollTop'] += n
+					var e = this.eShowMe
+					e.style.cssText = ''
+					var o = Tag.dimension( this.e.appendChild( e ))
+					E.nTextZoneViewHeight = o.height
+					E.nTextZoneViewWidth = o.width
+					this.getVisibleArea()
+					this[ this.bVisible ? 'show' : 'hide' ]()
+					}
+				getVisibleArea (){
+					var E = this.oEditor
+					, n = this.nShowMeMargin
+					, nPaddingLeft = this.oDocument.Padding.get('left')
+					, nLeft = this.e.scrollLeft + nPaddingLeft
+					, nTop = this.e.scrollTop
+					return this.oVisibleArea ={
+						left: nLeft + n,
+						top: nTop + n,
+						right: nLeft + E.nTextZoneViewWidth - nPaddingLeft - n,
+						bottom: nTop + E.nTextZoneViewHeight - n
 						}
 					}
-				return Tzc
-				})(),
-			TopMenu:(function(){
-				var TM =function( E ){
+				hide (){
+					this.bVisible = false
+					if( this.eShowMe.parentNode )
+						this.e.removeChild( this.eShowMe )
+					}
+				show (){
+					this.bVisible = true
+					var e = this.e.appendChild( this.eShowMe )
+					, oStyle = e.style
+					, o = this.oVisibleArea
+					oStyle.left = o.left+'px'
+					oStyle.top = o.top+'px'
+					oStyle.width = o.right-o.left+'px'
+					oStyle.height = o.bottom-o.top+'px'
+					}
+				scrollBy ( n, s ){
+					this.e[s||'scrollTop'] += n
+					}
+				},
+			TopMenu:class{
+				constructor( E ){
+					this.toggle =_toggle
+
 					var MenuItem =function( sName, oEditor ){
 						var eLI = null
 						if( MenuItem.button[ sName ] != undefined ) eLI = MenuItem.createButton( oEditor, sName )
@@ -858,43 +828,37 @@ Editor =(function(){
 					this.show()
 					if( ! ( this.eMenu.firstChild.innerHTML && E.bTopMenu )) this.hide()
 					}
-				TM.prototype ={
-					a: [],
-					bVisible: null,
-					getDimension :function(){
-						var o = Tag.dimension( this.eMenu )
-						this.height = o.height
-						this.width = o.width
-						return o
-						},
-					hide :function(){
-						if( ! this.bVisible ) return;
-						var e=this.eMenu, E=this.oEditor, D=E.oActiveDocument
-						this.bVisible = false
-						e.style.display = "none"
-						E.oPadding.add( 'top', -this.height )
-						if( E.oTabMenu ){
-							E.oTabMenu.eTabMenu.style.top = "0"
-							if( D ) D.oTextZoneControl.refresh()
-							}
-						if( D ) D.refreshView()
-						},
-					show :function(){
-						if( this.bVisible ) return;
-						this.getDimension()
-						var e=this.eMenu, E=this.oEditor, D=E.oActiveDocument
-						this.bVisible = true
-						e.style.display = ""
-						E.oPadding.add( 'top', this.height )
-						if( E.oTabMenu ){
-							E.oTabMenu.eTabMenu.style.top = this.height+'px'
-							if( D ) D.oTextZoneControl.refresh() 
-							}
-						},
-					toggle :_toggle
+				getDimension (){
+					var o = Tag.dimension( this.eMenu )
+					this.height = o.height
+					this.width = o.width
+					return o
 					}
-				return TM
-				})()
+				hide (){
+					if( ! this.bVisible ) return;
+					var e=this.eMenu, E=this.oEditor, D=E.oActiveDocument
+					this.bVisible = false
+					e.style.display = "none"
+					E.oPadding.add( 'top', -this.height )
+					if( E.oTabMenu ){
+						E.oTabMenu.eTabMenu.style.top = "0"
+						if( D ) D.oTextZoneControl.refresh()
+						}
+					if( D ) D.refreshView()
+					}
+				show (){
+					if( this.bVisible ) return;
+					this.getDimension()
+					var e=this.eMenu, E=this.oEditor, D=E.oActiveDocument
+					this.bVisible = true
+					e.style.display = ""
+					E.oPadding.add( 'top', this.height )
+					if( E.oTabMenu ){
+						E.oTabMenu.eTabMenu.style.top = this.height+'px'
+						if( D ) D.oTextZoneControl.refresh() 
+						}
+					}
+				}
 			}
 		})()
 	var Modules={
@@ -1048,7 +1012,7 @@ Editor =(function(){
 								? { start:0, end:0 } 
 								: { start:nIndex, end:nIndex }
 							}
-							
+
 						var sPrefixe = this.getLine( s.line-1 ) || ''
 						, sSuffixe = this.getLine( s.line+1 ) || ''
 						, n = sPrefixe.index || 0
@@ -1247,7 +1211,7 @@ Editor =(function(){
 						, aVisibleRangesInView = []
 
 						var n1=0, n2=Math.min( nLines-1, nLength-1), bSearchStart=true, bSearchEnd=true, nStart
-							
+
 						var f =function( a ){
 							if( nStart ) nStart = a[0]
 							for( var i=a[0], ni=a[1]+1; i<ni; i++ ){
@@ -1277,7 +1241,7 @@ Editor =(function(){
 							}
 						for(var i=0, ni= this.aRealVisibleRanges.length; i<ni; i++ )
 							f( this.aRealVisibleRanges[i])
-						
+
 						this.aVisibleRanges = aVisibleRangesInView
 						this.aVisibleLinesFlipped = Array.flip( aVisibleLines )
 						}
@@ -1457,7 +1421,7 @@ Editor =(function(){
 
 					var nViewLine = nLine = Math.max( 1, Math.min( nLine, V.nLines ))
 					nCol = Math.max( 1, nCol )
-					
+
 					if( V.haveHiddenRange()) nLine = V.aVisibleLines[ nLine-1 ]
 
 					var sLine = this.a[ nLine-1 ]
@@ -1666,7 +1630,7 @@ Editor =(function(){
 					o.height = o.paddingTop = o.paddingBottom = 0
 					this.execAction( 'initialize' )
 					}
-				}	
+				}
 			RS.get =function( s ){ return Strategies[ s ]}
 			RS.addStrategy =function( s, o ){
 				if( o.initialize && o.editing && o.redraw )
@@ -1784,7 +1748,7 @@ Editor =(function(){
 			this.eSelections = this.HTML.selection
 			this.eHighlight = this.HTML.highlight
 			this.eTZ = this.HTML.textZone
-			
+
 			var D=this, E=D.oEditor
 			Events.add(
 				this.eTZC,
@@ -1803,7 +1767,7 @@ Editor =(function(){
 			D.layOut('_initContents')
 			D.oSource.setValue( sSource )
 			}
-		
+
 		var D=function( oEditor, sDocName, sSource, oSettings ){
 			var D = this
 			D.bContentEditable = Modules.Selection && 1
@@ -1847,14 +1811,14 @@ Editor =(function(){
 					oEditor.oncontentchange( D.oUpdates )
 					}
 				)
-			
+
 			// fait à l'initialisation... normalement
 			if( D.sFontSize!='13px' || D.nLineHeight!=1.3 )
 				D.setAttribute( 'lineHeight', D.nLineHeight )
 			if( ! D.bGutter ) D.oGutter.hide()
-			
+
 			D.setSyntax( D.sFileExt )
-			
+
 			this.elementIn =function ( sName ){
 				return (e)=>{
 					while( e ){
@@ -2004,7 +1968,7 @@ Editor =(function(){
 			layOut :function( s ){
 				var D=this, E=D.oEditor
 				if( ! D.oCharacter.nWidth ) return ;
-				
+
 				D.nLinesMaxWidth = Math.max(
 					E.nTextZoneViewWidth-D.Padding.get('left'),
 					(D.oPositions.nColumnMax+2) * D.oCharacter.nWidth // ! getColumnMax()
@@ -2076,7 +2040,7 @@ Editor =(function(){
 			this.oPadding = Padding()
 			this.eEditor = eEditor
 			Tag.className( eEditor,'editor','add' )
-			
+
 			var eInner = document.createDocumentFragment()
 			eInner.appendChild( this.eStatus 	= Tag('DIV', { className:'status' }))
 			eInner.appendChild( this.eClipboard = Tag('TEXTAREA'))
@@ -2089,9 +2053,9 @@ Editor =(function(){
 			this.oFixedDim = o
 			this.oFixedDim.height +=6
 			this.oFixedDim.width
-				
+
 			Editor.loadFile( 'src/js/L10N/'+ this.sLanguage +'.js' )
-				
+
 			this.oTopMenu = new HTMLZone.TopMenu (this)
 			this.oTabMenu = new HTMLZone.TabMenu (this)
 			this.oStatus = new HTMLZone.Status (this, 6, this.bStatus)
