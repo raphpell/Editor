@@ -1,0 +1,4 @@
+// 28/07/2021	85307 2480
+// CallBack	84031 2464 	delete function
+// refactoring	81744 2413 	closure -> class
+

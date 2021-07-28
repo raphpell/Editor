@@ -1,7 +1,3 @@
-// 28/07/2021	85307 2480
-//(-)CallBack	84031 2464
-// refactoring	81825 2428
-
 Editor =(function(){
 	var HTMLZone=(function(){
 		var _toggle =function(){ this[ this.bVisible?'hide':'show' ]()}
@@ -2012,7 +2008,6 @@ Editor =(function(){
 				}
 			}
 		})()
-
 	return (function(){
 		var Editor =function( eEditor, oSettings ){
 		//	if( eEditor.nodeName=='TEXTAREA' ) return Editor.replaceElement( eEditor, oSettings )
