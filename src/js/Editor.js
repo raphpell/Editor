@@ -1,3 +1,6 @@
+// 28/07/2021	85307 2480
+//(-)CallBack	84031 2464
+
 Editor =(function(){
 	var HTMLZone=(function(){
 		var _toggle =function(){ this[ this.bVisible?'hide':'show' ]()}
@@ -8,9 +11,7 @@ Editor =(function(){
 					this.oDocument = D
 					this.position = { col:1, line:1, index:0 }
 					Events.add(
-						D.oCharacter, 'sizechange', CallBack( this, 'refresh' )
-					//	,D.oTabulation, 'sizechange', CallBack( this, 'refresh' )
-					//	, D, 'layout', CallBack( this, 'refresh' )
+						D.oCharacter, 'sizechange', ()=>this.refresh()
 						)
 
 					this.setPosition =function( oPos ){ // ATTENTION oPos DOIT CONTENIR index QUE SI C'EST UNE VALEUR JUSTE
@@ -59,7 +60,7 @@ Editor =(function(){
 							case true:
 								this.setActive( false )
 								oStyle.display = ''
-								this.nInterval = setInterval( CallBack( this, function(){ oStyle.display = oStyle.display ? '' : 'none' }), this.nTime )
+								this.nInterval = setInterval( ()=> oStyle.display = oStyle.display ? '' : 'none', this.nTime )
 								break;
 							case false:
 								this.nInterval = clearInterval( this.nInterval )
@@ -100,12 +101,12 @@ Editor =(function(){
 				var Ch =function( D ){
 					this.e = Tag( 'PRE', { className:'charSizeTest' })
 					D.eTZC.appendChild( this.e )
-					Events.add( this, 'sizechange', CallBack( this, function getDimension (){
+					Events.add( this, 'sizechange', ()=>{
 						this.e.innerHTML = this.sChars
 						var o = Tag.dimension( this.e )
 						this.nWidth = Math.round10( o.width / this.sChars.length, -2 )
 						this.nHeight = o.height
-						}))
+						})
 					}
 				Ch.prototype ={
 					sChars: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/*-+.",
@@ -118,7 +119,7 @@ Editor =(function(){
 			Cols:(function(){
 				var Cols =function(D){
 					this.oDocument = D
-					Events.add( D, 'layout', CallBack( this, this.refreshDimension ))
+					Events.add( D, 'layout', ()=> this.refreshDimension())
 					}
 				Cols.prototype ={
 					refreshDimension :function( evt, b ){
@@ -147,7 +148,7 @@ Editor =(function(){
 				var CL =function(D, bVisible ){
 					this.oDocument = D
 					this.e = D.eCurrentLine
-					Events.add( D, 'layout', CallBack( this, 'refreshDimension' ))
+					Events.add( D, 'layout', ()=> this.refreshDimension())
 					this.bVisible = ! bVisible
 					this.toggle()
 					}
@@ -180,12 +181,12 @@ Editor =(function(){
 					, oStartDim
 					eParent.appendChild( this.e = Tag('DIV',{className:'grip'}))
 					var bExpanded = false
-					this.hide =function(){ this.bVisible = !( this.e.style.display="none" )}
-					this.show =function(){ this.bVisible = !( this.e.style.display="" )}
+					this.hide = ()=> this.bVisible = !( this.e.style.display="none" )
+					this.show = ()=> this.bVisible = !( this.e.style.display="" )
 					this.toggle =_toggle
 					Events.add(
 						this.e,
-							'dblclick', CallBack( this, function(){
+							'dblclick', ()=>{
 								if( bExpanded ){
 									bExpanded = false
 									E.resizeTo( E.oFixedDim.width-2 +'px', E.oFixedDim.height-6 +'px' ) // TODO: supprimer "les valeurs négatives"
@@ -194,15 +195,14 @@ Editor =(function(){
 									E.fitDocument()
 									}
 								if( E.onresize ) E.onresize()
-								}),
-							'mousedown', CallBack( this, function( evt ){
+								},
+							'mousedown', (evt)=>{
 								MP1 = Mouse.position( evt )
 								oStartDim = Tag.dimension( E.eEditor )
-							//	eParent.appendChild( eMask )
 								return Events.prevent( evt )
-								}),
+								},
 						document,
-							'mousemove', CallBack( this, function( evt ){
+							'mousemove', (evt)=>{
 								if( MP1 ){
 									var MP2 = Mouse.position( evt )
 									E.resizeTo(
@@ -210,14 +210,13 @@ Editor =(function(){
 										oStartDim.height + MP2.top - MP1.top +'px'
 										)
 									}
-								}),
-							'mouseup', CallBack( this, function( evt ){
+								},
+							'mouseup', ( evt )=>{
 								if( MP1 ){
 									oStartDim = MP1 = null
-								//	eMask = eParent.removeChild( eMask )
 									if( E.onresize ) E.onresize()
 									}
-								})
+								}
 						)
 					this.bVisible = ! bVisible
 					this.toggle()
@@ -232,11 +231,11 @@ Editor =(function(){
 					var E=D.oEditor
 					Events.add(
 						this.e,
-							'dblclick', function( evt ){
+							'dblclick', (evt)=>{
 								Keyboard.code(evt)
 								if( ! Keyboard.ctrl ) E.execCommand( 'SELECT_ALL' )
 								},
-							'mousedown', CallBack( this, function( evt ){
+							'mousedown', (evt)=>{
 								var e = Events.element( evt )
 								Keyboard.code(evt)
 								if( e.nodeName=="LI" ){
@@ -254,9 +253,9 @@ Editor =(function(){
 									D.oCaret.setIndex( nIndex )
 									E.focus()
 									}
-								}),
+								},
 						document,
-							'mousemove', CallBack( this, function( evt ){
+							'mousemove', (evt)=>{
 								if( this.sLineSelected ){
 									var S=D.oSelection, C=D.oCaret
 									if( S ){
@@ -275,17 +274,17 @@ Editor =(function(){
 											}
 										}
 									}
-								}),
-							'mouseup', CallBack( this, function( evt ){
+								},
+							'mouseup', (evt)=>{
 								this.sLineSelected = false
-								}),
-						D.eTZC, 'scroll', CallBack( this, this.toLeft ),
-						D.oView, 'change', function(){
+								},
+						D.eTZC, 'scroll', ()=> this.toLeft() ,
+						D.oView, 'change', ()=>{
 							if( D.oGutter.bVisible ) D.oGutter.refresh()
 								else D.layOut('render')
 							},
-						D.oCharacter, 'sizechange', CallBack( this, this.refreshWidth ),
-						D, 'update', CallBack( this, function(){
+						D.oCharacter, 'sizechange', ()=> this.refreshWidth(),
+						D, 'update', ()=>{
 							var o = D.oUpdates, b
 							, oD = o.oDeleted
 							, oA = o.oAdded
@@ -297,7 +296,7 @@ Editor =(function(){
 							if( oA.text ) this.aMark.splice.apply( this.aMark, [ oA.nLineStart+1, 0 ].concat( Array( oA.nLineEnd-oA.nLineStart )))
 							
 							var nLength = D.oSource.nLines.toString().length
-							})
+							}
 						)
 					}
 				G.prototype ={
@@ -389,7 +388,7 @@ Editor =(function(){
 			Lines:(function(){
 				var Lines =function(D){
 					this.oDocument = D
-					Events.add( D, 'layout', CallBack( this, this.refreshDimension ))
+					Events.add( D, 'layout', ()=>this.refreshDimension() )
 					}
 				Lines.prototype ={
 					refreshDimension :function( evt, b ){
@@ -420,15 +419,14 @@ Editor =(function(){
 					this.toggle()
 					Events.preventSelection( true, this.e )
 					Events.add(
-						this.aSlots[4], 'dblclick', CallBack( this ,function(){
+						this.aSlots[4], 'dblclick', ()=>{
 							var D=E.oActiveDocument
 							if( D ){
 								var T=D.oSource
-							//	if( ! confirm( "Change OS ?" )) return;
 								T.sOS = { DOS:"MAC",MAC:"UNIX",UNIX:"DOS" }[T.sOS]
 								T.showInfo()
 								}
-							})
+							}
 						)
 					}
 				St.prototype ={
@@ -482,8 +480,9 @@ Editor =(function(){
 					this.eTabContents = Tag('DIV',{ className:'tab_contents '+ E.id })
 					E.eEditor.appendChild( this.eTabMenu )
 					E.eEditor.appendChild( this.eTabContents )
-					this.eTabMenu.style.display = 'none'
-					this.eTabMenu.style.top = E.oPadding.get( 'top' ) +'px'
+					let o = this.eTabMenu.style
+					o.display = 'none'
+					o.top = E.oPadding.get( 'top' ) +'px'
 					var nScroll=0, nLeft=0
 					
 					var nTimeout, nTime = 250
@@ -495,7 +494,7 @@ Editor =(function(){
 						if( eDT && eDT.nextSibling ){
 							nLeft -= Tag.dimension( eDT ).width+1
 							e.firstChild.style.left = nLeft +'px'
-							nTimeout = setTimeout( CallBack( this,'next'), nTime )
+							nTimeout = setTimeout( ()=> this.next(), nTime )
 							}
 						else{
 							nScroll--
@@ -506,7 +505,7 @@ Editor =(function(){
 						if( eDT ){
 							nLeft += Tag.dimension( eDT ).width+1
 							e.firstChild.style.left = nLeft +'px'
-							nTimeout = setTimeout( CallBack( this,'previous'), nTime )
+							nTimeout = setTimeout( ()=> this.previous(), nTime )
 							}
 						else{
 							nScroll++
@@ -521,28 +520,28 @@ Editor =(function(){
 					Events.preventSelection( true, ePrevious )
 					Events.add(
 						'mousedown',
-							eNext, CallBack( this,'next'),
-							ePrevious, CallBack( this,'previous'),
+							eNext, ()=> this.next(),
+							ePrevious, ()=> this.previous(),
 						'mouseup',
-							eNext, CallBack( this,'clearRepeat'),
-							ePrevious, CallBack( this,'clearRepeat'),
+							eNext, ()=> this.clearRepeat(),
+							ePrevious, ()=> this.clearRepeat(),
 						'mouseout',
-							eNext, CallBack( this,'clearRepeat'),
-							ePrevious, CallBack( this,'clearRepeat'),
+							eNext, ()=> this.clearRepeat(),
+							ePrevious, ()=> this.clearRepeat(),
 						this.eTabMenu,
-							'click', CallBack( this, function(evt){
+							'click', (evt)=>{
 								if( E.bPreventUserInteraction ) return;
 								var e = Events.element( evt )
 								if( e.nodeName=='DT' ) this.setActive( e.title )
 								E.focus()
-								}),
-							'dblclick', CallBack( this, function(evt){
+								},
+							'dblclick', (evt)=>{
 								if( E.bPreventUserInteraction ) return;
 								var e = Events.element( evt )
 								if( e.nodeName=='DT' && this.nLength>1 ) this.close( e.title )
 								E.focus()
-								}),
-						this, 'change', function(){}
+								},
+						this, 'change', ()=>{}
 						)
 					}
 				TM.prototype ={
@@ -669,15 +668,15 @@ Editor =(function(){
 					this.oTextZone = new HTMLZone.TextZone(D)
 					this.eShowMe = Tag('DIV', { className:'showMe' })
 					Events.add(
-						this.e, 'scroll', CallBack( this, function(){
+						this.e, 'scroll', ()=>{
 							this.getVisibleArea()
 							if( this.bVisible ) this.show()
-							}),
-						D.oEditor, 'documentinit', CallBack( this, function(){
+							},
+						D.oEditor, 'documentinit', ()=>{
 							this.refresh()
 							this.getVisibleArea()
 							if( this.bVisible ) this.show()
-							})
+							}
 						)
 					}
 				Tzc.prototype ={
@@ -1042,7 +1041,7 @@ Editor =(function(){
 					},
 				getWordPositionAt :function( nIndex, sType ){ // return {start,end,next,previous}
 					var re = T.oRe[ sType || 'selection' ]
-					var f = CallBack( this, function( nIndex ){
+					var f = (nIndex)=>{
 						var s = this.lineAt( nIndex )
 						if( s==null ){
 							return nIndex < 0
@@ -1069,7 +1068,7 @@ Editor =(function(){
 							return { start:nStart, end:nEnd } 
 							}
 						return { start:nIndex, end:nIndex }
-						})
+						}
 					var o = f( nIndex )
 					o.previous = o.start > 0 ? f( o.start-1 ).start : 0
 					o.next = f( o.end ).end
@@ -1090,7 +1089,7 @@ Editor =(function(){
 				this.oDocument = D
 				this.bSoftTab = D.bSoftTab
 				this.setMaxSize( D.nTabSize||8 )
-				Events.add( D.oCharacter, 'sizechange', CallBack( this, 'refresh' ))
+				Events.add( D.oCharacter, 'sizechange', ()=> this.refresh() )
 				}
 			Tab.HTML = '<i class="tab">\t</i>'
 			Tab.prototype ={
@@ -1114,11 +1113,7 @@ Editor =(function(){
 				this.aHiddenRanges = []
 				this.aVisibleRanges = []
 				this.aRealVisibleRanges = []
-				Events.add(
-					D.oCharacter, 'sizechange', CallBack( this, function(){
-						this.refresh()
-						})
-					)
+				Events.add( D.oCharacter, 'sizechange', ()=> this.refresh() )
 				}
 			V.prototype={
 				bUpdateCalcul: true,
@@ -1397,9 +1392,9 @@ Editor =(function(){
 				this.oSource = D.oSource
 				this.oTabulation = D.oTabulation
 				var E = D.oEditor
-				var f=CallBack( E, function(){ _refreshArray.call( this.oActiveDocument.oPositions )})
+				var f = ()=> _refreshArray.call( E.oActiveDocument.oPositions )
 				Events.add(
-					D, 'update', CallBack( this, function(){ _refreshArray.call( this )}),
+					D, 'update', ()=> _refreshArray.call( this ),
 					E,
 						'documentinit', f,
 						'TabSizeChange', f,
@@ -1793,9 +1788,9 @@ Editor =(function(){
 			var D=this, E=D.oEditor
 			Events.add(
 				this.eTZC,
-					'mousedown', CallBack( E, E.placeHandle ),
-					'focus', CallBack( E, E.focus ),
-					'scroll', function(){ D.oView.refresh()}
+					'mousedown', (evt)=> E.placeHandle(evt),
+					'focus', (evt)=> E.focus(evt),
+					'scroll', ()=> D.oView.refresh()
 				)
 			return this.HTML.textZoneControl
 			}
@@ -1839,15 +1834,13 @@ Editor =(function(){
 
 			Events.preventSelection( true, D.eTZ )
 			Events.add(
-				window, 'resize', CallBack( D, 'layOut' ), // cas utilisation % pour la largeur
-				V, 'change', function( sAction ){
+				window, 'resize', ()=> D.layOut(), // cas utilisation % pour la largeur
+				V, 'change', ( sAction )=>{
 					D.oRender.execAction( sAction )
 					oEditor.onviewchange( V )
 					},
-				C, 'change', function(){
-					oEditor.oncaretchange( C.position )
-					},
-				D, 'update', function(){
+				C, 'change', ()=> oEditor.oncaretchange( C.position ),
+				D, 'update', ()=>{
 					D.oSyntax.update()
 					V.refresh('editing')
 					D.layOut('oDocument.onupdate')
@@ -1863,13 +1856,13 @@ Editor =(function(){
 			D.setSyntax( D.sFileExt )
 			
 			this.elementIn =function ( sName ){
-				return CallBack( this, function( e ){
+				return (e)=>{
 					while( e ){
 						if( e===this[sName]) return true
 						e = e.parentNode
 						}
 					return false
-					})
+					}
 				}
 			this.elementInContents = this.elementIn('eTZ')
 			this.elementInTextZone = this.elementIn('eTZC')
@@ -2097,9 +2090,7 @@ Editor =(function(){
 			this.oFixedDim.height +=6
 			this.oFixedDim.width
 				
-			Editor.loadFile( 'src/js/L10N/'+ this.sLanguage +'.js', CallBack( this, function(){
-			//	this.oTopMenu = new HTMLZone.TopMenu (this)	//	TROP ASYNCHRONE !
-				}))
+			Editor.loadFile( 'src/js/L10N/'+ this.sLanguage +'.js' )
 				
 			this.oTopMenu = new HTMLZone.TopMenu (this)
 			this.oTabMenu = new HTMLZone.TabMenu (this)
@@ -2109,15 +2100,11 @@ Editor =(function(){
 
 			var nTimeOut
 			Events.add( 
-				document, 'mousedown', CallBack( this, this.blur ),
-				window, 'resize', CallBack( this, function(){
+				document, 'mousedown', (evt)=> this.blur(evt),
+				window, 'resize', ()=>{
 					if( nTimeOut ) clearTimeout( nTimeOut )
 					var D = this.oActiveDocument
 					setTimeout( function(){ D.layOut()}, 200 )
-					}),
-				this.eDialogs, 'click', function( evt ){
-					var e = Events.element( evt )
-				//	if( e.nodeName!='SELECT' && e.type!="text" ) oEditor.focus()
 					}
 				)
 			if( Modules.KeyBoard ) this.oKeyBoard = new Modules.KeyBoard (this)
@@ -2264,12 +2251,12 @@ Editor =(function(){
 					if( f ){
 						var D=this.oActiveDocument
 						if( D ) var C=D.oCaret, S=D.oSelection, T=D.oSource, V=D.oView
-						var fCommand = CallBack( this, function(){
+						var fCommand = ()=>{
 							if( this.oncommand ) this.oncommand( sAction )
 							var sResult = f.call( this, D,C,S,T,V )
 							setTimeout(function(){ that.focus()}, 10 )
 							return sResult
-							})
+							}
 						return bCallBack
 							? fCommand
 							: fCommand()
