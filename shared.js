@@ -106,7 +106,7 @@ Events ={
 			e[s] = Events.remove( e, e[s])
 		}
 	}
-
+/* TO DELETE
 call =function( o1, s1 ){
 	var a1 = to_array( arguments ) , a = [0]
 	for( var i = 2 , ni = a1.length ; i < ni ; i++ )
@@ -117,6 +117,7 @@ call =function( o1, s1 ){
 		}
 	return f1
 	}
+*/
 var eHEAD = null, eBODY = null
 window.LOADED = false
 var Browser = Fx = Color = Style = CssRules = false

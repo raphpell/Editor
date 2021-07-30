@@ -75,7 +75,7 @@ Editor.addModule('KeyBoard',(function(){
 		//	if( oShortCuts!==ShortCuts ) ShortCuts.acquire( oShortCuts )
 
 			var _fShortCut =function( sShortCut ){
-				return CallBack( this, function(){ return this.fireShortCut( sShortCut )})
+				return ()=>{ return this.fireShortCut( sShortCut )}
 				}
 			// Enumère les touches raccourcies
 			var aKeys=[], sChar

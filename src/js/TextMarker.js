@@ -54,14 +54,14 @@ Editor.addModule('TextMarker',(function(){
 	var TM =function( D ){
 		this.oDocument = D
 		this.oLayers = new Layers()
-		var f=CallBack( this, 'refresh' )
+		var f= ()=> this.refresh()
 		Events.add(
 			D.eTZC, 'dblclick', f,
 			D.oCaret, 'change', f,
 			D.oSelection, 'change', f,
 			D.oView,
 				'change', f,
-				'update', CallBack( this, 'update' )
+				'update', ()=> this.update()
 			)
 		}
 	TM.prototype={
@@ -78,9 +78,7 @@ Editor.addModule('TextMarker',(function(){
 			if( ! /\s+/.test( s ))
 				this.oDocument.oSource.getValue().replace(
 					new RegExp ( sBound + RegExp.escape( s ) + sBound, 'gi' ),
-					CallBack( this, function( sMatched, nIndex ){
-						this.add( 'smart', nIndex, nIndex + sMatched.length )
-						})
+					( sMatched, nIndex )=> this.add( 'smart', nIndex, nIndex + sMatched.length )
 					)
 			},
 		mark :function( sLayer, m ){
@@ -90,10 +88,8 @@ Editor.addModule('TextMarker',(function(){
 					? new RegExp ( RegExp.escape( m ), 'g' )
 					: m ,
 				sLayer=='count'
-					?function(){ nCount++ }
-					: CallBack( this, function( sMatched, nIndex ){
-						this.add( sLayer, nIndex, nIndex + sMatched.length )
-						})
+					? function(){ nCount++ }
+					: ( sMatched, nIndex )=> this.add( sLayer, nIndex, nIndex + sMatched.length )
 				)
 			this.refresh()
 			return nCount

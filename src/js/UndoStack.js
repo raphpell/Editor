@@ -32,14 +32,14 @@ Editor.addModule('UndoStack',(function(){
 			if( o.added ) S.set( o.start, nIndex ); else S.collapse()
 			US.onchange()
 			}
-		Events.add( US, 'change', CallBack( US, function(){
+		Events.add( US, 'change', ()=>{
 			var m = D.oEditor.oTopMenu
 			if( m = m && m.MenuItem.set ){
 				m('UNDO',US.haveUndo()?'enable':'disable')
 				m('REDO',US.haveRedo()?'enable':'disable')
 				m('DOCUMENT_SAVE',US.isSaved()?'disable':'enable')
 				}
-			}))
+			})
 		US.acquire({
 			clear :function(){a=[];n=-1;US.onchange()},
 			haveRedo :function(){return n<a.length-1},

@@ -25,18 +25,19 @@ Editor.addModule( 'Selection', (function(){
 			S.set( nIndex, nIndex )
 			S.expand()
 			}
+		let f = ( evt )=> E.placeHandle( evt )
 		Events.add(
 			document,
-				'click', CallBack( E, E.placeHandle ),
-				'mouseup', CallBack( E, E.placeHandle ),
-				'dblclick', CallBack( E, E.placeHandle ),
-				'selectstart', CallBack( E, E.placeHandle ),
+				'click', f,
+				'mouseup', f,
+				'dblclick', f,
+				'selectstart', f,
 			E.eEditor,
-				"dblclick", function( evt ){
+				"dblclick", ( evt )=>{
 					nIndex = C.position.index
 					timer = setTimeout( function(){timer=null}, timeout )
 					},
-				"click", function( evt ){
+				"click", ( evt )=>{
 					if( timer ) executeTripleClickFunction() // selectionne une ligne
 					}
 			)

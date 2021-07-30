@@ -10,8 +10,8 @@ Editor.addModule('Brackets',(function(){
 		Events.preventSelection( true, this.eStart = Tag('DIV',{className:'bracket'}))
 		Events.preventSelection( true, this.eEnd = Tag('DIV',{className:'bracket'}))
 		Events.add(
-			D, 'layout', CallBack( this, 'search' ), // BOURIN : cas suppression avec la touche SUPPR
-			D.oCaret, 'change', CallBack( this, 'search' )
+			D, 'layout', ()=> this.search(), // BOURIN : cas suppression avec la touche SUPPR
+			D.oCaret, 'change', ()=> this.search()
 			)
 		}
 	B.prototype={

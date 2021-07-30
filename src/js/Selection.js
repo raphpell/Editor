@@ -2,29 +2,24 @@ Editor.addModule('Selection',(function(){
 	var S =function( D ){
 		this.oDocument = D
 		var E=D.oEditor, S=this, C=D.oCaret, P=D.oPositions
-		
+
 		// Restaure le défilement automatique 
 		var oStart = false
 		var nScrollInterval
 		// Ajoute le triple clique
 		var timer, timeout = 400, oWord
-		var _refreshSelection = CallBack( S, function(){
-			if( this.exist()) this.set( this.start, this.end )
-			})
-		
+		var _refreshSelection = ()=>{ if( S.exist()) S.set( S.start, S.end ) }
+
 		Events.add(
 			D.oView,
 				'hide', _refreshSelection,
 				'show', _refreshSelection,
 			D.oCharacter, 'sizechange', _refreshSelection,
-			this, 'change', CallBack( S, function(){
-				var E = this.oDocument.oEditor
-				if( E.onselectionchange ) E.onselectionchange( this )
-				}),
+			S, 'change', ()=>{ if( E.onselectionchange ) E.onselectionchange( S )},
 			document,
 				// Initialisation du glissé voir Editor.prototype.placeHandle
 				// Initialise la sélection
-				'mousedown', CallBack( S, function( evt ){
+				'mousedown', ( evt )=>{
 					if( D.elementInContents( Events.element( evt ))){
 						oStart = P.getFromEvent( evt )
 						S.bMouseSelection = true
@@ -33,9 +28,9 @@ Editor.addModule('Selection',(function(){
 							S.bMouseSelection = false
 							} else if( ! Keyboard.shift ) S.start = S.end = null
 						}
-					}),
+					},
 				// Restaure le DÉFILEMENT AUTOMATIQUE lors d'une sélection
-				'mousemove', CallBack( S, function( evt ){
+				'mousemove', ( evt )=>{
 					if( oStart || D.oGutter.sLineSelected || S.bDragging ){
 						var e = D.eTZC 
 						var oMouse = Mouse.position( evt )
@@ -46,19 +41,19 @@ Editor.addModule('Selection',(function(){
 							e[sAttr] += nAdded
 							nScrollInterval = setInterval( function(){ e[sAttr] += parseInt( nAdded*2*oChrono.stop()/100 ) }, 50 )
 							}
-						
+
 						var n = D.oCharacter.nWidth
 						if( oMouse.left > oTag.left + oTag.width ) fScroll( 'scrollLeft', n )
 						else if( oMouse.left < oTag.left ) fScroll( 'scrollLeft', -n )
 						else clearInterval( nScrollInterval )
-							
+
 						var n = parseInt( D.oCharacter.nHeight/2)
 						if( oMouse.top > oTag.top + oTag.height ) fScroll( 'scrollTop', n )
 						else if( oMouse.top < oTag.top )fScroll( 'scrollTop', -n ) 
 						}
-					}),	
+					},
 				// Etend la sélection
-				'mousemove', CallBack( S, function( evt ){
+				'mousemove', ( evt )=>{
 					if( oStart ){
 						var o = P.getFromEvent( evt )
 						C.setIndex( o.index )
@@ -68,21 +63,21 @@ Editor.addModule('Selection',(function(){
 						var o = P.getFromEvent( evt )
 						Tag.className( D.eTZ, 'selectionHover', o && S.includesIndex( o.index ) ? 'add' : 'delete' )
 						}
-					}),
+					},
 				// Glisse la sélection
-				'mousemove', CallBack( S, function( evt ){
+				'mousemove', ( evt )=>{
 					if( S.bDragging ) C.setPosition( P.getFromEvent( evt ))
-					}),
+					},
 				// Finalise la sélection
-				'mouseup', CallBack( S, function( evt ){
+				'mouseup', ( evt )=>{
 					clearInterval( nScrollInterval )
 					if( S.start==S.end || ! oStart )
 							; // CONFLICT D&D // E.placeHandle( evt )
 					oStart = false
 					S.bMouseSelection = false
-					}),
+					},
 				// Finalise le glissé
-				'mouseup', CallBack( S, function( evt ){
+				'mouseup', ( evt )=>{
 					if( S.bDragging ){
 						var o = P.getFromEvent( evt )
 						, nIndex = o.index
@@ -119,10 +114,10 @@ Editor.addModule('Selection',(function(){
 						Tag.className( D.eTZ, 'drag', 'delete' )
 						Tag.className( D.eCaret, 'drag', 'delete' )
 						}
-					}),
+					},
 			D.eTZC,
 				// Ajoute le TRIPLE CLIQUE + Sélectionne un 'mot'
-				'dblclick', CallBack( S, function( evt ){
+				'dblclick', ( evt )=>{
 					timer = null
 					var e = Events.element( evt )
 					if( D.elementInContents( e ) || e==D.eCaret ){
@@ -133,16 +128,16 @@ Editor.addModule('Selection',(function(){
 						E.focus()
 						timer = setTimeout(function(){ timer = null; }, timeout )
 						}
-					}),
+					},
 				// TRIPLE CLIQUE = Sélectionne la ligne
-				'click', CallBack( S, function( evt ){
+				'click', ( evt )=>{
 					if( timer && D.elementInContents( Events.element( evt ))){
 						S.set( oWord.start, oWord.end )
 						S.expand('line')
 						C.setIndex( S.end )
 						E.focus()
 						}
-					})
+					}
 			)
 		S.showInfo()
 		}

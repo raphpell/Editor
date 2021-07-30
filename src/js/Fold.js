@@ -1,4 +1,5 @@
 Editor.addModule('Fold',(function(){
+	// TEST: folding when invisible...
 	Editor.oDefaultSettings.bFold = 1
 	var _={
 		foldLevel :function( nLevel ){ return function(D){ D.oFold.foldLevel( nLevel )}},
@@ -114,7 +115,7 @@ Editor.addModule('Fold',(function(){
 		this.e = D.eTZC.appendChild( Tag( 'DIV', { className:'fold', innerHTML:'<DL></DL>' }))
 		Events.preventSelection( true, this.e )
 		Events.add(
-			this.e, 'mousedown', CallBack( this, function( evt ){
+			this.e, 'mousedown', ( evt )=>{
 				var e = Events.element(evt)
 				if( e.nodeName=='DIV' ) this.unfold( e.previousSibling )
 				if( e.nodeName=='DT' ){
@@ -128,20 +129,20 @@ Editor.addModule('Fold',(function(){
 					}
 				// Needed tant que 'e' n'a plus de parent (il est effacé!)
 				setTimeout( function(){ D.oEditor.focus()}, 50 )
-				})
+				}
 			,D
-				,'update', CallBack( this, 'getBrackets' )
-				,'layout', CallBack( this, function(){
+				,'update', ()=> this.getBrackets()
+				,'layout', ()=>{
 					if( this.bVisible ){
 						_refreshDim.call( this )
 						_refreshHBarDim.call( this )
 						this.refresh()
 						}
-					})
-			,D.oCaret, 'change', CallBack( this, function(){
+					}
+			,D.oCaret, 'change', ()=>{
 				if( this.bVisible ) this.highlight()
-				})
-			,D.oCharacter, 'sizechange', CallBack( this, function(){
+				}
+			,D.oCharacter, 'sizechange', ()=>{
 				var b = this.bVisible
 				if( b ){
 					D.Padding.add( 'left', -this.nWidth )
@@ -151,7 +152,7 @@ Editor.addModule('Fold',(function(){
 				this.nWidth = D.oCharacter.nWidth*2
 				D.oView.refresh()
 				if( ! this.bInitialized || b ) this.show()
-				})
+				}
 			)
 		}
 	F.prototype={
