@@ -37,7 +37,7 @@
 		<li>Le bout est toujours visible lorsqu'on l'étend.</li>
 	</ul>
 
-	<div style="float:left;"><h2> La sélection dans un textarea</h2>
+	<div style="float:left;"><h2> Essayez de sélectionner dans ce textarea</h2>
 <textarea id="eSource" wrap="off" style="height: 144px; width: 456px;">
 // Les symboles spéciaux : >, <, &amp
 // Exemple: <hr>, &amp;lt
@@ -232,9 +232,9 @@ function getC (){ return oEditor.oActiveDocument.oCaret }
 		</p>
 		<p>Finalement je vais tenter de créer une simulation de <b>sélection simple</b> :</p>
 		<ul>
-			<li>Je vais avoir un élément html par ligne (et pour une sélection multiple plusieurs...)</li>
-			<li>Une fois la sélection réalisée un textarea avec tout le contenu sélectionné aura le focus 
-				(Pour le couper <kbd>CTRL+X</kbd> et le copié <kbd>CTRL+C</kbd>).</li>
+			<li>Je vais avoir un seul élément html par ligne (plusieurs pour une sélection multiple...)</li>
+			<li>Une fois la sélection finalisée, le contenu d'un textarea sera entièrement sélectionné et aura le focus 
+				(Pour permettre le couper <kbd>CTRL+X</kbd> et le copié <kbd>CTRL+C</kbd>).</li>
 			<li>Lorsque le curseur aura la priorité je vais avoir un deuxième textarea pour capturer le texte tapé...</li>
 		</ul>
 	</div>

@@ -56,6 +56,7 @@ Editor.addModule( 'Commands',(function(){
 	DIALOGS :function(){ this.dialog('dialogs')},
 	DIALOG_DOCUMENT :function(){ this.dialog('document')},
 	DIALOG_SEARCH :function(){ this.dialog('search')},
+	INFO :function(){ this.dialog('info')},
 	
 	FULLSCREEN: function(D){
 		Tag.fullscreen( this.eEditor, this.bFullScreen = ! this.bFullScreen )

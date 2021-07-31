@@ -1,0 +1,14 @@
+﻿oDialog ={
+	css:1,
+	html:`
+
+<dl>
+	<dt>Auteur
+	<dd>Raphaël PELLICIER
+	<dt>fait le
+	<dd>bien avant 2021 !
+	<dt>Source
+	<dd><a href="https://raphpell.github.io/Widget.Editor/" target="_blank">Github</a>
+</dl>
+
+`}
