@@ -2191,21 +2191,19 @@ Editor =(function(){
 			oncaretchange :function(){},
 		//¤	oncommand :function( sCommand ){},
 			execCommand :function( sAction, bCallBack ){
-				var o=Editor.Modules.Commands, that = this
+				var o=Editor.Modules.Commands, E=this
 				if( o ){
 					var f = o[ sAction ]
 					if( f ){
-						var D=this.oActiveDocument
+						var D = E.oActiveDocument
 						if( D ) var C=D.oCaret, S=D.oSelection, T=D.oSource, V=D.oView
 						var fCommand = ()=>{
-							if( this.oncommand ) this.oncommand( sAction )
-							var sResult = f.call( this, D,C,S,T,V )
-							setTimeout(function(){ that.focus()}, 10 )
+							if( E.oncommand ) E.oncommand( sAction )
+							var sResult = f( E,D,C,S,T,V )
+							setTimeout(function(){ E.focus()}, 10 )
 							return sResult
 							}
-						return bCallBack
-							? fCommand
-							: fCommand()
+						return bCallBack ? fCommand : fCommand()
 						}
 						else throw new Error ( 'Command '+sAction+' undefined !' )
 					}

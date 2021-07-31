@@ -398,7 +398,7 @@ Editor.addModule('Selection',(function(){
 	var fH=Editor.addInHistory
 	  , fI=Editor.getUniqueId
 	Editor.extend( 'Commands', {
-		BACK_TAB :function(D,C,S,T){ // TODO : new RegExp (  '^(?:\t| {1,'+ D.nTabSize +'})', 'gim' )
+		BACK_TAB :(E,D,C,S,T)=>{ // TODO : new RegExp (  '^(?:\t| {1,'+ D.nTabSize +'})', 'gim' )
 			var CP=C.position
 			, sAction = fI('OUTDENT')
 			if( S.exist()){
@@ -424,7 +424,7 @@ Editor.addModule('Selection',(function(){
 				C.setPosition({ line:CP.line, col:n+1 })
 				}
 			},
-		CHAR_LEFT_EXTEND :function(D,C,S,T,V){
+		CHAR_LEFT_EXTEND :(E,D,C,S,T,V)=>{
 			var nS = C.position.index, nE = nS-1
 			if( nS<=0 ) return ;
 			if( C.setIndex( nE )){
@@ -438,7 +438,7 @@ Editor.addModule('Selection',(function(){
 				else if( S.end==nS ) S.set( S.start, nE )
 				}
 			},
-		CHAR_RIGHT_EXTEND :function(D,C,S,T,V){
+		CHAR_RIGHT_EXTEND :(E,D,C,S,T,V)=>{
 			var nS = C.position.index, nE = nS+1
 			if( nS >= T.getValue().length ) return ;
 			if( C.setIndex( nE )){
@@ -452,52 +452,52 @@ Editor.addModule('Selection',(function(){
 				else if( S.start==nS ) S.set( nE, S.end )
 				}
 			},
-		CLEAR :function(D,C,S){
+		CLEAR :(E,D,C,S)=>{
 			if( S.exist()) S.remove( true )
 			else{
 				var n = C.position.index
 				D.updateContents({ start:n, deleted:D.oSource.charAt(n) })
 				}
 			},
-		COMMENT_BLOCK :function(D,C,S){
+		COMMENT_BLOCK :(E,D,C,S)=>{
 			var CP=C.position
 			, sAction = fI('COMMENT_BLOCK')
 			if( S && S.exist()){
-				fH.call( this, sAction, 'Undo', S.start, S.end, CP.index )
+				fH.call( E, sAction, 'Undo', S.start, S.end, CP.index )
 				var s = '/* '+ S.cloneContents() +' */'
 				, i = S.start==CP.index ? S.start+3 : null
 				S.replace( s, true, sAction )
-				fH.call( this, sAction, 'Redo', S.start+3, S.start+s.length-3, i||S.start+s.length-3 )()
+				fH.call( E, sAction, 'Redo', S.start+3, S.start+s.length-3, i||S.start+s.length-3 )()
 				}
 			else{
-				fH.call( this, sAction, 'Undo', null, null, CP.index )
+				fH.call( E, sAction, 'Undo', null, null, CP.index )
 				var s = '/*  */'
 				C.insert( s, true, sAction )
-				fH.call( this, sAction, 'Redo', null, null, CP.index + parseInt( s.length/2 ))()
+				fH.call( E, sAction, 'Redo', null, null, CP.index + parseInt( s.length/2 ))()
 				}
 			},
-		COMMENT_LINE :function(D,C,S,T,V){
+		COMMENT_LINE :(E,D,C,S,T,V)=>{
 			var CP=C.position
 			, sAction = fI('COMMENT_LINE')
 			, sComment = '// ' 
 			if( S.exist()){
-				fH.call( this, sAction, 'Undo', S.start, S.end, CP.index )
+				fH.call( E, sAction, 'Undo', S.start, S.end, CP.index )
 				var sLine = T.lineAt( S.end )
 				S.set( S.start, sLine.index+sLine.length-1 )
 				var s = S.cloneContents()
 				, i = S.start==CP.index ? S.start : null
 				s = sComment + s.split( T.sNewLine ).join( T.sNewLine + sComment )
 				S.replace( s, true, sAction )
-				fH.call( this, sAction, 'Redo', S.start, S.start+s.length, i||S.start+s.length )()
+				fH.call( E, sAction, 'Redo', S.start, S.start+s.length, i||S.start+s.length )()
 			}else{
-				fH.call( this, sAction, 'Undo', null, null, CP.index )
+				fH.call( E, sAction, 'Undo', null, null, CP.index )
 				var sLine = T.lineAt( CP.index )
 				S.set( CP.index, sLine.index+sLine.length-1 )
 				S.replace( sComment + S.cloneContents(), true, sAction )
-				fH.call( this, sAction, 'Redo', null, null, CP.index + sComment.length )()
+				fH.call( E, sAction, 'Redo', null, null, CP.index + sComment.length )()
 				}
 			},
-		DEL_LINE_LEFT :function(D,C,S,T){
+		DEL_LINE_LEFT :(E,D,C,S,T)=>{
 			var CP=C.position
 			, n=CP.index
 			, bRestoreSelection = S.exist() && n==S.start
@@ -511,7 +511,7 @@ Editor.addModule('Selection',(function(){
 			S.remove( true, fI('DEL_LINE_LEFT'))
 			if( bRestoreSelection ) S.set( nStart, nEnd )
 			},
-		DEL_LINE_RIGHT :function(D,C,S,T){
+		DEL_LINE_RIGHT :(E,D,C,S,T)=>{
 			var CP=C.position
 			, n=CP.index
 			, bRestoreSelection = S.exist() && n==S.end
@@ -523,7 +523,7 @@ Editor.addModule('Selection',(function(){
 			S.remove( true, fI('DEL_LINE_RIGHT'))
 			if( bRestoreSelection ) S.set( nStart, nEnd )
 			},
-		DEL_WORD_LEFT :function(D,C,S,T){
+		DEL_WORD_LEFT :(E,D,C,S,T)=>{
 			var CP=C.position
 			, n=CP.index
 			, bRestoreSelection = S.exist() && n==S.start
@@ -543,7 +543,7 @@ Editor.addModule('Selection',(function(){
 			S.remove( true, fI('DEL_WORD_LEFT'))
 			if( bRestoreSelection ) S.set( nStart-nDiff, nEnd-nDiff )
 			},
-		DEL_WORD_RIGHT :function(D,C,S,T){
+		DEL_WORD_RIGHT :(E,D,C,S,T)=>{
 			var CP=C.position
 			, n=CP.index
 			, bRestoreSelection = S.exist() && n==S.end
@@ -555,7 +555,7 @@ Editor.addModule('Selection',(function(){
 			S.remove( true, fI('DEL_WORD_RIGHT'))
 			if( bRestoreSelection ) S.set( nStart, nEnd )
 			},
-		DELETE_BACK :function(D,C,S,T,V){
+		DELETE_BACK :(E,D,C,S,T,V)=>{
 			if( S.exist()) S.remove( true )
 			else{
 				var n = C.position.index
@@ -565,16 +565,16 @@ Editor.addModule('Selection',(function(){
 					}
 				}
 			},
-		DOCUMENT_END_EXTEND :function(D,C,S){
-			var n=this.getContents().length
+		DOCUMENT_END_EXTEND :(E,D,C,S)=>{
+			var n=E.getContents().length
 			, i=C.position.index
 			if( S.exist() && S.end!=n )
 				C.setIndex( i = ( i==S.start ? S.end : S.start ))
 			C.setIndex( S.end!=n || i==S.start ? n : S.start )
 			if( S.end!=n ) S.set( i, n )
 			D.scrollToPosition()
-			},	
-		DOCUMENT_START_EXTEND :function(D,C,S){
+			},
+		DOCUMENT_START_EXTEND :(E,D,C,S)=>{
 			var i=C.position.index
 			if( S.exist() && S.start!=0 )
 				C.setIndex( i = ( i==S.start ? S.end : S.start ))
@@ -582,15 +582,13 @@ Editor.addModule('Selection',(function(){
 			if( S.start!=0 ) S.set( 0, i )
 			D.scrollToPosition()
 			},
-		LINE_DELETE :function(D,C,S,T){
+		LINE_DELETE :(E,D,C,S,T)=>{
 			S.expand('line')
 			S.replace( '', false, fI('LINE_DELETE'))
 			C.setIndex( S.start )
 			},
-		LINE_DOWN_EXTEND :function(D,C,S){
-			S.expand( 'lines',+1)
-			},
-		LINE_END_EXTEND :function(D,C,S,T){
+		LINE_DOWN_EXTEND :(E,D,C,S)=> S.expand( 'lines',+1),
+		LINE_END_EXTEND :(E,D,C,S,T)=>{
 			var CP=C.position
 			, sLine = T.getLine( CP.line )
 			, n = sLine.index + sLine.length - ( sLine.charAt( sLine.length-1 )==T.sNewLine ? 1 : 0 )
@@ -599,7 +597,7 @@ Editor.addModule('Selection',(function(){
 			else if( CP.index==S.end ) S.set( S.start, n )
 			C.setIndex( n )
 			},
-		LINE_START_EXTEND :function(D,C,S,T){
+		LINE_START_EXTEND :(E,D,C,S,T)=>{
 			var CP=C.position
 			, sLine = T.getLine( CP.line )
 			, n1 = sLine.index
@@ -611,7 +609,7 @@ Editor.addModule('Selection',(function(){
 			else if( CP.index==S.end ) S.set( S.start, n )
 			C.setIndex( n )
 			},
-		LINE_TRANSPOSE :function(D,C,S,T){
+		LINE_TRANSPOSE :(E,D,C,S,T)=>{
 			var CP=C.position
 			if( S.exist()) S.collapse()
 			var sCurrent = T.lineAt( CP.index )
@@ -628,15 +626,15 @@ Editor.addModule('Selection',(function(){
 				C.setIndex( nIndex )
 				}
 			},
-		LINE_UP_EXTEND :function(D,C,S){ S.expand( 'lines',-1)},
-		LINES_CLIMB_DOWN: function(D,C,S,T){
+		LINE_UP_EXTEND :(E,D,C,S)=> S.expand( 'lines',-1),
+		LINES_CLIMB_DOWN :(E,D,C,S,T)=>{
 			var CP=C.position
 			var sAction = fI('LINES_CLIMB_DOWN')
 			if( ! S.exist()) S.expand()
 			var n = T.lineNumberAt( S.end )
 			if( n < T.nLines ){
 				S.expand()
-				fH.call( this, sAction, 'Undo', S.start, S.end+1, S.start )()
+				fH.call( E, sAction, 'Undo', S.start, S.end+1, S.start )()
 				var s = S.cloneContents()
 				, sLine = T.getLine( n + 1 )
 				, n = sLine.index
@@ -649,17 +647,17 @@ Editor.addModule('Selection',(function(){
 					}
 				S.set( S.start, n + sLine.length, true )
 				S.replace( sLine + s, true, sAction )
-				fH.call( this, sAction, 'Redo', nStart, nEnd, nStart )()
+				fH.call( E, sAction, 'Redo', nStart, nEnd, nStart )()
 				}
 			},
-		LINES_CLIMB_UP: function(D,C,S,T){
+		LINES_CLIMB_UP :(E,D,C,S,T)=>{
 			var CP=C.position
 			var sAction = fI('LINES_CLIMB_UP')
 			if( ! S.exist()) S.expand()
 			var n = T.lineNumberAt( S.start )
 			if( n > 1 ){
 				S.expand()
-				fH.call( this, sAction, 'Undo', S.start, S.end+1, S.start )()
+				fH.call( E, sAction, 'Undo', S.start, S.end+1, S.start )()
 				var s = S.cloneContents()
 				var sLine = T.getLine( n-1 )
 				var b = T.lineNumberAt( S.end-1 )==T.nLines?1:0
@@ -669,51 +667,51 @@ Editor.addModule('Selection',(function(){
 				, nIndex= nStart
 				if( b ) sLine = T.sNewLine + sLine.slice( 0, -1 )
 				S.replace( s + sLine, true, sAction )
-				fH.call( this, sAction, 'Redo',  nStart, nEnd, nIndex )()
+				fH.call( E, sAction, 'Redo',  nStart, nEnd, nIndex )()
 				}
 			},
-		LINES_JOIN: function(D,C,S,T){
+		LINES_JOIN :(E,D,C,S,T)=>{
 			var CP=C.position
 			if( S.exist()){
 				var sAction = fI('LINES_JOIN')
 				var s = S.cloneContents()
-				fH.call( this, sAction, 'Undo', S.start, S.end, CP.index )()
+				fH.call( E, sAction, 'Undo', S.start, S.end, CP.index )()
 				var i = S.start==CP.index ? S.start : null
 				s = s.split( T.sNewLine ).join( '' )
 				S.replace( s, true, sAction )
-				fH.call( this, sAction, 'Redo', S.start, S.start+s.length, i||S.start+s.length )()
+				fH.call( E, sAction, 'Redo', S.start, S.start+s.length, i||S.start+s.length )()
 				}
 			},
-		LOWERCASE :function(D,C,S){
+		LOWERCASE :(E,D,C,S)=>{
 			if( S.exist()) S.replace( S.cloneContents().toLowerCase(), false, fI('LOWERCASE'))
 			},
-		NEW_LINE :function(D,C,S,T){
+		NEW_LINE :(E,D,C,S,T)=>{
 			var sAction = fI('ENTER')
 			, s = T.getValue().substring( T.getLine( C.position.line ).index, C.position.index )
 			, a = s.match( /^([\t]+)/ )
-			fH.call( this, sAction, 'Undo', S.start, S.end, C.position.index )
+			fH.call( E, sAction, 'Undo', S.start, S.end, C.position.index )
 			if( S.exist()) S.remove( true, sAction )
 			C.insert( T.sNewLine + (a?a[0]:''), false, sAction )
-			fH.call( this, sAction, 'Redo', null, null, C.position.index )()
+			fH.call( E, sAction, 'Redo', null, null, C.position.index )()
 			},
-		PAGE_DOWN_EXTEND :function(D,C,S){
+		PAGE_DOWN_EXTEND :(E,D,C,S)=>{
 			var CP=C.position
 			, nCharHeight = D.oCharacter.nHeight 
-			, nLinesNumber = parseInt( this.nTextZoneHeight/nCharHeight )-1
+			, nLinesNumber = parseInt( E.nTextZoneHeight/nCharHeight )-1
 			D.oTextZoneControl.scrollBy( nLinesNumber*nCharHeight )
 			S.expand( 'lines', +nLinesNumber )
 			},
-		PAGE_UP_EXTEND :function(D,C,S){
+		PAGE_UP_EXTEND :(E,D,C,S)=>{
 			var nCharHeight = D.oCharacter.nHeight 
-			, nLinesNumber = parseInt( this.nTextZoneHeight/nCharHeight )-1
+			, nLinesNumber = parseInt( E.nTextZoneHeight/nCharHeight )-1
 			D.oTextZoneControl.scrollBy( -nLinesNumber*nCharHeight )
 			S.expand( 'lines', -nLinesNumber )
 			},
-		SELECT_ALL :function(D,C,S,T){
+		SELECT_ALL :(E,D,C,S,T)=>{
 			C.setIndex( T.getValue().length )
 			S.expand('all')
 			},
-		SELECTION_DUPLICATE :function(D,C,S,T){
+		SELECTION_DUPLICATE :(E,D,C,S,T)=>{
 			var i = C.position.index
 			var sAction = fI('DUPLICATE')
 			if( S.exist()){ // duplique la sélection
@@ -726,19 +724,19 @@ Editor.addModule('Selection',(function(){
 				}
 			C.setIndex( i )
 			},
-		SHOW_SELECTION_END :function(D,C,S){
+		SHOW_SELECTION_END :(E,D,C,S)=>{
 			if( S.exist()){
 				C.setIndex( S.end )
 				D.scrollToPosition()
 				}
 			},
-		SHOW_SELECTION_START :function(D,C,S){
+		SHOW_SELECTION_START :(E,D,C,S)=>{
 			if( S.exist()){
 				C.setIndex( S.start )
 				D.scrollToPosition()
 				}
 			},
-		TAB :function(D,C,S){// Insère une tabulation, ou indente une ou plusieurs lignes
+		TAB :(E,D,C,S)=>{// Insère une tabulation, ou indente une ou plusieurs lignes
 			if( S.exist()){
 				S.expand()
 				S.replace( str_replace( /^/gim, "\t", S.cloneContents()), false, fI('INDENT'))
@@ -746,14 +744,14 @@ Editor.addModule('Selection',(function(){
 			}else{
 				var sAction = fI('INSERT_TAB')
 				C.insert( "\t", false, sAction )
-				fH.call( this, sAction, 'Redo', null, null, C.position.index )()
+				fH.call( E, sAction, 'Redo', null, null, C.position.index )()
 				}
 			},
-		UPPERCASE :function(D,C,S){
+		UPPERCASE :(E,D,C,S)=>{
 			if( S.exist()) S.replace( S.cloneContents().toUpperCase(), false, fI('UPPERCASE'))
 			},
 		WORD_LEFT_END_EXTEND: null,
-		WORD_LEFT_EXTEND :function(D,C,S,T){// Etend la sélection à la limite de mot à gauche
+		WORD_LEFT_EXTEND :(E,D,C,S,T)=>{// Etend la sélection à la limite de mot à gauche
 			var n = C.position.index
 			, oWord = T.getWordPositionAt( n, 'spaceRight' )
 			, nStart = n > oWord.start ? oWord.start : oWord.previous
@@ -765,7 +763,7 @@ Editor.addModule('Selection',(function(){
 				}
 			C.setIndex( nStart )
 			},
-		WORD_RIGHT_END_EXTEND :function(D,C,S,T){// Etend la sélection à la limite de mot à droite
+		WORD_RIGHT_END_EXTEND :(E,D,C,S,T)=>{// Etend la sélection à la limite de mot à droite
 			var n = C.position.index
 			, oWord = T.getWordPositionAt( n, 'spaceLeft' )
 			, nEnd = n < oWord.end ? oWord.end : oWord.next

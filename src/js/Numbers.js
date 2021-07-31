@@ -32,7 +32,7 @@ Editor.addModule('Numbers',(function(){
 				}
 			}
 		}
-	var _increment =function( n ){ return function(D,C,S,T){ N.set(C,S,T,n)}}
+	var _increment =function( n ){ return (E,D,C,S,T)=>N.set(C,S,T,n) }
 	Editor.extend( 'Commands', {
 		INCREMENT_DOT :_increment(.1),
 		INCREMENT_ONE :_increment(1),

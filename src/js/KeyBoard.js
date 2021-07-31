@@ -55,25 +55,29 @@ Editor.addModule('KeyBoard',(function(){
 		'CTRL+MINUS':'ZOOM_OUT',
 		'CTRL+PLUS':'ZOOM_IN'
 		}
-	var K =function( E ){
-		Events.add( // Capture des touches pressées
-			E.eTextarea, // CURSEUR TEXTE
-				'keypress', function( evt ){
-					E.sClipBoardValue=''
-					Keyboard.code( evt )
-					if( Keyboard.key ) Editor.insertTextFromTextarea.call( E )
-					},
-			E.eClipboard, // SELECTION
-				'keydown', function( evt ){
-					Keyboard.code( evt )
-					if( Keyboard.ctrl/*  || Keyboard.shift */ || Keyboard.alt ) ; // raccourcies
-						else E.eTextarea.focus()
-					}
-			)
-					
-		this.addShortCuts =function( oShortCuts ){
-		//	if( oShortCuts!==ShortCuts ) ShortCuts.acquire( oShortCuts )
-
+	var K = class {
+		constructor( E ){
+			this.E = E
+			Events.add( // Capture des touches pressées
+				E.eTextarea, // CURSEUR TEXTE
+					'keypress', function( evt ){
+						E.sClipBoardValue=''
+						Keyboard.code( evt )
+						if( Keyboard.key ) Editor.insertTextFromTextarea.call( E )
+						},
+				E.eClipboard, // SELECTION
+					'keydown', function( evt ){
+						Keyboard.code( evt )
+						if( Keyboard.ctrl/*  || Keyboard.shift */ || Keyboard.alt ) ; // raccourcies
+							else E.eTextarea.focus()
+						// Soucis comment bloquer les raccourcies du navigateur utilisé dans l'éditeur... ormis couper/coller
+						// return Events.prevent( evt )
+						}
+				)
+			this.addShortCuts( ShortCuts )
+			}
+		addShortCuts ( oShortCuts ){
+			let E = this.E
 			var _fShortCut =function( sShortCut ){
 				return ()=>{ return this.fireShortCut( sShortCut )}
 				}
@@ -90,19 +94,18 @@ Editor.addModule('KeyBoard',(function(){
 				[ E.eClipboard ], aKeys
 				))
 			}
-		this.fireShortCut =function( sKeys ){
+		fireShortCut ( sKeys ){
+			let E = this.E
 			E.focus()
 			var m = ShortCuts[ sKeys ]
 			if( m ){
 				if( m.constructor==String ) return E.execCommand( m )
 				if( m.constructor==Function ){
 					var D=E.oActiveDocument, C=D.oCaret, S=D.oSelection, T=D.oSource, V=D.oView
-					return m.call( E, D,C,S,T,V )
+					return m.call( null, E,D,C,S,T,V )
 					}
 				}
 			}
-
-		this.addShortCuts( ShortCuts )
 		}
 	K.ShortCuts = ShortCuts
 	K.extend =function( oShortCuts ){

@@ -2,33 +2,27 @@ Editor.addModule( 'Commands',(function(){
 	var fH=Editor.addInHistory
 	  , fI=Editor.getUniqueId
 
-/* Functions arguments = D,C,S,T,V
-	D = this.oActiveDocument
+/* Functions arguments = E,D,C,S,T,V
+	E = oEditor
+	D = E.oActiveDocument
 	C = D.oCaret
 	S = D.oSelection
 	T = D.oSource
 	V = D.oView
 */
 	var Cds ={
-	1 :function(){ this.oTopMenu.toggle()},
-	2 :function(){ this.oTabMenu.toggle()},
-	3 :function(){ this.oStatus.toggle()},
-	4 :function(D){ D.oGutter.toggle()},
-	5 :function(D){ D.oCurrentLine.toggle()},
-/* 	
-	5 :function(){ this.oGrip.toggle()},
-	6 :function(){ this.oStatus.toggle()},
-	7 :function(){ this.oTabMenu.toggle()},
-	8 :function(){ this.oTopMenu.toggle()}, 
-*/
-	COPY :function(){
-		var E=this
+	1 :(E)=> E.oTopMenu.toggle(),
+	2 :(E)=> E.oTabMenu.toggle(),
+	3 :(E)=> E.oStatus.toggle(),
+	4 :(E,D)=> D.oGutter.toggle(),
+	5 :(E,D)=> D.oCurrentLine.toggle(),
+
+	COPY :(E)=>{
 		E.sClipBoardValue = E.eClipboard.value
 		setTimeout( function(){ E.eTextarea.focus()}, 50 )
 		return true
 		},
-	CUT :function(D,C,S){
-		var E=this
+	CUT :(E,D,C,S)=>{
 		E.sClipBoardValue = E.eClipboard.value
 		setTimeout( function(){
 			if( S && S.exist()){
@@ -40,57 +34,55 @@ Editor.addModule( 'Commands',(function(){
 			}, 50 )
 		return true
 		},
-	PASTE :function(D,C,S){
+	PASTE :(E,D,C,S)=>{
 		var sAction = fI('PASTE')
 		var f = Editor.insertTextFromTextarea
-		this.eClipboard.value= ''
+		E.eClipboard.value= ''
 		return S && S.exist()
-			? f.call( this, this.eClipboard, sAction )
-			: f.call( this, null, sAction )
+			? f.call( E, E.eClipboard, sAction )
+			: f.call( E, null, sAction )
 		},
 
-	DOCUMENT_CLOSE :function(D){ if( this.oTabMenu ) this.oTabMenu.close( D.sName )},
-	DOCUMENT_NEW: function(){ this.newDoc()},
-	DOCUMENT_SAVE :function(){ this.saveDoc()},
+	DOCUMENT_CLOSE :(E,D)=>{ if( E.oTabMenu ) E.oTabMenu.close( D.sName )},
+	DOCUMENT_NEW: (E)=>{ E.newDoc()},
+	DOCUMENT_SAVE :(E)=>{ E.saveDoc()},
 
-	DIALOGS :function(){ this.dialog('dialogs')},
-	DIALOG_DOCUMENT :function(){ this.dialog('document')},
-	DIALOG_SEARCH :function(){ this.dialog('search')},
-	INFO :function(){ this.dialog('info')},
+	DIALOGS :(E)=> E.dialog('dialogs'),
+	DIALOG_DOCUMENT :(E)=> E.dialog('document'),
+	DIALOG_SEARCH :(E)=> E.dialog('search'),
+	INFO :(E)=> E.dialog('info'),
 	
-	FULLSCREEN: function(D){
-		Tag.fullscreen( this.eEditor, this.bFullScreen = ! this.bFullScreen )
-		var o = this.oTopMenu
-		if( o ) o.MenuItem.set( 'FULLSCREEN', this.bFullScreen ? 'down' : 'up' )
-		this.oGrip[ this.bFullScreen ? 'hide' : 'show' ]()
-		this.setDocActive( D )
-		if( this.onresize ) this.onresize()
+	FULLSCREEN: (E,D)=>{
+		Tag.fullscreen( E.eEditor, E.bFullScreen = ! E.bFullScreen )
+		var o = E.oTopMenu
+		if( o ) o.MenuItem.set( 'FULLSCREEN', E.bFullScreen ? 'down' : 'up' )
+		E.oGrip[ E.bFullScreen ? 'hide' : 'show' ]()
+		E.setDocActive( D )
+		if( E.onresize ) E.onresize()
 		},
-	SET_ZOOM :function(D){
-		D.setAttribute( 'fontSize', this.sFontSize )
+	SET_ZOOM :(E,D)=>{
+		D.setAttribute( 'fontSize', E.sFontSize )
 		D.scrollToPosition()
 		},
-	SHOW_CARET :function(D){ D.scrollToPosition()},
-	SHOW_COLUMNS:function(){ this.setAttribute('columns')},
-	SHOW_INVISIBLES :function(D){ this.setAttribute('whiteSpaces')},
-	SHOW_LINES:function(){ this.setAttribute('lines')},
-	SOFT_TAB:function(){ this.setAttribute('softTab')},
-	ZOOM_IN :function(D){
-		D.setAttribute( 'fontSize', ( parseInt(D.sFontSize)+2 ) +'px' )
-		},
-	ZOOM_OUT :function(D){
+	SHOW_CARET :(E,D)=> D.scrollToPosition(),
+	SHOW_COLUMNS:(E)=> E.setAttribute('columns'),
+	SHOW_INVISIBLES :(E)=> E.setAttribute('whiteSpaces'),
+	SHOW_LINES:(E)=> E.setAttribute('lines'),
+	SOFT_TAB:(E)=> E.setAttribute('softTab'),
+	ZOOM_IN :(E,D)=> D.setAttribute( 'fontSize', ( parseInt(D.sFontSize)+2 ) +'px' ),
+	ZOOM_OUT :(E,D)=>{
 		var n = parseInt( D.sFontSize )-2
 		if( n > 0 ) D.setAttribute( 'fontSize', n+'px' )
 		},
 
-	CHAR_LEFT :function(D,C,S,T,V){
-		if( ! C.state ) this.execCommand('LINE_UP')
+	CHAR_LEFT :(E,D,C,S,T,V)=>{
+		if( ! C.state ) E.execCommand('LINE_UP')
 		else if( S && S.exist()){
 			var n = S.get().start
 			if( n!=null ){
 				S.collapse()
 				C.setIndex( n )
-				this.eTextarea.focus()
+				E.eTextarea.focus()
 				}
 			}
 		else{// Déplacement caractère par caractère
@@ -102,14 +94,14 @@ Editor.addModule( 'Commands',(function(){
 				}
 			}
 		},
-	CHAR_RIGHT :function(D,C,S,T,V){
-		if( ! C.state ) this.execCommand('LINE_DOWN')
+	CHAR_RIGHT :(E,D,C,S,T,V)=>{
+		if( ! C.state ) E.execCommand('LINE_DOWN')
 		else if( S && S.exist()){
 			var n = S.end
 			if( n!=null ){
 				S.collapse()
 				C.setIndex( n )
-				this.eTextarea.focus()
+				E.eTextarea.focus()
 				}
 			}
 		else{// Déplacement caractère par caractère
@@ -121,22 +113,22 @@ Editor.addModule( 'Commands',(function(){
 				}
 			}
 		},
-	DOCUMENT_END :function(D,C,S){
+	DOCUMENT_END :(E,D,C,S)=>{
 		if( S ) S.collapse()
-		C.setIndex( this.getContents().length )
+		C.setIndex( E.getContents().length )
 		},
-	DOCUMENT_START :function(D,C,S){
+	DOCUMENT_START :(E,D,C,S)=>{
 		if( S ) S.collapse()
 		C.setIndex( 0 )
 		},
-	LINE_DOWN :function(D,C,S,T,V){
+	LINE_DOWN :(E,D,C,S,T,V)=>{
 		var CP=C.position
 		C.setPosition({ col:CP.col, viewLine:V.getLine( V.getClosestLine( 'bottom', CP.line ))})
 		if( S && S.exist()) S.collapse()
 		D.scrollToPosition()
 		},
-	LINE_END :function(D,C,S){
-		if( ! C.state ) this.execCommand('DOCUMENT_END')
+	LINE_END :(E,D,C,S)=>{
+		if( ! C.state ) E.execCommand('DOCUMENT_END')
 		else{
 			if( S ) S.collapse()
 			var n = C.position.line
@@ -144,50 +136,50 @@ Editor.addModule( 'Commands',(function(){
 			D.scrollToPosition()
 			}
 		},
-	LINE_SCROLL_DOWN :function(D,C,S,T,V){
-		if( V.nLineStart+2 > C.position.line ) this.execCommand('LINE_DOWN')
+	LINE_SCROLL_DOWN :(E,D,C,S,T,V)=>{
+		if( V.nLineStart+2 > C.position.line ) E.execCommand('LINE_DOWN')
 		D.oTextZoneControl.scrollBy( D.oCharacter.nHeight )
 		},
-	LINE_SCROLL_UP :function(D,C,S,T,V){
-		if( V.nLineEnd-2 < C.position.line ) this.execCommand('LINE_UP')
+	LINE_SCROLL_UP :(E,D,C,S,T,V)=>{
+		if( V.nLineEnd-2 < C.position.line ) E.execCommand('LINE_UP')
 		D.oTextZoneControl.scrollBy( -D.oCharacter.nHeight )
 		},
-	LINE_START :function(D,C,S){
-		if( ! C.state ) this.execCommand('DOCUMENT_START')
+	LINE_START :(E,D,C,S)=>{
+		if( ! C.state ) E.execCommand('DOCUMENT_START')
 		else{
 			if( S ) S.collapse()
 			C.setPosition({ line:C.position.line, col:1 })
 			D.scrollToPosition()
 			}
 		},
-	LINE_UP :function(D,C,S,T,V){
+	LINE_UP :(E,D,C,S,T,V)=>{
 		var CP=C.position
 		C.setPosition({ col:CP.col, viewLine:V.getLine( V.getClosestLine( 'top', CP.line ))})
 		if( S && S.exist()) S.collapse()
 		D.scrollToPosition()
 		},
-	PAGE_DOWN :function(D,C,S,T,V){
+	PAGE_DOWN :(E,D,C,S,T,V)=>{
 		var CP=C.position
 		, nCharHeight = D.oCharacter.nHeight 
-		, nLinesNumber = parseInt( this.nTextZoneHeight/nCharHeight )-1
+		, nLinesNumber = parseInt( E.nTextZoneHeight/nCharHeight )-1
 		, nLine = V.getLinePlusPlus( CP.line, nLinesNumber, 'getviewline' )
 		D.oTextZoneControl.scrollBy( nLinesNumber*nCharHeight )
 		if( S ) S.collapse()
 		C.setPosition({ col:CP.col, viewLine:nLine })
 		},
-	PAGE_UP :function(D,C,S,T,V){
+	PAGE_UP :(E,D,C,S,T,V)=>{
 		var CP=C.position
 		, nCharHeight = D.oCharacter.nHeight 
-		, nLinesNumber = parseInt( this.nTextZoneHeight/nCharHeight )-1
+		, nLinesNumber = parseInt( E.nTextZoneHeight/nCharHeight )-1
 		, nLine = V.getLinePlusPlus( CP.line, -nLinesNumber, 'getviewline' )
 		if( nLine < 1 ) nLine = 1
 		D.oTextZoneControl.scrollBy( -nLinesNumber*nCharHeight )
 		if( S ) S.collapse()
 		C.setPosition({ col:CP.col, viewLine:nLine })
 		},
-	WORD_LEFT :function(D,C,S,T){
-		if( ! C.state ) this.execCommand('LINE_UP')
-		else if( S && S.exist()) this.execCommand('CHAR_LEFT')
+	WORD_LEFT :(E,D,C,S,T)=>{
+		if( ! C.state ) E.execCommand('LINE_UP')
+		else if( S && S.exist()) E.execCommand('CHAR_LEFT')
 		else{
 			// déplacement mot par mot
 			var n = C.position.index
@@ -196,9 +188,9 @@ Editor.addModule( 'Commands',(function(){
 			}
 		},
 	WORD_LEFT_END: null,
-	WORD_RIGHT :function(D,C,S,T){
-		if( ! C.state ) this.execCommand('LINE_DOWN')
-		else if( S && S.exist()) this.execCommand('CHAR_RIGHT')
+	WORD_RIGHT :(E,D,C,S,T)=>{
+		if( ! C.state ) E.execCommand('LINE_DOWN')
+		else if( S && S.exist()) E.execCommand('CHAR_RIGHT')
 		else{
 			var n = C.position.index
 			, oWord = T.getWordPositionAt( n, 'spaceRight' )

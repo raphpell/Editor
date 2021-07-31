@@ -1,7 +1,7 @@
 Editor.addModule('TextMarker',(function(){
 	var _={
-		markstyle :function( sStyle ){ return function(D,C,S){ if( S.exist()) D.oTextMarker.mark( sStyle, S.cloneContents())}},
-		unmarkstyle :function( sStyle ){ return function(D){ D.oTextMarker.unmark( sStyle )}}
+		markstyle :function( sStyle ){ return (E,D,C,S)=>{ if( S.exist()) D.oTextMarker.mark( sStyle, S.cloneContents())}},
+		unmarkstyle :function( sStyle ){ return (E,D)=> D.oTextMarker.unmark( sStyle ) }
 		}
 	Editor.extend( 'Commands', {
 		MARK_STYLE_1:_.markstyle('style1'),

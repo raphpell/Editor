@@ -1,7 +1,7 @@
 Editor.addModule('UndoStack',(function(){
 	Editor.extend( 'Commands', {
-		REDO :function(D){if(D)D.oUndoStack.redo()},
-		UNDO :function(D){if(D)D.oUndoStack.undo()}
+		REDO :(E,D)=>{if(D)D.oUndoStack.redo()},
+		UNDO :(E,D)=>{if(D)D.oUndoStack.undo()}
 		})
 	Editor.extend( 'KeyBoard', {
 		'CTRL+Y': 'REDO',

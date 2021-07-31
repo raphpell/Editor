@@ -1,9 +1,8 @@
 Editor.addModule('Fold',(function(){
-	// TEST: folding when invisible...
 	Editor.oDefaultSettings.bFold = 1
 	var _={
-		foldLevel :function( nLevel ){ return function(D){ D.oFold.foldLevel( nLevel )}},
-		unfoldLevel :function( nLevel ){ return function(D){ D.oFold.unfoldLevel( nLevel )}}
+		foldLevel :( nLevel )=>{ return (E,D,C,S)=> D.oFold.foldLevel( nLevel ) },
+		unfoldLevel :( nLevel )=>{ return (E,D,C,S)=> D.oFold.unfoldLevel( nLevel ) }
 		}
 	Editor.extend( 'Commands', {
 		FOLD_ALL :_.foldLevel(0),
@@ -26,7 +25,7 @@ Editor.addModule('Fold',(function(){
 		UNFOLD_LEVEL_8 :_.unfoldLevel(8)
 		})
 	Editor.extend( 'KeyBoard', {
-		'ALT+SHIFT+F': function(D){ D.oFold.toggle()},
+		'ALT+SHIFT+F': (E,D)=> D.oFold.toggle(),
 		'ALT+0': 'FOLD_ALL',
 		'ALT+1': 'FOLD_LEVEL_1',
 		'ALT+2': 'FOLD_LEVEL_2',
@@ -60,21 +59,24 @@ Editor.addModule('Fold',(function(){
 		}
 	, _actionGroup =function( sAction ){ // fold | unfold
 		return function( nLevel ){
-			var D=this.oDocument, V=D.oView
+			var D=this.oDocument, V=D.oView, S = D.oSelection
 			, a=this.aBuffer, i=1, ni=a.length
-			if( nLevel ){
-				for(; i<ni; i++ )
-					if( a[i] && nLevel==a[i][1])
-						this[ sAction ]( i, true )
+			if( D.oFold.bVisible ){
+				if( nLevel ){
+					for(; i<ni; i++ )
+						if( a[i] && nLevel==a[i][1])
+							this[ sAction ]( i, false )
+					}
+				else
+					for(; i<ni; i++ )
+						if( a[i])
+							this[ sAction ]( i, false )
+				V.refresh()
+				var f = V[ sAction=='fold'?'onhide':'onshow']
+				if( f ) f()
+				D.oTextZoneControl.refresh()
+				if( S.exist()) S.set( S.start, S.end )
 				}
-			else
-				for(; i<ni; i++ )
-					if( a[i])
-						this[ sAction ]( i, true )
-			V.refresh()
-			var f = V[ sAction=='fold'?'onhide':'onshow']
-			if( f ) f()
-			D.oTextZoneControl.refresh()
 			}
 		}
 	, _actionSingle =function( sAction ){ // hideRange | showRange
@@ -327,8 +329,8 @@ Editor.addModule('Fold',(function(){
 		hide: function(){
 			var D=this.oDocument, C=D.oCaret
 			if( this.bVisible ) D.Padding.add( 'left', -this.nWidth )
-			this.bVisible = !( this.e.style.display="none" )
 			D.oEditor.execCommand('UNFOLD_ALL')
+			this.bVisible = !( this.e.style.display="none" )
 			C.refresh()
 			},
 		show: function(){

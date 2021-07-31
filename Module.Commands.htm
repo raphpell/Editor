@@ -36,15 +36,15 @@
 
 <div><h2>A noter</h2>
 	<ul>
-		<li>Les commandes sont exécutées par <code>oEditor.execCommand</code>.</li>
+		<li>Les commandes sont exécutées par la méthode <code>oEditor.execCommand</code>.</li>
 		<li>Elles peuvent être associées à des touches raccourcies <del>et à des boutons de l'éditeur</del>.</li>
 		<li>
 			La liste des commandes est étendue pendant l'exécution.<br>
-			<code>Editor.extend( 'Commands', { COMMAND_NAME:function(D,C,S,T,V){} })</code>
+			<code>Editor.extend( 'Commands', { COMMAND_NAME:(E,D,C,S,T,V)=>{ /* */ } })</code>
 	<pre>
 	/*
-		this = oEditor
-		D = this.oActiveDocument
+		E = oEditor
+		D = E.oActiveDocument
 		C = D.oCaret
 		S = D.oSelection
 		T = D.oSource
@@ -116,7 +116,6 @@
 <script type="text/JavaScript">
 _( 'eEditeur1,eSource,eKeyboard' )
 _( 'eTime,eDeleted,eAdded,eLinesNew,eLinesOld' )
-
 var oEditor = new Editor ( eEditeur1, {
 	bSoftTab: 1,
 	bWhiteSpaces: 1,

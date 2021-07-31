@@ -149,9 +149,7 @@ Editor.addModule('Snippet',(function(){
 		'CTRL+E': 'EXPAND_SNIPPET'
 		})
 	Editor.extend( 'Commands', {
-		'EXPAND_SNIPPET': function(D,C,S,T){
-			Editor.Modules.Snippet.replace(this,D,C,S,T)
-			}
+		'EXPAND_SNIPPET': (E,D,C,S,T)=> Editor.Modules.Snippet.replace(E,D,C,S,T)
 		})
 
 	var Sn ={
