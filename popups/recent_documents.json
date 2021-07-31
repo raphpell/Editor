@@ -1,0 +1,8 @@
+﻿oDialog ={
+	js:1,
+	css:1,
+	html:`
+
+<ul id="e{EDITOR_NAME}RecentDocuments"></ul>
+
+`}

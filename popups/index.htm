@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>Principe de fonctionnement des fenêtres modales</title>
+	<title>Principe de fonctionnement des fenÃªtres modales</title>
 	<style>
 		pre {
 			border: 1px solid #000;
@@ -12,40 +12,39 @@
 	</style>
 </head>
 <body>
-	<h1>Principe de fonctionnement des fenêtres modales</h1>
+	<h1>Principe de fonctionnement des fenÃªtres modales</h1>
 	<ol>
-		<li>Elles ont un nom, par exemple <code>'fenêtre'</code>.
-		<li>Elles sont ouverte et fermée avec la portion de code <code>oEditor.dialog( 'fenêtre' )</code>
-		<li>Elles ont un fichier de base <code>fenêtre.xml</code> charger à l'aide d'une requête http.
+		<li>Elles ont un nom, par exemple <code>'fenÃªtre'</code>.
+		<li>Elles sont ouverte et fermÃ©e avec la portion de code <code>oEditor.dialog( 'fenÃªtre' )</code>
+		<li>Elles ont un fichier de base <code>fenÃªtre.json</code> charger Ã  l'aide d'une balise SCRIPT.
 		<pre>
-&lt;?xml version='1.0' encoding='UTF-8'?&gt;
-&lt;popup&gt;
-	&lt;contents <b>js="1"</b> <b>css="1"</b>&gt;&lt;![CDATA[
-		... contenu html de la fenêtre de l'éditeur <b>{EDITOR_NAME}</b> ...
-		<b>@TRANSLATION_KEY@</b>
-	]]&gt;&lt;/contents&gt;
-&lt;/popup&gt;</pre>
+oDialog = {
+	<b>js</b>:1, // optionnel
+	<b>css</b>:1, // optionnel
+	<b>html</b>:`
+
+... contenu html de la fenÃªtre de l'Ã©diteur <b>{EDITOR_NAME}</b> ...
+<b>@TRANSLATION_KEY@</b>
+
+`}</pre>
 		<ol>
-			<li>Le contenu de la balise <code>&lt;contents&gt;</code> est modifié
-				<ol>
-					<li><code>"{EDITOR_NAME}"</code> est remplacé par l'identifiant de l'éditeur unique (<code>oEditor.id</code>).</li>
-					<li>Les valeurs de la forme <code>"@TRANSLATION_KEY@"</code> sont remplacées à l'aide de l'objet L10N.<br> 
-						si la valeur <code>TRANSLATION_KEY</code> est trouvée, elle est remplacé par sa traduction... 
-						sinon elle est remplacé par <code>"[_TRANSLATION_KEY_]"</code></li>
-				</ol>
-			<li><i>Optionnel:</i> Elles ont un fichier javascript <code>fenêtre.js</code> chargé si la balise <code>&lt;contents&gt;</code> à l'attribut <code>js="1"</code>.
+			<li><code>"{EDITOR_NAME}"</code> est remplacÃ© par l'identifiant de l'Ã©diteur unique (<code>oEditor.id</code>).</li>
+			<li>Les valeurs de la forme <code>"@TRANSLATION_KEY@"</code> sont remplacÃ©es Ã  l'aide de l'objet L10N.<br> 
+				si la valeur <code>TRANSLATION_KEY</code> est trouvÃ©e, elle est remplacÃ© par sa traduction... 
+				sinon elle est remplacÃ© par <code>"[_TRANSLATION_KEY_]"</code></li>
+			<li><i>Optionnel:</i> Elles ont un fichier javascript <code>fenÃªtre.js</code> chargÃ© si la balise <code>&lt;contents&gt;</code> Ã  l'attribut <code>js="1"</code>.
 		<pre>
-// fonction exécutée après le chargement du fichier
-Editor.Modules.Dialog.init_<b>fenêtre</b> =function( oEditor ){
-    alert( L10N.get( 'TRANSLATION_KEY', 'valeur remplacant $1', "...jusqu'à 9 paramètres possibles." ))
-    Events.add(
-        oEditor.Dialog.<b>fenêtre</b>, // élément HTML racine de la fenêtre
-            'open', function(){}, // fonction lancée avant l'ouverture de la fenêtre
-            'close', function(){} // fonction lancée après la fermeture de la fenêtre
-            )
-    }</pre>
-			<li><i>Optionnel:</i> Elles ont une feuille de style <code>fenêtre.css</code> chargée si la balise <code>&lt;contents&gt;</code> à l'attribut <code>css="1"</code>.
-		<pre>.dialog_<b>fenêtre</b> { /* classe propre à la fenêtre */ }</pre>
+// fonction exÃ©cutÃ©e aprÃ¨s le chargement du fichier
+Editor.Modules.Dialog.init_<b>fenÃªtre</b> =function( oEditor ){
+	alert( L10N.get( 'TRANSLATION_KEY', 'valeur remplacant $1', "...jusqu'Ã  9 paramÃ¨tres possibles." ))
+	Events.add(
+		oEditor.Dialog.<b>fenÃªtre</b>, // Ã©lÃ©ment HTML racine de la fenÃªtre
+			'open', function(){}, // fonction lancÃ©e avant l'ouverture de la fenÃªtre
+			'close', function(){} // fonction lancÃ©e aprÃ¨s la fermeture de la fenÃªtre
+			)
+	}</pre>
+			<li><i>Optionnel:</i> Elles ont une feuille de style <code>fenÃªtre.css</code> chargÃ©e si la balise <code>&lt;contents&gt;</code> Ã  l'attribut <code>css="1"</code>.
+		<pre>.dialog_<b>fenÃªtre</b> { /* classe propre Ã  la fenÃªtre */ }</pre>
 		</ol>
 	</ol>
 </body>

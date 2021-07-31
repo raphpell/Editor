@@ -1,0 +1,8 @@
+oDialog ={
+	js:1,
+	css:1,
+	html:`
+
+<div style="height:200px; overflow:scroll;" id="e{EDITOR_NAME}Commands"></div>
+
+`}

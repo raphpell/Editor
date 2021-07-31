@@ -1,5 +1,5 @@
 Events ={
-	// Attention modifié
+	// Attention modifiÃ©
 	add :function(){
 		var addEvent =function( e , s1 , f1 ){
 			if( ! e || ! s1 || ! f1 ) return false ;
@@ -128,7 +128,7 @@ Bitmask =function(){
 	return { n:parseInt(sMask,2), s:sMask }
 	}
 
-// Utilitaire Mathématique
+// Utilitaire MathÃ©matique
 if( ! Math.round10 )
 (function(){
 	function decimalAdjust ( type, value, exp ){
@@ -873,7 +873,7 @@ CssRules =(function(){
 					sName = aRules[i][0].trim()
 					sRule = aRules[i][1]
 					o = this.get( sName )
-					if( o ) Style.set( o, sRule ) // ne rajoute ainsi  pas un sélecteur 2 fois et permet une suppression en un coup.
+					if( o ) Style.set( o, sRule ) // ne rajoute ainsi  pas un sÃ©lecteur 2 fois et permet une suppression en un coup.
 						else _oStyleSheet.addRule( sName, sRule )
 					}
 				}
@@ -906,6 +906,20 @@ CssRules =(function(){
 		}
 	})()
 
+Scripts={
+	add :function( url, fOnload, fOnError ){
+		document.head.appendChild( Tag('SCRIPT',{
+			onerror: fOnError || Scripts.loadError,
+			onload: fOnload,
+			src: encodeURI( url )
+			}))
+		return this
+		},
+	loadError :function( oError ){
+		throw new URIError("The script " + oError.target.src + " didn't load correctly.");
+		}
+	}
+	
 FileSystem =(function(){
 	var s = document.location.toString()
 	, sCurrentPath = s.substring( 0, s.lastIndexOf( '/' )+1 )
@@ -937,7 +951,7 @@ FileSystem =(function(){
 		isFileName :function( s ){
 			if( ! s || /^\s*$/.test ( s )) return false
 			return ! ( /(\\|\/|\:|\*|\?|\"|\<|\>|\|)/i.test( s ))
-			// alert ( "Nom de fichier erroné.\nAu moins un des caractères \\ / : * ? \" < > | est utilisé." ) 
+			// alert ( "Nom de fichier erronÃ©.\nAu moins un des caractÃ¨res \\ / : * ? \" < > | est utilisÃ©." ) 
 			},
 		load :function( s, f ){
 			var sExt = s.split('?').shift().split('.').pop()
@@ -960,7 +974,7 @@ FileSystem =(function(){
 							'readystatechange',function(){
 								if( Browser.isIE && in_array( e.readyState, ['complete', 'loaded'])) fOnload()
 								}
-							// ! IE : 'complete','loaded', j'ai remarqué que parfois ca change... et que parfois les deux sont atteints
+							// ! IE : 'complete','loaded', j'ai remarquÃ© que parfois ca change... et que parfois les deux sont atteints
 							)
 						return eHEAD.appendChild( e )
 						}
