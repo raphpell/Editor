@@ -1894,7 +1894,6 @@ Editor =(function(){
 						E.sLanguage = mValue
 						Editor.loadFile( 'src/js/L10N/'+ mValue +'.js?'+ (new Date).valueOf(), function(){
 							if( Modules.Dialog ) Modules.Dialog.setLanguage( E )
-						//	this.oTopMenu = new HTMLZone.TopMenu (this)
 							})
 						},
 					'whiteSpaces':function(){

@@ -1,18 +1,15 @@
 
 Editor.addModule('Dialog',(function(){
-	var _Dialogs ={
-		en:{ aList:[], sLanguage:'en' },
-		fr:{ aList:[], sLanguage:'fr' }
+	let _Dialogs ={ fr:{ aList:[], sLanguage:'fr' }}
+	, Dialogs = _Dialogs.fr
+	, _sCurrentDialog = null
+	, _sLanguage = null
+	, nTime
+	, _setCurrent =( sDialogName )=>{ // Une fenêtre à la fois...
+		if( Dialogs[ _sCurrentDialog ]) Dialogs[ _sCurrentDialog ].classList.remove( 'current' )
+		if( sDialogName ) Dialogs[ _sCurrentDialog = sDialogName ].classList.add( 'current' )
 		}
-	var Dialogs = _Dialogs.fr
-	var _sCurrentDialog = null
-	var _sLanguage = null
-	
-	var _setCurrent =function( sDialogName ){
-		if( Dialogs[ _sCurrentDialog ]) Tag.className( Dialogs[ _sCurrentDialog ], 'current', 'delete' )
-		if( sDialogName ) Tag.className( Dialogs[ _sCurrentDialog = sDialogName ], 'current', 'add' )
-		}
-	var _close =function( sDialogName ){
+	, _close =( sDialogName )=>{
 		var e = Dialogs[ sDialogName ]
 		if( e ){
 			var o = e.style
@@ -23,7 +20,7 @@ Editor.addModule('Dialog',(function(){
 			if( e.onclose ) e.onclose()
 			}
 		}
-	var _open =function( E, sDialogName ){
+	, _open =( E, sDialogName )=>{
 		var e = Dialogs[ sDialogName ], o = e.style
 		if( e.parentNode != E.eDialogs ) E.eDialogs.appendChild( e )
 		if( e.onopen ) e.onopen( E )
@@ -37,18 +34,17 @@ Editor.addModule('Dialog',(function(){
 		e.bShowed = 1
 		_setCurrent( sDialogName )
 		}
-	var _toggle =function( sDialogName ){ // NB: 	this == oEditor
+	, _toggle =( E, sDialogName )=>{
 		var e = Dialogs[ sDialogName ]
-		if( e.parentNode != this.eDialogs ) e.bShowed = 0
+		if( e.parentNode != E.eDialogs ) e.bShowed = 0
 		if( e )
 			switch( e.bShowed ){
 				case 1: _close( sDialogName ); break;
-				default: _open( this, sDialogName )
+				default: _open( E, sDialogName )
 				}
-		this.focus()
+		E.focus()
 		}
-	let nTime
-	let _load = function( E, sDialogName ){
+	, _load = ( E, sDialogName )=>{
 		if( ! oDialog.html ) return ;
 		if( oDialog.css ) Editor.loadFile( 'popups/'+ sDialogName +'.css?'+ nTime )
 		var e = Dialogs[ sDialogName ] = E.eDialogs.appendChild( Tag( 'DIV', {
@@ -103,8 +99,7 @@ Editor.addModule('Dialog',(function(){
 					}
 			)
 		}
-
-	var Dg =function( E, sDialogName ){
+	, Dg =function( E, sDialogName ){
 		Dg.setLanguage( E )
 		if( ! Dialogs[ sDialogName ]){
 			nTime = (new Date).valueOf() 
@@ -112,13 +107,14 @@ Editor.addModule('Dialog',(function(){
 				Editor.sBasePath +'popups/'+ sDialogName +'.json?sLanguage='+ E.sLanguage +'&time='+nTime,
 				()=>_load( E, sDialogName )
 				)
-			} else _toggle.call( E, sDialogName )
+			} else _toggle( E, sDialogName )
 		}
 	Dg.setLanguage =function( E ){
 		var sLanguage = E.sLanguage
 		if( _sLanguage == sLanguage ) return null
 		_sLanguage = sLanguage
 		if( ! _Dialogs[ sLanguage ]) _Dialogs[ sLanguage ] = { aList:[], sLanguage:sLanguage }
+		_close( _sCurrentDialog )
 		// détache les fenêtres de l'ancien langage
 		for(var i=0, a=Dialogs.aList, ni=a.length; i<ni; i++ )
 			if( a[i].parentNode )

@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<popup>
-	<contents js="1" css="1"><![CDATA[
-	<div style="height:200px; overflow:scroll;" id="e{EDITOR_NAME}Commands"></div>
-	]]></contents>
-</popup>
