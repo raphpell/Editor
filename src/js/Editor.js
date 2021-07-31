@@ -701,7 +701,6 @@ Editor =(function(){
 			TopMenu:class{
 				constructor( E ){
 					this.toggle =_toggle
-
 					var MenuItem =function( sName, oEditor ){
 						var eLI = null
 						if( MenuItem.button[ sName ] != undefined ) eLI = MenuItem.createButton( oEditor, sName )
@@ -2009,7 +2008,6 @@ Editor =(function(){
 		})()
 	return (function(){
 		var Editor =function( eEditor, oSettings ){
-		//	if( eEditor.nodeName=='TEXTAREA' ) return Editor.replaceElement( eEditor, oSettings )
 			Editor.bContentEditable = Modules.Selection && 1
 			Editor.aInstances.push( this )
 			if( ! Editor.sBasePath ) Editor.sBasePath = FileSystem.pathOf( 'src/js/Editor.js' )
