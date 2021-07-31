@@ -13,7 +13,6 @@ Editor.addModule('Dialog',(function(){
 		var e = Dialogs[ sDialogName ]
 		if( e ){
 			var o = e.style
-			e.bShowed = e.bDetached = 0
 			o.display = "none"
 			o.top = null
 			if( _sCurrentDialog==sDialogName ) _setCurrent( null )
@@ -21,27 +20,21 @@ Editor.addModule('Dialog',(function(){
 			}
 		}
 	, _open =( E, sDialogName )=>{
+		_close( _sCurrentDialog )
 		var e = Dialogs[ sDialogName ], o = e.style
 		if( e.parentNode != E.eDialogs ) E.eDialogs.appendChild( e )
 		if( e.onopen ) e.onopen( E )
-		for(var eDialog=E.eDialogs.firstChild; eDialog; eDialog=eDialog.nextSibling ){
-			if( ! eDialog.bDetached ) _close( eDialog.sName )
-			}
 		o.display = ""
 		var oDim = Tag.dimension( e )
 		o.left = E.nTextZoneViewWidth/2 - oDim.width/2 +'px'
 		o.top = ( E.oTopMenu && E.oTopMenu.bVisible ? E.oTopMenu.height : 0 )-1 +'px'
-		e.bShowed = 1
 		_setCurrent( sDialogName )
 		}
 	, _toggle =( E, sDialogName )=>{
-		var e = Dialogs[ sDialogName ]
-		if( e.parentNode != E.eDialogs ) e.bShowed = 0
-		if( e )
-			switch( e.bShowed ){
-				case 1: _close( sDialogName ); break;
-				default: _open( E, sDialogName )
-				}
+		if( Dialogs[ sDialogName ]){
+			if( Dialogs[ sDialogName ].classList.contains( 'current' )) _close( sDialogName )
+			else _open( E, sDialogName )
+			}
 		E.focus()
 		}
 	, _load = ( E, sDialogName )=>{
@@ -67,16 +60,16 @@ Editor.addModule('Dialog',(function(){
 			e,
 				'mousedown', function(){ _setCurrent( sDialogName )},
 				'dblclick', function( evt ){
-					if( Events.element( evt ).className=="dialog_title" ) _close( sDialogName )
+					if( Events.element( evt ).classList.contains("dialog_title")) _close( sDialogName )
 					},
 				'mousedown', function( evt ){
-					if( Events.element( evt ).className=="dialog_title" ){
+					if( Events.element( evt ).classList.contains("dialog_title")){
 						oStartMove = Mouse.position( evt )
-						var oStyle = Dialogs[ sDialogName ].style
-						oStyle.transition = "none"
+						var o = Dialogs[ sDialogName ].style
+						o.transition = "none"
 						oStartPos ={
-							left:parseInt( oStyle.left ),
-							top:parseInt( oStyle.top )
+							left:parseInt( o.left ),
+							top:parseInt( o.top )
 							}
 						}
 					},
@@ -84,16 +77,14 @@ Editor.addModule('Dialog',(function(){
 				'mousemove', function( evt ){
 					if( oStartMove ){
 						var oEndMove = Mouse.position( evt )
-						, oStyle = Dialogs[ sDialogName ].style
-						oStyle.left = oStartPos.left + oEndMove.left - oStartMove.left +'px'
-						oStyle.top = oStartPos.top + oEndMove.top - oStartMove.top +'px'
+						, o = Dialogs[ sDialogName ].style
+						o.left = oStartPos.left + oEndMove.left - oStartMove.left +'px'
+						o.top = oStartPos.top + oEndMove.top - oStartMove.top +'px'
 						}
 					},
 				'mouseup', function(){
 					if( oStartMove ){
-						var oDialog = Dialogs[ sDialogName ]
-						oDialog.bDetached = true
-						oDialog.style.transition = null
+						Dialogs[ sDialogName ].style.transition = null
 						oStartMove = null
 						}
 					}
@@ -114,13 +105,13 @@ Editor.addModule('Dialog',(function(){
 		if( _sLanguage == sLanguage ) return null
 		_sLanguage = sLanguage
 		if( ! _Dialogs[ sLanguage ]) _Dialogs[ sLanguage ] = { aList:[], sLanguage:sLanguage }
-		_close( _sCurrentDialog )
 		// détache les fenêtres de l'ancien langage
+		_close( _sCurrentDialog )
 		for(var i=0, a=Dialogs.aList, ni=a.length; i<ni; i++ )
 			if( a[i].parentNode )
 				a[i] = a[i].parentNode.removeChild( a[i])
+		// attache les fenêtres du langage sélectionné
 		Editor.Dialog = Dialogs = _Dialogs[ sLanguage ]
-		// attache les fenêtres de l'ancien langage
 		for(var i=0, a=Dialogs.aList, ni=a.length; i<ni; i++ )
 			E.eDialogs.appendChild( a[i])
 		}
