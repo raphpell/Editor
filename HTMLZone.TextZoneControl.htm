@@ -17,6 +17,14 @@
 			width: 48%;
 			float: left;
 			}
+		.imgtextzone {
+			margin: 0 2em;
+			width: 30%;
+			float: left;
+			}
+		.clear {
+			clear: both;
+			}
 	</style>
 </head>
 <body spellcheck="false">
@@ -25,17 +33,25 @@
 
 <div><h1>La zone texte</h1>
 
-<div class=""><h2>Description</h2>
-	<p>
-		Espace contenant les lignes de code...
-	</p>
+<div><h2>Description</h2>
+	<img src="images/TextZone.png" class="imgtextzone">
+	<p>Espace contenant les lignes de code...</p>
+	<p>Il est composé de 3 blocs principaux :</p>
+	<ol>
+		<li>Le bloc des barres de défilement</li>
+		<li>Le bloc intérieur, le plus grand : "contient le texte".</li>
+		<li>Le bloc permettant de déterminer la dimension de l'espace visible (le plus petit : bloc 1 sans barres de défilement).</li>
+	</ol>
+	<p>Seules les lignes présentent dans l'espace du bloc 3 sont affichées.</p>
+	<p>L'objectif est d'augmenter les performances de l'éditeur en reduisant la quantité d'html à afficher.</p>
+	<p class="clear"></p>
 </div>
 
-<div class=""><h2>Diagramme</h2>
+<div><h2>Diagramme</h2>
 	<img src="diagram/Class.TextZone.gif">
 </div>
 
-<div class=""><h2>Aperçu</h2>
+<div><h2>Aperçu</h2>
 <!-- SOURCE -->
 <textarea id="eSource" wrap="off">
 /* 1 - JavaScript syntax */
@@ -93,7 +109,7 @@
 <div style="clear:left;"><h2>A faire</h2>
 
 	<ol>
-		<li>...</li>
+		<li>...une meilleure documentation !</li>
 	</ol>
 </div>
 </div>

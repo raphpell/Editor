@@ -329,11 +329,11 @@ TEXTAREA.fullscreen {
 .editor .textZoneControl .showMe {
 	background: yellow;
 	box-shadow: inset 0 0 10px red;
-	opacity:0.5;
+	opacity: 0.5;
 	z-index: 100000;
 	position: absolute;
-	left:0;
-	top:0;
+	left: 0;
+	top: 0;
 	height: 100%;
 	width: 100%;
 	}
@@ -341,16 +341,16 @@ TEXTAREA.fullscreen {
 /* Contenu "edition" */
 .editor .textZone {
 	background: transparent url(../../images/tzc.png) no-repeat right top;
-	cursor:text;
+	cursor: text;
 	font-family: inherit !important;
 	position: absolute;
 	left: 0;
 	margin: 0;
 	padding: 0;
 	overflow: visible;
-	min-height:100% !important; /* IMPORTANT */
+	min-height: 100% !important; /* IMPORTANT */
 	/*height: auto !important;  Attention: Limitation */
-	z-index:50;
+	z-index: 50;
 	}
 .editor .textZone DT {} /* Une ligne */
 /* .editor .textZone DT:hover { background: yellow; } */

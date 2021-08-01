@@ -1953,7 +1953,6 @@ Editor =(function(){
 			layOut ( s ){
 				var D=this, E=D.oEditor
 				if( ! D.oCharacter.nWidth ) return ;
-
 				D.nLinesMaxWidth = Math.max(
 					E.nTextZoneViewWidth-D.Padding.get('left'),
 					(D.oPositions.nColumnMax+2) * D.oCharacter.nWidth // ! getColumnMax()

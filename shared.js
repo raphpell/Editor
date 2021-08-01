@@ -143,7 +143,7 @@ if( ! Math.round10 )
 	if( ! Math.floor10) Math.floor10 =function( value, exp ){ return decimalAdjust('floor', value, exp)}
 	if( ! Math.ceil10 ) Math.ceil10 =function( value, exp ){ return decimalAdjust('ceil', value, exp)}
 	})()
-		
+
 extend =function( o, m, bPreserve ){
 	if( ! o ) return ;
 	var b = bPreserve || false , s
@@ -276,7 +276,7 @@ Object.prototype.inheritFrom =function( fClass ){
 	if( fClass.prototype ) fClass.prototype.constructor = fClass
 	return this.prototype
 	}
-	
+
 RegExp.acquire({
 	escape :function( s ){
 		return s.replace( /(\.|\?|\*|\+|\\|\(|\)|\[|\]|\}|\{|\$|\^|\|)/g , "\\$1" )
@@ -919,7 +919,7 @@ Scripts={
 		throw new URIError("The script " + oError.target.src + " didn't load correctly.");
 		}
 	}
-	
+
 FileSystem =(function(){
 	var s = document.location.toString()
 	, sCurrentPath = s.substring( 0, s.lastIndexOf( '/' )+1 )
