@@ -4,6 +4,7 @@
 	<title>La zone texte</title>
 	<link rel="stylesheet" type="text/css" href="src/css/styles.css">
 	<link rel="stylesheet" type="text/css" href="src/css/syntaxes.css">
+	<link rel="stylesheet" type="text/css" href="src/toc.css">
 	<style>
 		#eSource {
 			display: none;
@@ -100,7 +101,7 @@
 		<li><input type="button" onclick="Button.toggle()" value="oTZC.toggle()"></li>
 		<li><input type="button" onclick="Button.refresh()" value="oTZC.refresh()"></li>
 		<dt><p>
-			L'espace surligné sert à rendre visible le curseur.
+			L'espace surligné sert à déterminer l'espace visible par l'utilisateur.
 		</p></dt>
 	</ul>
 	
@@ -138,11 +139,8 @@ Button={
 	toggle :function(){ oEditor.oActiveDocument.oTextZoneControl.toggle()},
 	refresh :function(){ oEditor.oActiveDocument.oTextZoneControl.refresh()}
 	}
-
 </script>
 
-
-	<link rel="stylesheet" type="text/css" href="src/toc.css">
 	<script src="src/toc.js"></script>
 	<script>setTOC('HTMLZone.TextZoneControl.htm')</script>
 </body>
