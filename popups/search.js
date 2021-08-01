@@ -51,9 +51,7 @@ Editor.Modules.Dialog.init_search =function( oEditor ){
 		alert( L10N.get( 'NOT_FOUND', '/'+ re.source +'/'+ re.sModifier ))
 		}
 	, _initialize =function( E ){
-		if( _oEditor!==E ){
-			_oEditor = E
-			}
+		if( _oEditor!==E ) _oEditor = E
 		var D = E.oActiveDocument
 		if( _oDocument!==D ){
 			_oDocument = D
